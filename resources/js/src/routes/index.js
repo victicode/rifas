@@ -10,7 +10,6 @@ const routes = [
   { 
     path: '/dashboard', 
     component: HomeView, 
-    beforeEnter: auth,
     meta:{
       title: 'Bienvenido'
     }
