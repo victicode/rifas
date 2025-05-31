@@ -13,4 +13,20 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::prefix('rifas')->name('rifa.')->group(function () {
+        
+    });
+
+    Route::prefix('orders')->name('order.')->group(function () {
+
+    });
+
+    Route::prefix('configuration')->name('configuration.')->group(function () {
+
+    });
+
+    Route::prefix('clients')->name('clientes.')->group(function () {
+
+    });
+
 });

@@ -8,17 +8,25 @@ import guest from './middlewares/guest'
 
 const routes = [
   { 
-    path: '/dashboard', 
-    component: HomeView, 
-    meta:{
-      title: 'Bienvenido'
-    }
+    path: '/', 
+    component: authLayout,
+    beforeEnter: guest,
+    children: [
+      {
+        path: '/dashboard', 
+        component: HomeView, 
+        meta:{
+          title: 'Bienvenido'
+        }
+      }
+    ]
   },
 
   { 
     path: '/', 
     component: authLayout,
     beforeEnter: guest,
+    redirect: { name: 'home' },
     children: [
       {
         path:'/login',
@@ -28,12 +36,13 @@ const routes = [
         }
       },
       {
-        path:'/register',
-        component: () => import('@/view/auth/login.vue'),
+        path: '/home', 
+        name: 'home',
+        component: HomeView, 
         meta:{
           title: 'Bienvenido'
         }
-      },
+      }
     ]
   },
 ]

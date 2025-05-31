@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('configuration_rifas', function (Blueprint $table) {
             $table->id();
+            $table->integer('quantity_tickets');
+            $table->integer('price');
+            $table->integer('minumus_buy');
+            $table->integer('auto_select');
+            $table->longText('banner_img');
+            $table->longText('all_image');
+            $table->unsignedBigInteger('rifa_id');
+            $table->foreign('rifa_id')->references('id')->on('rifas')->onDelete('cascade');
+            $table->unsignedBigInteger('create_by');
+            $table->foreign('create_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

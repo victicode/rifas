@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->integer('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

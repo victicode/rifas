@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('system_configuration', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('value');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
