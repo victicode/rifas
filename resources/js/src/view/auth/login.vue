@@ -3,12 +3,12 @@
   import { useAuthStore } from '@/services/store/auth.services';
   import { useRouter } from 'vue-router'
   import { Notify } from 'quasar'
+
   const authServices = useAuthStore()
   const login = reactive({
     username: '',
     password: ''
   })
-  
   const isPwd =  ref(true)
   const loading = ref(false)
   const router = useRouter();
@@ -42,7 +42,7 @@
       showNotify('positive', 'Inicio de sesión correcto')
       setTimeout(() => {
         loading.value = false
-        router.push('/dashboard')
+        router.push('/admin/dashboard')
       },2000)
     })
     .catch((response) =>{
@@ -54,21 +54,19 @@
 </script>
 <template>
   <div>
-    <section class="text-center text-white pt-11 ">
-      <div class="font-bold font-sans mt-2 text-4xl">Inicia sesion</div>
-    </section>
-    <section class="mt-20 mt-md-12 " >
+    
+    <div class=" pt-12" >
       <q-form
         @submit="authLogin"
-        class="w-full h-full"
+        class="w-full h-full form__container mx-auto  bg-white"
       >
-        <div class="mx-auto form__cont" >
-          <div class="w-full h-full">
-            <div class="relative px-10 h-full w-full form pt-12 md:pt-0">
-              <div class="font-bold text-3xl  form_welcome">
-                Bienvenido!
-              </div>
-              <div class="w-full mt-10 md:mt-5">
+        <div class="text-center text-white header__form bg-black mx-auto" >
+          <div class="font-bold font-sans mt-2 text-3xl py-4">Inicia sesion</div>
+        </div>
+        <div class="mx-auto form__cont "  >
+          <div class="w-full ">
+            <div class="relative px-10 h-full w-full form pt-12 md:pt-0 ">
+              <div class="w-full pt-0 md:mt-5">
                 <q-input v-model="login.username" :rules="rules('user')" placeholder="Usuario" color="primary" >
                   <template v-slot:prepend>
                     <q-icon name="eva-person-outline" color="primary" />
@@ -91,14 +89,14 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="px-2  mx-auto md:w-2/3 ">
-          <q-btn flat round color="white" :loading="loading" size="xl" type="submit" >
-            <q-icon name="eva-arrow-forward-outline" size="xl" class="" />
-          </q-btn>
+          <div class="px-12 pb-5  flex justify-end md:w-full ">
+            <q-btn flat round color="black" :loading="loading" size="xl" type="submit" >
+              <q-icon name="eva-arrow-forward-outline" size="xl" class="" />
+            </q-btn>
+          </div>
         </div>
       </q-form>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -112,38 +110,42 @@
 }
 .form__cont {
   z-index: 2;
-  width: 60%;
+  width: 100%;
   position: relative;
-  height: 430px;
-  display: flex;
+  height: fit-content;
 
   &:before {
     position: absolute;
     display: block;
     width: 100%;
-    border-radius: 12px;
-    top: 2%;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
     height: 100%;
     content: '';
     background: white;
-    transform: skewY(18deg);
     z-index: 0;
   }
 }
-.form{
-  display: flex;
-    flex-direction: column;
-    justify-content: center;
+.form__container{ 
+  width: 35%;
+    box-shadow: 0px 7px 13px 0px #dadada;
+    border-radius: 12px;
+}
+
+.header__form{
+  width: 100%;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
 }
 @media (max-width: 780px) {
   .form_welcome{
     margin-top: 0rem;
   }
-  .form__cont {
-
+  .form__container{ 
     width: 90%;
-    height: 450px;
 
+  }
+  .form__cont {
 
     &:before {
       top: 3rem;

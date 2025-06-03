@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-
+use App\Http\Controllers\Api\RifaController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function ()
         return $request->user();
     });
     Route::prefix('rifas')->name('rifa.')->group(function () {
+        Route::get('/', [RifaController::class, 'getRifas']);
         
     });
 

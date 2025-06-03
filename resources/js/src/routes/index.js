@@ -1,27 +1,32 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import HomeView from '@/view/dashboard.vue'
 import authLayout from '@/layouts/authLayout.vue'
 import auth from './middlewares/auth'
 import guest from './middlewares/guest'
+import ClientLayout from '@/layouts/clientLayout.vue'
+import AdminLayout from '@/layouts/adminLayout.vue'
 
 
 const routes = [
+  {
+    path: '/', 
+    redirect: { name: 'home' },
+  },
   { 
     path: '/', 
-    component: authLayout,
-    beforeEnter: guest,
+    component: ClientLayout,
+    redirect: { name: 'home' },
     children: [
       {
-        path: '/dashboard', 
-        component: HomeView, 
+        path: '/home', 
+        name: 'home',
+        component: () => import('@/view/client/homePage.vue'),
         meta:{
           title: 'Bienvenido'
         }
       }
     ]
   },
-
   { 
     path: '/', 
     component: authLayout,
@@ -30,19 +35,67 @@ const routes = [
     children: [
       {
         path:'/login',
-        component: () => import('@/view/auth/login.vue'),
+        component: () =>import('@/view/auth/login.vue'), 
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+    ]
+  },
+  { 
+    path: '/', 
+    component: AdminLayout,
+    beforeEnter: auth,
+    children: [
+      {
+        path:'/admin/dashboard',
+        component: () => import('@/view/admin/dashboard.vue'),
         meta:{
           title: 'Bienvenido'
         }
       },
       {
-        path: '/home', 
-        name: 'home',
-        component: HomeView, 
+        path:'/admin/rifas',
+        component: () => import('@/view/admin/rifas.vue'),
+        meta:{
+          title: 'Rifas'
+        }
+      },
+      {
+        path:'/admin/pagos',
+        component: () => import('@/view/admin/dashboard.vue'),
         meta:{
           title: 'Bienvenido'
         }
-      }
+      },
+      {
+        path:'/admin/pay_methods',
+        component: () => import('@/view/admin/dashboard.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
+        path:'/admin/clients',
+        component: () => import('@/view/admin/dashboard.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
+        path:'/admin/configuration',
+        component: () => import('@/view/admin/dashboard.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
+        path:'/admin/report',
+        component: () => import('@/view/admin/dashboard.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
     ]
   },
 ]

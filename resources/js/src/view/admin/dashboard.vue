@@ -6,6 +6,6 @@ const { user } = storeToRefs(useAuthStore());
 </script>
 <template>
   <div>
-    <h1>hola {{user.name}}</h1>
+    <h2 class="text-black">Bienvenido</h2>
   </div>
 </template>

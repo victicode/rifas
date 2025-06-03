@@ -1,5 +1,5 @@
 <template>
   <div>
-   Home page 
+   Pagina de rifa 
   </div>
 </template>
