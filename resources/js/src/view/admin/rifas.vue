@@ -1,10 +1,13 @@
 <script setup>
 import { useRifaStore } from '@/services/store/rifas.store';
 import { onMounted, ref } from 'vue';
+import createRifaModal from '@/components/admin/rifa/createRifaModal.vue';
+
 const ready = ref(false)
 const rifaStore = useRifaStore()
 const actualPage = ref(1)
 const rifas = ref([]) 
+const showModal = ref('')
 const getRifas = () => {
   ready.value = false
 
@@ -19,6 +22,7 @@ const getRifas = () => {
     }, 2000);
   })
 }
+const closeModal = () => showModal.value = ''
 onMounted(() =>{
   getRifas()
 })
@@ -36,7 +40,7 @@ onMounted(() =>{
       </div>
       <div>
         <q-btn unelevated style="border-radius:0.4rem" icon="add" color="black" 
-        class="q-py-sm mx-2" label="Agregar Rifa" no-caps />
+        class="q-py-sm mx-2" label="Agregar Rifa" no-caps @click="showModal = 'create'" />
       </div>
     </div>
     <template v-if="ready">
@@ -66,13 +70,14 @@ onMounted(() =>{
       </div>
     </template>
     <template v-else>
-      <div class="flex column items-center justify-center h-full">
-        <q-spinner-ball
+      <div class="flex column items-center justify-center h-full q-py-sm">
+        <q-spinner-tail
           color="black"
           size="4rem"
         />
       </div>
     </template>
+    <createRifaModal :dialog="(showModal == 'create')" @closeModal="closeModal()" />
   </div>
 </template>
 <style lang="scss">

@@ -67,18 +67,18 @@ export const useAuthStore = defineStore('auth', {
         if (!ApiService.getToken()) {
           throw '';
         }
-          ApiService.setHeader();
-          ApiService.get("/api/user")
-            .then((data) => {
-              if(data.status !=200){
-                throw data;
-              }
-              this.setAuth(data)
-              resolve(data);
-            }).catch(( response ) => {
-              console.log(response)
-              reject('Error al obtener usuario');
-            });
+        ApiService.setHeader();
+        ApiService.get("/api/user")
+          .then((data) => {
+            if(data.status !=200){
+              throw data;
+            }
+            this.setAuth(data)
+            resolve(data);
+          }).catch(( response ) => {
+            console.log(response)
+            reject('Error al obtener usuario');
+          });
         
       })
       .catch(( response ) => {
