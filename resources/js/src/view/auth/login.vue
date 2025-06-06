@@ -145,12 +145,5 @@
     width: 90%;
 
   }
-  .form__cont {
-
-    &:before {
-      top: 3rem;
-      transform: skewX(0deg) skewY(25deg);
-    }
-  }
 }
 </style>

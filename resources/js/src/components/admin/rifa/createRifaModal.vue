@@ -13,7 +13,7 @@ import moment from 'moment';
     title:'',
     description:'',
     due_date:moment().format('YYYY/MM/DD'),
-    quantity_tickets:0,
+    quantity_tickets:10000,
     price:'',
     minimus_buy:1,
     auto_select:false,
@@ -54,7 +54,6 @@ import moment from 'moment';
       <q-card class="dialog_document" style="border-radius:1rem">
         <q-card-section>
           <div class="text-h5 text-center text-bold">
-            Crear Rifa
             {{ step == 1 ? 'Crear Rifa' : 'Configuracion de Ticket' }}
           </div>
         </q-card-section>
@@ -63,12 +62,18 @@ import moment from 'moment';
          <q-form
             class="md:px-5"
             style="overflow: hidden; "
+            @submit="step == 1 ? step = 2 : createRifa()"
           >
             <transition name="fade">
               <template v-if="step==1">
                 <div>
+                  <div class="row mb-5 justify-center">
+                    <div style="height: 9rem; width: 9rem; background: #111; border-radius: 1rem;" class="flex justify-center items-center">
+                        <q-icon name="add" color="white" size="5rem"/>
+                    </div>
+                  </div>
                   <div class="row my-3">
-                    <div class="col-md-6 q-pr-sm">
+                    <div class="col-md-6 col-12 q-pr-md-sm q-pb-xs q-pb-md-none">
                       <q-input
                         outlined
                         v-model="formInputs.title"
@@ -77,7 +82,7 @@ import moment from 'moment';
                         :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 q-pl-sm">
+                    <div class="col-md-6 col-12 q-pl-md-sm q-mt-sm q-mt-md-none">
                       <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="formInputs.due_date" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
@@ -94,7 +99,7 @@ import moment from 'moment';
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-12 my-3">
+                    <div class="col-md-12 col-12 my-3">
                       <q-input
                         outlined
                         v-model="formInputs.description"
@@ -112,38 +117,49 @@ import moment from 'moment';
               <template v-if="step==2">
                 <div>
                   <div class="row my-3">
-                    <div class="col-md-6 q-pr-sm">
+                    <div class="col-md-6 col-12  q-mb-xs q-mb-md-none">
                       <q-input
                         outlined
-                        v-model="formInputs.title"
-                        label="Nombre de la rifa"
+                        v-model="formInputs.quantity_tickets"
+                        type="number"
+                        label="Cantidad de tickets"
                         class=" createRifaForm__input"
-                        :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
+                        :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 q-pl-sm">
-                      <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="formInputs.due_date" mask="date" :rules="['date']">
-                        <template v-slot:append>
-                          <q-icon name="event" class="cursor-pointer">
-                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                              <q-date v-model="formInputs.due_date" :options="optionsFn">
-                                <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
-                                </div>
-                              </q-date>
-                            </q-popup-proxy>
-                          </q-icon>
-                        </template>
-                      </q-input>
+                    <div class="col-md-6 col-12  q-mt-xs q-mt-md-none">
+                      <q-input
+                        outlined
+                        v-model="formInputs.price"
+                        type="number"
+                        label="Valor del ticket en Bs"
+                        class=" createRifaForm__input"
+                        :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
+                      />
+                    </div>
+                  </div>
+                  <div class="row my-3">
+                    <div class="col-md-6 col-12 q-mb-xs q-mb-md-none">
+                      <q-input
+                        outlined
+                        v-model="formInputs.minimus_buy"
+                        type="number"
+                        label="Compra minima"
+                        class=" createRifaForm__input"
+                        :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
+                      />
+                    </div>
+                    <div class="col-12 q-mt-xs q-mt-md-none">
+                      <q-checkbox  v-model="formInputs.auto_select" label="Selección aleatoria de tickets" color="teal" />
                     </div>
                   </div>
                 </div>
               </template>
             </transition>
             
-            <div class="flex justify-end">
+            <div class="flex justify-end mt-5">
               <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mr-sm" @click="step == 1 ? hideModal() : step = 1" />
-              <q-btn :label="step == 1 ? 'Siguiente' : 'Enviar' "  :type="step == 1 ? 'button' : 'submit'" color="black" @click="step == 1 ? step = 2 : createRifa()"/>
+              <q-btn :label="step == 1 ? 'Siguiente' : 'Enviar' "  color="black" type="submit"/>
             </div>
           </q-form>
         </q-card-section>
@@ -182,6 +198,12 @@ import moment from 'moment';
   & .q-field__append{
     transform: translateY(5%)
   }
-
+}
+@media (max-width: 768px){
+  .dialog_document {
+    margin-left: 0%;
+    min-width: 70%!important;
+    max-width: 800px!important; 
+  }
 }
 </style>
