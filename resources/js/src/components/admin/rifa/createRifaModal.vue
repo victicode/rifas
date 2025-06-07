@@ -2,14 +2,25 @@
 import { onMounted, ref, watch, useTemplateRef } from 'vue';
 import { Notify } from 'quasar'
 import moment from 'moment';
+import { useRifaStore } from '@/services/store/rifas.store';
+
+  const rifaStore = useRifaStore()
   const props = defineProps({
     dialog: Boolean,
   })
+
   const emit = defineEmits(['updateList', 'closeModal'])
   const step = ref(1)
   const loading = ref(false);
   const dialog = ref(props.dialog);
   const previewImg = ref(null)
+  const rewards = ref([
+    {
+      title:'',
+      position:'',
+      time:'',
+    }
+  ])
   const formInputs = ref({
     title:'',
     description:'',
@@ -23,43 +34,87 @@ import moment from 'moment';
   const optionsFn = (date) => {
     return date >= moment().format('YYYY/MM/DD')
   }
+  const localeTime = {
+    days:         ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+    daysShort:    ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+    months:       ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    monthsShort:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+  }
   const loadingShow = (state) => {
     loading.value = state;
   }
   const hideModal = () => {
     emit('closeModal')
   }
+  
+
+  const updateList = () => {
+      formInputs.value = {
+      title:'',
+      description:'',
+      due_date:moment().format('YYYY/MM/DD'),
+      quantity_tickets:'10000',
+      price:'',
+      minimus_buy:1,
+      auto_select:false,
+      all_image:'',
+    }
+    previewImg.value = null
+    step.value = 1;
+    emit('updateList')
+    hideModal()
+  }
   const showNotify = (type,text) => {
     Notify.create({
       color:type,
       message: text,
-      position:'top',
       timeout:2000
     })
   }
   const createRifa = () => {
+    loadingShow(true)
     const file = document.getElementById('rifa_img')
-    // const form = new FormData()
-    // form.append('title', formInputs.value.title);
-    // form.append('description', formInputs.value.description)
-    // form.append('due_date', formInputs.value.due_date)
-    // form.append('quantity_tickets', formInputs.value.quantity_tickets)
-    // form.append('price', formInputs.value.price)
-    // form.append('minimus_buy', formInputs.value.minimus_buy)
-    // form.append('auto_select', formInputs.value.auto_select)
-    // form.append('banner_img')
-    
-    console.log(file)
+ 
+    const formData = new FormData()
+    formData.append('title', formInputs.value.title);
+    formData.append('description', formInputs.value.description)
+    formData.append('due_date', formInputs.value.due_date)
+    formData.append('quantity_tickets', parseInt(formInputs.value.quantity_tickets.replace(/\./g, '')))
+    formData.append('price', parseInt(formInputs.value.price.replace(/\./g, '')))
+    formData.append('minimus_buy', formInputs.value.minimus_buy)
+    formData.append('auto_select', formInputs.value.auto_select)
+    formData.append('banner_img', file.files[0])
+    formData.append('rewards', JSON.stringify(rewards.value))
 
+    rifaStore.createRifa(formData)
+    .then((response) => {
+      
+      loadingShow(false)
+      showNotify('positive', 'Rifa creada con exito')
 
+      updateList();
+    })
+    .catch((response) => {
+      console.log(response)
+      loadingShow(false)
 
-    showNotify('positive', 'Bien!!!')
+      showNotify('negative', response)
+    })
+  }
+  const deleteReward = (index) => {
+    rewards.value.splice(index, 1)
   }
   const onFileChange = (e) => {
     const file = e.target.files[0];
     return previewImg.value= URL.createObjectURL(file)
   }
-  
+  const addReward = () => {
+    rewards.value.push({
+      title:'',
+      position:'',
+      time:'',
+    })
+  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
@@ -70,19 +125,19 @@ import moment from 'moment';
 
 </script>
 <template>
-   <q-dialog v-model="dialog" persistent backdrop-filter="blur(8px)">
+   <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(8px)">
       <q-card class="dialog_document" style="border-radius:1rem">
         <q-card-section>
           <div class="text-h5 text-center text-bold">
-            {{ step == 1 ? 'Crear Rifa' : 'Configuracion de Ticket' }}
+            {{ step == 1 ? 'Crear Rifa' : step == 2 ? 'Configuracion de Ticket' : 'Premios' }}
           </div>
         </q-card-section>
 
-        <q-card-section class="q-pt-none">
+        <q-card-section class="q-pt-none q-px-sm">
          <q-form
             class="md:px-5"
             style="overflow: hidden; "
-            @submit="step == 1 ? step = 2 : createRifa()"
+            @submit="step == 3 ? createRifa() : step++"
           >
             <transition name="fade">
               <template v-if="step==1">
@@ -104,7 +159,7 @@ import moment from 'moment';
                     </div>
                   </div>
                   <div class="row my-3">
-                    <div class="col-md-6 col-12 md:pr-2 mb-4 md:mb-0">
+                    <div class="col-md-6 col-12 md:pr-2 mb-3 md:mb-0">
                       <q-input
                         outlined
                         v-model="formInputs.title"
@@ -113,14 +168,14 @@ import moment from 'moment';
                         :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 col-12 md:pl-2 mt-4 md:mt-0">
+                    <div class="col-md-6 col-12 md:pl-2 mt-1 md:mt-0">
                       <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="formInputs.due_date" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                              <q-date v-model="formInputs.due_date" :options="optionsFn">
+                              <q-date v-model="formInputs.due_date" :options="optionsFn" :locale="localeTime">
                                 <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                  <q-btn v-close-popup label="Guardar" color="primary" flat />
                                 </div>
                               </q-date>
                             </q-popup-proxy>
@@ -148,7 +203,7 @@ import moment from 'moment';
               <template v-if="step==2">
                 <div>
                   <div class="row my-3">
-                    <div class="col-md-6 col-12 md:pr-2 mb-4 md:mb-0">
+                    <div class="col-md-6 col-12 md:pr-2 mb-1 md:mb-0">
                       <q-input
                         outlined
                         v-model="formInputs.quantity_tickets"
@@ -159,7 +214,7 @@ import moment from 'moment';
                         :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 col-12  md:pl-2 mt-4 md:mt-0">
+                    <div class="col-md-6 col-12  md:pl-2 mt-1 md:mt-0">
                       <q-input
                         outlined
                         v-model="formInputs.price"
@@ -189,11 +244,55 @@ import moment from 'moment';
                 </div>
               </template>
             </transition>
+            <transition name="fade">
+              <template v-if="step==3">
+                <div>
+                  <div class="row my-3" v-for="(item, index) in rewards" :key="index">
+                    <div class="col-md-6 col-12 md:pr-2  pr-1 md:mb-0" >
+                      <q-input
+                        outlined
+                        v-model="item.title"
+                        :label="'Premio n° '+(index+1)"
+                        class=" createRifaForm__input"
+                        :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
+                      />
+                    </div>
+                    <div class="col-md-5 col-10 md:px-2 px-1 md:mb-0" >
+                      <q-input
+                        outlined
+                        v-model="item.time"
+                        label="Hora de premiación"
+                        class=" createRifaForm__input"
+                        :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
+                      >
+                      <template v-slot:append>
+                          <q-icon name="access_time" class="cursor-pointer">
+                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                              <q-time v-model="item.time">
+                                <div class="row items-center justify-end">
+                                  <q-btn v-close-popup label="Guardar" color="primary" flat />
+                                </div>
+                              </q-time>
+                            </q-popup-proxy>
+                          </q-icon>
+                        </template>
+                      </q-input>
+                    </div>
+                    <div class="col-md-1 col-2 md:pl-2 pl-1 pt-2" v-if="index > 0" >
+                      <q-btn  color="negative" icon="delete" round v-if="step==3" @click="deleteReward(index)" />
+
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </transition>
             <input type="file"  id="rifa_img" ref="rifa_img" style="display: none;" @change="onFileChange" >
             
             <div class="flex justify-end mt-5">
-              <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mr-sm" @click="step == 1 ? hideModal() : step = 1" />
-              <q-btn :label="step == 1 ? 'Siguiente' : 'Enviar' "  color="black" type="submit"/>
+              <q-btn label=" Add Premio" color="black" class="" icon="add" v-if="step==3" @click="addReward()" />
+              
+              <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mx-sm" @click="step == 1 ? hideModal() : step--" />
+              <q-btn :label="step !== 3 ? 'Siguiente' : 'Enviar' "  color="black" type="submit" :loading="loading"/>
             </div>
           </q-form>
         </q-card-section>
@@ -259,9 +358,12 @@ import moment from 'moment';
   transition: all 0.5 ease;
 }
 @media (max-width: 768px){
+  .createRifaDialog .q-dialog__inner--minimized{
+    padding: 24px 1rem;
+  }
   .dialog_document {
     margin-left: 0%;
-    min-width: 70%!important;
+    min-width: 100%!important;
     max-width: 800px!important; 
   }
 }

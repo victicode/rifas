@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RifaConfiguration extends Model
 {
     //
+    use SoftDeletes;
     protected $table = "configuration_rifas";
     protected $fillable = ["quantity_tickets", "price", "minimus_buy", "auto_select", "banner_img", "all_img", "rifa_id", "create_by"];
     

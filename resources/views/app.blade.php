@@ -13,7 +13,16 @@
             .hiddenx{
                 display: none;
             }
+            .blockx{
+                display: block;
+            }
             @media (min-width: 768px){
+                .md\:justify-end{
+                    justify-content: end!important;
+                }
+                .md\:hiddenx{
+                    display: none!important;
+                }
                 .md\:block {
                     display: block!important;
                 }

@@ -20,8 +20,8 @@ const showSidebar = () => {
 <template>
   <div class="px-3 py-2">
     <div class="  px-2 header__container" >
-      <div class="flex justify-between items-center h-full">
-        <div>
+      <div class="flex md:justify-end justify-between items-center h-full ">
+        <div class="blockx md:hiddenx">
           <q-btn flat round  color="white" class="mx-2" text-color="white" icon="menu" @click="showSidebar()" />
         </div>
   

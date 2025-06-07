@@ -49,7 +49,7 @@ import { useRoute, useRouter } from 'vue-router';
     <sideBar  />
     <div class="md:w-5/6 w-full h-screen container__page">
       <headerAdmin />
-      <section class=" py-5 px-8 h-5/6" >
+      <section class=" py-5 md:px-8 px-4 h-5/6" >
         <router-view v-slot="{ Component }">
           <transition name="fade">
             <component :is="Component" />

@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
     //
+    use SoftDeletes;
     protected $fillable = ["number", "rifa_id", "order_id", "status"];
 
      public function rifa(): BelongsTo

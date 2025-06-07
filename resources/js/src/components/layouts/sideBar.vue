@@ -2,10 +2,13 @@
 import {  inject, onMounted, ref, watch} from 'vue';
 
 const emitter = inject('emitter')
-const showXs = ref(false)
+const showXs = ref( window.screen.width < 780 ? false : true)
 
 const showMovil = () => {
-  showXs.value = !showXs.value
+  window.screen.width < 780 
+  ? showXs.value = !showXs.value
+  : ''
+  
 }
 
 

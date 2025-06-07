@@ -27,6 +27,23 @@ export const useRifaStore = defineStore('rifa', {
         return 'Error al obtener';
       });
     },
+    async createRifa(data) {
+      return await new Promise((resolve, reject) => {
+        
+        if (!ApiService.getToken()) throw ''
+        ApiService.setHeader();
+        ApiService.post('/api/rifas/create', data)
+        .then((data) => {
+          if(data.status !=200) throw data;
+          
+          resolve(data);
+        }).catch(( response ) => {
+          console.log(response)
+          reject(response.response.data.error);
+        });
+        
+      })
 
+    }
   },
 })

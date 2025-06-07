@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function ()
     });
     Route::prefix('rifas')->name('rifa.')->group(function () {
         Route::get('/', [RifaController::class, 'getRifas']);
+        Route::post('/create', [RifaController::class, 'createRifa']);
         
     });
 
