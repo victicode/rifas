@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, useTemplateRef } from 'vue';
 import { Notify } from 'quasar'
 import moment from 'moment';
   const props = defineProps({
@@ -9,15 +9,15 @@ import moment from 'moment';
   const step = ref(1)
   const loading = ref(false);
   const dialog = ref(props.dialog);
+  const previewImg = ref(null)
   const formInputs = ref({
     title:'',
     description:'',
     due_date:moment().format('YYYY/MM/DD'),
-    quantity_tickets:10000,
+    quantity_tickets:'10000',
     price:'',
     minimus_buy:1,
     auto_select:false,
-    banner_img:'',
     all_image:'',
   })
   const optionsFn = (date) => {
@@ -38,8 +38,28 @@ import moment from 'moment';
     })
   }
   const createRifa = () => {
+    const file = document.getElementById('rifa_img')
+    // const form = new FormData()
+    // form.append('title', formInputs.value.title);
+    // form.append('description', formInputs.value.description)
+    // form.append('due_date', formInputs.value.due_date)
+    // form.append('quantity_tickets', formInputs.value.quantity_tickets)
+    // form.append('price', formInputs.value.price)
+    // form.append('minimus_buy', formInputs.value.minimus_buy)
+    // form.append('auto_select', formInputs.value.auto_select)
+    // form.append('banner_img')
+    
+    console.log(file)
+
+
+
     showNotify('positive', 'Bien!!!')
   }
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    return previewImg.value= URL.createObjectURL(file)
+  }
+  
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
@@ -67,13 +87,24 @@ import moment from 'moment';
             <transition name="fade">
               <template v-if="step==1">
                 <div>
-                  <div class="row mb-5 justify-center">
-                    <div style="height: 9rem; width: 9rem; background: #111; border-radius: 1rem;" class="flex justify-center items-center">
-                        <q-icon name="add" color="white" size="5rem"/>
+                  <div class="row mb-8 justify-center column items-center">
+                    <label for="rifa_img" class="label_img">
+                      <div v-if="!previewImg" style="" class="flex justify-center items-center slot__img">
+                          <q-icon name="add" color="white" size="5rem"/>
+                      </div>
+                      <div class="img__container" v-else>
+                        <img  :src="previewImg" class="slot__img" alt="">
+                        <div class="flex justify-center items-center overflow__img" style="">
+                          <q-icon name="add" color="white" size="5rem"/>
+                        </div>
+                      </div>
+                    </label>
+                    <div class="text-center text-gray-700" style="font-size:1rem">
+                      Agrega Imagen
                     </div>
                   </div>
                   <div class="row my-3">
-                    <div class="col-md-6 col-12 q-pr-md-sm q-pb-xs q-pb-md-none">
+                    <div class="col-md-6 col-12 md:pr-2 mb-4 md:mb-0">
                       <q-input
                         outlined
                         v-model="formInputs.title"
@@ -82,7 +113,7 @@ import moment from 'moment';
                         :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 col-12 q-pl-md-sm q-mt-sm q-mt-md-none">
+                    <div class="col-md-6 col-12 md:pl-2 mt-4 md:mt-0">
                       <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="formInputs.due_date" mask="date" :rules="['date']">
                         <template v-slot:append>
                           <q-icon name="event" class="cursor-pointer">
@@ -117,21 +148,23 @@ import moment from 'moment';
               <template v-if="step==2">
                 <div>
                   <div class="row my-3">
-                    <div class="col-md-6 col-12  q-mb-xs q-mb-md-none">
+                    <div class="col-md-6 col-12 md:pr-2 mb-4 md:mb-0">
                       <q-input
                         outlined
                         v-model="formInputs.quantity_tickets"
-                        type="number"
                         label="Cantidad de tickets"
                         class=" createRifaForm__input"
+                        mask="###.###.###"
+                        reverse-fill-mask
                         :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                       />
                     </div>
-                    <div class="col-md-6 col-12  q-mt-xs q-mt-md-none">
+                    <div class="col-md-6 col-12  md:pl-2 mt-4 md:mt-0">
                       <q-input
                         outlined
                         v-model="formInputs.price"
-                        type="number"
+                        mask="###.###.###"
+                        reverse-fill-mask
                         label="Valor del ticket en Bs"
                         class=" createRifaForm__input"
                         :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
@@ -156,6 +189,7 @@ import moment from 'moment';
                 </div>
               </template>
             </transition>
+            <input type="file"  id="rifa_img" ref="rifa_img" style="display: none;" @change="onFileChange" >
             
             <div class="flex justify-end mt-5">
               <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mr-sm" @click="step == 1 ? hideModal() : step = 1" />
@@ -168,6 +202,23 @@ import moment from 'moment';
     </q-dialog>
 </template>
 <style lang="scss">
+.img__container{
+  position: relative;
+   transition: all 0.5 ease;
+  &:hover .overflow__img{
+    opacity: 1;
+    transition: all 0.5 ease;
+  }
+}
+.label_img{
+  cursor: pointer;
+}
+.slot__img{
+  height: 14rem; width: 11rem; background: #111; border-radius: 1rem;
+  &:hover{
+    background: #484848;
+  }
+}
 .dialog_document {
   margin-left: 10%;
   min-width: 600px!important;
@@ -198,6 +249,14 @@ import moment from 'moment';
   & .q-field__append{
     transform: translateY(5%)
   }
+}
+.overflow__img{
+  opacity: 0;
+  position: absolute; 
+  top:0; bottom:0; left:0; right:0; 
+  background:rgba(34, 34, 34, 0.539);
+  border-radius: 1rem;
+  transition: all 0.5 ease;
 }
 @media (max-width: 768px){
   .dialog_document {
