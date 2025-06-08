@@ -35,4 +35,4 @@ const numberUtils = {
   }
 }
 
-export default {...numberUtils}
+export default numberUtils

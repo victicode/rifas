@@ -18,13 +18,13 @@ export const useRifaStore = defineStore('rifa', {
             resolve(data);
           }).catch(( response ) => {
             console.log(response)
-            reject('Error al obtener usuario');
+            reject('Error al obtener rifas');
           });
         
       })
       .catch(( response ) => {
         console.log(response)
-        return 'Error al obtener';
+        return 'Error al obtener rifas';
       });
     },
     async createRifa(data) {
@@ -42,6 +42,22 @@ export const useRifaStore = defineStore('rifa', {
           reject(response.response.data.error);
         });
         
+      })
+
+    },
+    async updateRewards(data) {
+      return await new Promise((resolve, reject) => {
+        if(!ApiService.getToken()) throw ''
+        ApiService.setHeader();
+        ApiService.post('/api/rifas/rewards/u/'+data.id, data.form)
+        .then((data) => {
+            if(data.status !=200) throw data;
+            resolve(data);
+        })
+        .catch((response) => {
+          console.log(response)
+          reject('Error al editar premios');
+        })
       })
 
     }

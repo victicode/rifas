@@ -9,6 +9,7 @@ use App\Models\Reward;
 use App\Models\RifaConfiguration;
 use Exception;
 use Illuminate\Support\Facades\Validator;
+use phpDocumentor\Reflection\Types\This;
 
 class RifaController extends Controller
 {
@@ -46,8 +47,8 @@ class RifaController extends Controller
         $this->loadImageToStorage($request, $newRifa->id);
         $this->addRewards(json_decode($request->rewards, true), $newRifa->id);
 
-
-        return $this->returnSuccess(200, ['rifa' => $newRifa, 'config' => $configuration]);
+ $dd = json_decode($request->rewards, true);
+        return $this->returnSuccess(200, ['rifa' => $newRifa, 'config' => $configuration, 'dd' =>  $dd[0]['title']]);
         
     }
     private function loadImageToStorage(Request $request, $id ){
@@ -60,6 +61,11 @@ class RifaController extends Controller
         RifaConfiguration::where('rifa_id', $id)->update([
             'banner_img' => $banner
         ]);
+    }
+    public function updateRewards(Request $request, $id) {
+        Reward::where('rifa_id', $id)->delete();
+        $this->addRewards(json_decode($request->rewards, true), $id);
+        return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
     }
     private function validateFieldsFromInput($inputs){
         $rules=[
@@ -98,11 +104,12 @@ class RifaController extends Controller
     }
     private function addRewards($rewards, $id){
         for ($i=0; $i < count($rewards); $i++) { 
-            Reward::created([
+            Reward::create([
                 'title'     => $rewards[$i]['title'],
-                'time'      => $rewards[$i]['time'],
+                'reward_time'      => $rewards[$i]['reward_time'],
                 'rifa_id'   => $id,
             ]);
         }
+
     }
 }

@@ -7,30 +7,15 @@ import { useRifaStore } from '@/services/store/rifas.store';
   const rifaStore = useRifaStore()
   const props = defineProps({
     dialog: Boolean,
+    rifa: Object,
   })
 
   const emit = defineEmits(['updateList', 'closeModal'])
   const step = ref(1)
   const loading = ref(false);
   const dialog = ref(props.dialog);
-  const previewImg = ref(null)
-  const rewards = ref([
-    {
-      title:'',
-      position:'',
-      time:'',
-    }
-  ])
-  const formInputs = ref({
-    title:'',
-    description:'',
-    due_date:moment().format('YYYY/MM/DD'),
-    quantity_tickets:'10000',
-    price:'',
-    minimus_buy:2,
-    auto_select:false,
-    all_image:'',
-  })
+  const previewImg = ref(props.rifa.configuration.banner_img)
+  const rifa   = ref(props.rifa)
   const optionsFn = (date) => {
     return date >= moment().format('YYYY/MM/DD')
   }
@@ -53,6 +38,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     emit('updateList')
     hideModal()
   }
+
   const showNotify = (type,text) => {
     Notify.create({
       color:type,
@@ -61,24 +47,6 @@ import { useRifaStore } from '@/services/store/rifas.store';
     })
   }
   const cleanForm = () => {
-    formInputs.value = {
-      title:'',
-      description:'',
-      due_date:moment().format('YYYY/MM/DD'),
-      quantity_tickets:'10000',
-      price:'',
-      minimus_buy:2,
-      auto_select:false,
-      all_image:'',
-    }
-    rewards.value = [
-      {
-        title:'',
-        position:'',
-        reward_time:'',
-      }
-    ]
-    previewImg.value = null
     step.value = 1;
   }
   const createRifa = () => {
@@ -86,15 +54,15 @@ import { useRifaStore } from '@/services/store/rifas.store';
     const file = document.getElementById('rifa_img')
  
     const formData = new FormData()
-    formData.append('title', formInputs.value.title);
-    formData.append('description', formInputs.value.description)
-    formData.append('due_date', formInputs.value.due_date)
-    formData.append('quantity_tickets', parseInt(formInputs.value.quantity_tickets.replace(/\./g, '')))
-    formData.append('price', parseInt(formInputs.value.price.replace(/\./g, '')))
-    formData.append('minimus_buy', formInputs.value.minimus_buy)
-    formData.append('auto_select', formInputs.value.auto_select)
+    formData.append('title', rifa.value.title);
+    formData.append('description', rifa.value.description)
+    formData.append('due_date', rifa.value.due_date)
+    formData.append('quantity_tickets', parseInt(rifa.value.configuration.quantity_tickets.replace(/\./g, '')))
+    formData.append('price', parseInt(rifa.value.configuration.price.replace(/\./g, '')))
+    formData.append('minimus_buy', rifa.value.configuration.minimus_buy)
+    formData.append('auto_select', rifa.value.configuration.auto_select)
     formData.append('banner_img', file.files[0])
-    formData.append('rewards', JSON.stringify(rewards.value))
+    formData.append('rewards', JSON.stringify(rifa.value.rewards))
 
     rifaStore.createRifa(formData)
     .then((response) => {
@@ -125,12 +93,26 @@ import { useRifaStore } from '@/services/store/rifas.store';
       time:'',
     })
   }
+
+  const formatRifa = (rifa) => {
+    // let value = []
+    // rifa.forEach((reward) => {
+    //   value.push({
+    //     title: reward.title,
+    //     reward_time: reward.reward_time,
+    //   })
+    // });         
+    // return value
+  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
+    // rifa.value = formatRifa(props.rifa)
   });
+
   onMounted(() => {
-    
+  //  rifa.value =  formatRifa(props.rifa)
   })
+  
   
 
 </script>
@@ -176,18 +158,18 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-6 col-12 md:pr-2 mb-3 md:mb-0">
                         <q-input
                           outlined
-                          v-model="formInputs.title"
+                          v-model="rifa.title"
                           label="Nombre de la rifa"
                           class=" createRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                         />
                       </div>
                       <div class="col-md-6 col-12 md:pl-2 mt-1 md:mt-0">
-                        <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="formInputs.due_date" mask="date" :rules="['date']">
+                        <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="rifa.due_date" mask="date">
                           <template v-slot:append>
                             <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                <q-date v-model="formInputs.due_date" :options="optionsFn" :locale="localeTime">
+                                <q-date v-model="rifa.due_date" :options="optionsFn" :locale="localeTime">
                                   <div class="row items-center justify-end">
                                     <q-btn v-close-popup label="Guardar" color="primary" flat />
                                   </div>
@@ -202,7 +184,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-12 col-12 my-3">
                         <q-input
                           outlined
-                          v-model="formInputs.description"
+                          v-model="rifa.description"
                           label="Descripción de la rifa"
                           type="textarea"
                           class=" createRifaForm__input"
@@ -220,7 +202,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-6 col-12 md:pr-2 mb-1 md:mb-0">
                         <q-input
                           outlined
-                          v-model="formInputs.quantity_tickets"
+                          v-model="rifa.configuration.quantity_tickets"
                           label="Cantidad de tickets"
                           class=" createRifaForm__input"
                           mask="###.###.###"
@@ -231,7 +213,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-6 col-12  md:pl-2 mt-1 md:mt-0">
                         <q-input
                           outlined
-                          v-model="formInputs.price"
+                          v-model="rifa.configuration.price"
                           mask="###.###.###"
                           reverse-fill-mask
                           label="Valor del ticket en Bs"
@@ -244,7 +226,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-6 col-12 q-mb-xs q-mb-md-none">
                         <q-input
                           outlined
-                          v-model="formInputs.minimus_buy"
+                          v-model="rifa.configuration.minimus_buy"
                           type="number"
                           label="Compra minima"
                           class=" createRifaForm__input"
@@ -252,7 +234,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                         />
                       </div>
                       <div class="col-12 q-mt-xs q-mt-md-none">
-                        <q-checkbox  v-model="formInputs.auto_select" label="Selección aleatoria de tickets" color="teal" />
+                        <q-checkbox  v-model="rifa.configuration.auto_select" label="Selección aleatoria de tickets" color="teal" />
                       </div>
                     </div>
                   </div>

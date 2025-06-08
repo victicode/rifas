@@ -5,6 +5,7 @@ import numberUtils from '@/utils/numberUtils.js'
 import moment from 'moment';
 import createRifaModal from '@/components/admin/rifa/createRifaModal.vue';
 import rewardsModal from '@/components/admin/rifa/rewardsModal.vue'
+import updateRifaModal from '@/components/admin/rifa/updateRifaModal.vue';
 
 const ready = ref(false)
 const rifaStore = useRifaStore()
@@ -15,7 +16,7 @@ const lastPage = ref(0);
 const selectedRifa = ref({})
 const openModal = (modal, rifa) =>{
   selectedRifa.value = rifas.value.find(item => item.id == rifa)
-  showModal.value = 'rewards'
+  showModal.value = modal
 }
 const getRifas = () => {
   ready.value = false
@@ -32,7 +33,13 @@ const getRifas = () => {
     }, 1000);
   })
 }
-const closeModal = () => showModal.value = ''
+const updateReward = (data) => {
+  const index = rifas.value.findIndex((item) => item.id == data.id)
+  rifas.value[index].rewards = data.rewards 
+}
+const closeModal = () => {
+  showModal.value = ''
+}
 onMounted(() =>{
   getRifas()
 })
@@ -83,9 +90,9 @@ onMounted(() =>{
                           </div>
                         </q-chip>
                         <div class="flex justify-end">
-                          <q-btn round color="primary" size="sm" class="mr-1" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
-                          <q-btn round color="primary" size="sm" class="mx-1" text-color="white" icon="settings" />
-                          <q-btn round color="negative" size="sm" class="ml-1" text-color="white" icon="delete" />
+                          <q-btn round color="primary" size="0.81rem" class="mr-1" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
+                          <q-btn round color="primary" size="0.81rem" class="mx-1" text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
+                          <q-btn round color="negative" size="0.81rem" class="ml-1" text-color="white" icon="delete" />
                         </div>
                       </div>
                       <div v-if="rifa.status == 1 " class="q-mt-sm">
@@ -139,7 +146,8 @@ onMounted(() =>{
     </template>
     <createRifaModal :dialog="(showModal == 'create')" @closeModal="closeModal()"  @updateList="getRifas()"/>
     <template v-if="Object.values(selectedRifa).length > 0">
-      <rewardsModal :dialog="(showModal == 'rewards')" :rifa="selectedRifa" @closeModal="closeModal()" />
+      <rewardsModal :dialog="(showModal == 'rewards')"    :rifa="selectedRifa"  @closeModal="closeModal()" @updateReward="updateReward" />
+      <updateRifaModal :dialog="(showModal == 'update')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
     </template>
   </div>
 </template>
