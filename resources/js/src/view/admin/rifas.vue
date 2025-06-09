@@ -6,7 +6,7 @@ import moment from 'moment';
 import createRifaModal from '@/components/admin/rifa/createRifaModal.vue';
 import rewardsModal from '@/components/admin/rifa/rewardsModal.vue'
 import updateRifaModal from '@/components/admin/rifa/updateRifaModal.vue';
-
+import updateRifaStatusModal from '@/components/admin/rifa/updateRifaStatusModal.vue';
 const ready = ref(false)
 const rifaStore = useRifaStore()
 const actualPage = ref(1)
@@ -85,13 +85,14 @@ onMounted(() =>{
                       <div class="my-1 text-subtitle2"> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
                       <div class="flex q-my-sm justify-between items-center"> 
                         <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
-                          <div class="px-3">
+                          <div class="px-2 md:px-3">
                             {{rifa.status_label}}
                           </div>
                         </q-chip>
                         <div class="flex justify-end">
                           <q-btn round color="primary" size="0.81rem" class="mr-1" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
-                          <q-btn round color="primary" size="0.81rem" class="mx-1" text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
+                          <q-btn round color="primary" size="0.81rem" class="mx-2 " text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
+                          <q-btn round :color="'blue-10'" size="0.81rem" class="mr-2 ml-1" text-color="white" icon="cached" @click="openModal('status', rifa.id)" /> 
                           <q-btn round color="negative" size="0.81rem" class="ml-1" text-color="white" icon="delete" />
                         </div>
                       </div>
@@ -145,9 +146,11 @@ onMounted(() =>{
       </div>
     </template>
     <createRifaModal :dialog="(showModal == 'create')" @closeModal="closeModal()"  @updateList="getRifas()"/>
+    
     <template v-if="Object.values(selectedRifa).length > 0">
       <rewardsModal :dialog="(showModal == 'rewards')"    :rifa="selectedRifa"  @closeModal="closeModal()" @updateReward="updateReward" />
       <updateRifaModal :dialog="(showModal == 'update')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
+      <updateRifaStatusModal :dialog="(showModal == 'status')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
     </template>
   </div>
 </template>

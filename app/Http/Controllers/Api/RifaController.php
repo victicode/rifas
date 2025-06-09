@@ -47,13 +47,61 @@ class RifaController extends Controller
         $this->loadImageToStorage($request, $newRifa->id);
         $this->addRewards(json_decode($request->rewards, true), $newRifa->id);
 
- $dd = json_decode($request->rewards, true);
-        return $this->returnSuccess(200, ['rifa' => $newRifa, 'config' => $configuration, 'dd' =>  $dd[0]['title']]);
+        return $this->returnSuccess(200, ['rifa' => $newRifa, 'config' => $configuration ]);
         
     }
+    public function updateRifa(Request $request, $id){
+
+        $rifa = Rifa::find($id);
+        if(!$rifa)  return $this->returnFail(400, 'Rifa no encontrada');
+
+        $validated = $this->validateFieldsFromInput($request->all(), true);
+        if (count($validated) > 0) return $this->returnFail(400, $validated[0]);
+        
+        
+        try {
+            $rifa->update([
+                'title'         => $request->title,
+                'description'   => $request->description,
+                'due_date'      => $request->due_date,
+            ]);
+            RifaConfiguration::where('rifa_id', $id)->update([
+                'quantity_tickets'  => $request->quantity_tickets,
+                'price'             => $request->price,
+                'minimus_buy'       => $request->minimus_buy,
+                'auto_select'       => $request->auto_select ? 1 : 0,
+            ]);
+        } catch (Exception $th) {
+             return $this->returnFail(500, $th->getMessage());
+        }
+        
+        $this->loadImageToStorage($request, $id);
+        return $this->returnSuccess(200, ['rifa' => $rifa ]);
+    }
+    public function updateStatusRifa(Request $request, $id) {
+        $rifa = Rifa::find($id);
+        if(!$rifa)  return $this->returnFail(400, 'Rifa no encontrada');
+
+        
+        try {
+            $rifa->update([
+                'status' => $request->status,
+            ]);
+        } catch (Exception $th) {
+             return $this->returnFail(500, $th->getMessage());
+        }
+        
+        return $this->returnSuccess(200, ['rifa' => $rifa ]);
+    }
+    public function updateRewards(Request $request, $id) {
+        Reward::where('rifa_id', $id)->delete();
+        $this->addRewards(json_decode($request->rewards, true), $id);
+        return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
+    }
+
     private function loadImageToStorage(Request $request, $id ){
-        $banner = ''; 
-        if ($request->banner_img) {
+        $banner = RifaConfiguration::where('rifa_id', $id)->first()->banner_img; 
+        if ($request->file('banner_img')) {
             $banner = '/images/rifas/'.rand(1000000, 9999999).'_'. trim(str_replace(' ', '_', $id )) .'.'. $request->File('banner_img')->extension();
             $request->file('banner_img')->move(public_path() . '/images/rifas/', $banner);
         }  
@@ -62,12 +110,7 @@ class RifaController extends Controller
             'banner_img' => $banner
         ]);
     }
-    public function updateRewards(Request $request, $id) {
-        Reward::where('rifa_id', $id)->delete();
-        $this->addRewards(json_decode($request->rewards, true), $id);
-        return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
-    }
-    private function validateFieldsFromInput($inputs){
+    private function validateFieldsFromInput($inputs, $update = false){
         $rules=[
             'title'             => ['required', 'regex:/^[a-zA-Z-À-ÿ0-9 \/.]+$/i'],
             'description'       => ['required', 'regex:/^[^<>;\-_\']+$/i'],
@@ -75,7 +118,7 @@ class RifaController extends Controller
             'quantity_tickets'  => ['required', 'integer'],
             'price'             => ['required', 'integer'],
             'minimus_buy'       => ['required', 'integer'],
-            'banner_img'        => ['required', 'file', 'image'],
+            'banner_img'        => !$update ? ['required', 'file', 'image'] : [],
 
         ];
         $messages = [
@@ -91,11 +134,13 @@ class RifaController extends Controller
             'price.integer'             => 'precio no valido.',
             'minumus_buy.required'      => 'La cantida de compra minima es requerida',
             'minimus_buy.integer'       => 'Cantidad minima no valida',
-            'banner_img.required'       => 'La foto de la rifa es requerida',
-            'banner_img.file'           => 'La foto tiene que ser un archivo',
-            'banner_img.image'          => 'Formato de foto no valido',
+            
         ];
-
+        if(!$update){
+            $messages['banner_img.required'] = 'La foto de la rifa es requerida';
+            $messages['banner_img.file']     = 'La foto tiene que ser un archivo';
+            $messages['banner_img.image']    = 'Formato de foto no valido';
+        }
 
          $validator = Validator::make($inputs, $rules, $messages)->errors();
 

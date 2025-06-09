@@ -32,7 +32,7 @@ export const useRifaStore = defineStore('rifa', {
         
         if (!ApiService.getToken()) throw ''
         ApiService.setHeader();
-        ApiService.post('/api/rifas/create', data)
+        ApiService.post('/api/rifas', data)
         .then((data) => {
           if(data.status !=200) throw data;
           
@@ -44,6 +44,38 @@ export const useRifaStore = defineStore('rifa', {
         
       })
 
+    },
+    async updateRifa(id, data){
+      return await new Promise((resolve, reject) => {
+        if(!ApiService.getToken()) throw ''
+
+        ApiService.setHeader();
+        ApiService.post('/api/rifas/u/'+id, data)
+        .then((data) => {
+            if(data.status !=200) throw data;
+            resolve(data);
+        })
+        .catch((response) => {
+          console.log(response)
+          reject('Error al editar premios');
+        })
+      })
+    },
+    async updateStatus(id, data){
+      return await new Promise((resolve, reject) => {
+        if(!ApiService.getToken()) throw ''
+
+        ApiService.setHeader();
+        ApiService.post('/api/rifas/status/u/'+id, data)
+        .then((data) => {
+            if(data.status !=200) throw data;
+            resolve(data);
+        })
+        .catch((response) => {
+          console.log(response)
+          reject('Error al editar premios');
+        })
+      })
     },
     async updateRewards(data) {
       return await new Promise((resolve, reject) => {

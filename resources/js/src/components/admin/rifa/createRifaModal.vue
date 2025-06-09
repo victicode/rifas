@@ -18,7 +18,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     {
       title:'',
       position:'',
-      time:'',
+      reward_time:'',
     }
   ])
   const formInputs = ref({
@@ -122,7 +122,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     rewards.value.push({
       title:'',
       position:'',
-      time:'',
+      reward_time:'',
     })
   }
   watch(() => props.dialog, (newValue) => {
@@ -274,7 +274,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       <div class="col-md-5 col-10 md:px-2 md:px-1 md:mb-0" >
                         <q-input
                           outlined
-                          v-model="item.time"
+                          v-model="item.reward_time"
                           label="Hora de premiación"
                           class=" createRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
@@ -282,7 +282,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                         <template v-slot:append>
                             <q-icon name="access_time" class="cursor-pointer">
                               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                <q-time v-model="item.time">
+                                <q-time v-model="item.reward_time">
                                   <div class="row items-center justify-end">
                                     <q-btn v-close-popup label="Guardar" color="primary" flat />
                                   </div>

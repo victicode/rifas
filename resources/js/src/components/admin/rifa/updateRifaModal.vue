@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, ref, watch, } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Notify } from 'quasar'
 import moment from 'moment';
 import { useRifaStore } from '@/services/store/rifas.store';
+import numberUtils from '@/utils/numberUtils.js';
 
   const rifaStore = useRifaStore()
   const props = defineProps({
@@ -15,7 +16,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
   const loading = ref(false);
   const dialog = ref(props.dialog);
   const previewImg = ref(props.rifa.configuration.banner_img)
-  const rifa   = ref(props.rifa)
+  const rifa   = ref([])
   const optionsFn = (date) => {
     return date >= moment().format('YYYY/MM/DD')
   }
@@ -49,7 +50,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
   const cleanForm = () => {
     step.value = 1;
   }
-  const createRifa = () => {
+  const updateRifa = () => {
     loadingShow(true)
     const file = document.getElementById('rifa_img')
  
@@ -62,69 +63,59 @@ import { useRifaStore } from '@/services/store/rifas.store';
     formData.append('minimus_buy', rifa.value.configuration.minimus_buy)
     formData.append('auto_select', rifa.value.configuration.auto_select)
     formData.append('banner_img', file.files[0])
-    formData.append('rewards', JSON.stringify(rifa.value.rewards))
 
-    rifaStore.createRifa(formData)
+    rifaStore.updateRifa(rifa.value.id, formData)
     .then((response) => {
-      
       loadingShow(false)
-      showNotify('positive', 'Rifa creada con exito')
-
+      showNotify('positive', 'Rifa modificada con exito')
       updateList();
     })
     .catch((response) => {
-      console.log(response)
       loadingShow(false)
-
       showNotify('negative', response)
     })
   }
-  const deleteReward = (index) => {
-    rewards.value.splice(index, 1)
-  }
+
   const onFileChange = (e) => {
     const file = e.target.files[0];
     return previewImg.value= URL.createObjectURL(file)
   }
-  const addReward = () => {
-    rewards.value.push({
-      title:'',
-      position:'',
-      time:'',
-    })
+  const formatRifa = () => {
+    Object.entries(props.rifa).forEach(([key, value]) => {
+      if(key !=='configuration'){
+        rifa.value[key] = key== 'due_date' ? value.replace(/\-/g, '/') : value;
+      } else {
+        rifa.value['configuration'] = []
+        Object.entries(value).forEach(([key2, value2]) => {
+          if(['auto_select', 'quantity_tickets', 'price', 'minimus_buy'].includes(key2)) rifa.value['configuration'][key2] =numberUtils.numberFormat(value2);
+        })
+      }
+    }); 
+    previewImg.value = props.rifa.configuration.banner_img
+    rifa.value.configuration.auto_select = rifa.value.configuration.auto_select == 1;
   }
 
-  const formatRifa = (rifa) => {
-    // let value = []
-    // rifa.forEach((reward) => {
-    //   value.push({
-    //     title: reward.title,
-    //     reward_time: reward.reward_time,
-    //   })
-    // });         
-    // return value
-  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
-    // rifa.value = formatRifa(props.rifa)
+    formatRifa()
   });
 
   onMounted(() => {
-  //  rifa.value =  formatRifa(props.rifa)
+    formatRifa()
   })
   
   
 
 </script>
 <template>
-   <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(8px)">
+   <q-dialog v-model="dialog" class="updateRifaDialog" persistent backdrop-filter="blur(8px)">
       <q-card class="dialog_document" style="border-radius:1rem">
         <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
         <q-card-section>
           <div class="text-h5 text-center text-bold">
-            {{ step == 1 ? 'Crear Rifa' : step == 2 ? 'Configuracion de Ticket' : 'Premios' }}
+            {{ step == 1 ? 'Modificar Rifa' : 'Configuracion de Ticket' }}
           </div>
         </q-card-section>
         <section class="content__modalSection">
@@ -133,7 +124,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
            <q-form
               class="md:px-5"
               style="overflow: hidden; "
-              @submit="step == 3 ? createRifa() : step++"
+              @submit="step == 2 ? updateRifa() : step++"
             >
               <transition name="fade">
                 <template v-if="step==1">
@@ -160,12 +151,12 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           outlined
                           v-model="rifa.title"
                           label="Nombre de la rifa"
-                          class=" createRifaForm__input"
+                          class=" updateRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                         />
                       </div>
                       <div class="col-md-6 col-12 md:pl-2 mt-1 md:mt-0">
-                        <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" createRifaForm__input" v-model="rifa.due_date" mask="date">
+                        <q-input hint="Formato YYYY/MM/DD" label="Fecha de premiación" outlined class=" updateRifaForm__input" v-model="rifa.due_date" mask="date">
                           <template v-slot:append>
                             <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -187,7 +178,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           v-model="rifa.description"
                           label="Descripción de la rifa"
                           type="textarea"
-                          class=" createRifaForm__input"
+                          class=" updateRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'Este campo es obligatorio']"
                         />
                       </div>
@@ -204,7 +195,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           outlined
                           v-model="rifa.configuration.quantity_tickets"
                           label="Cantidad de tickets"
-                          class=" createRifaForm__input"
+                          class=" updateRifaForm__input"
                           mask="###.###.###"
                           reverse-fill-mask
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
@@ -217,7 +208,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           mask="###.###.###"
                           reverse-fill-mask
                           label="Valor del ticket en Bs"
-                          class=" createRifaForm__input"
+                          class=" updateRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
                         />
                       </div>
@@ -229,7 +220,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           v-model="rifa.configuration.minimus_buy"
                           type="number"
                           label="Compra minima"
-                          class=" createRifaForm__input"
+                          class=" updateRifaForm__input"
                           :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
                         />
                       </div>
@@ -240,54 +231,13 @@ import { useRifaStore } from '@/services/store/rifas.store';
                   </div>
                 </template>
               </transition>
-              <transition name="fade">
-                <template v-if="step==3">
-                  <div class="px-2">
-                    <div class="row my-3" v-for="(item, index) in rewards" :key="index">
-                      <div class="col-md-6 col-12 md:pr-2  pr-1 md:mb-0" >
-                        <q-input
-                          outlined
-                          v-model="item.title"
-                          :label="'Premio n° '+(index+1)"
-                          class=" createRifaForm__input"
-                          :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
-                        />
-                      </div>
-                      <div class="col-md-5 col-10 md:px-2 md:px-1 md:mb-0" >
-                        <q-input
-                          outlined
-                          v-model="item.time"
-                          label="Hora de premiación"
-                          class=" createRifaForm__input"
-                          :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
-                        >
-                        <template v-slot:append>
-                            <q-icon name="access_time" class="cursor-pointer">
-                              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                <q-time v-model="item.time">
-                                  <div class="row items-center justify-end">
-                                    <q-btn v-close-popup label="Guardar" color="primary" flat />
-                                  </div>
-                                </q-time>
-                              </q-popup-proxy>
-                            </q-icon>
-                          </template>
-                        </q-input>
-                      </div>
-                      <div class="col-md-1 col-2 md:pl-2 pl-1 pt-2" v-if="index > 0" >
-                        <q-btn  color="negative" icon="delete" round v-if="step==3" @click="deleteReward(index)" />
-                      </div>
-                    </div>
-                  </div>
-                </template>
-              </transition>
               <input type="file"  id="rifa_img" ref="rifa_img" style="display: none;" @change="onFileChange" >
               
               <div class="flex justify-end mt-5">
-                <q-btn label=" Premio" color="black" class="" icon="add" v-if="step==3" @click="addReward()" />
+
                 
                 <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mx-sm" @click="step == 1 ? hideModal() : step--" />
-                <q-btn :label="step !== 3 ? 'Siguiente' : 'Enviar' "  color="black" type="submit" :loading="loading"/>
+                <q-btn :label="step !== 2 ? 'Siguiente' : 'Guardar' "  color="black" type="submit" :loading="loading"/>
               </div>
             </q-form>
           </q-card-section>
@@ -315,7 +265,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
   }
 }
 
-.createRifaForm__input {
+.updateRifaForm__input {
   & .q-field__control {
     border-radius: 10px!important;
 
