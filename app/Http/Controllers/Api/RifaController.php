@@ -25,6 +25,11 @@ class RifaController extends Controller
 
         return $this->returnSuccess(200, $rifas);
     }
+    public function getRifaById($id) {
+        $rifa = Rifa::with('configuration', 'rewards')->find($id);
+
+        return $this->returnSuccess(200, $rifa);
+    }
     public function createRifa(Request $request){
         $validated = $this->validateFieldsFromInput($request->all());
         if (count($validated) > 0) return $this->returnFail(400, $validated[0]);

@@ -10,6 +10,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::prefix('public')->group(function () {
     Route::prefix('rifas')->name('rifa.')->group(function () {
         Route::get('/active', [RifaController::class, 'getRifasActive']);
+        Route::get('/byId/{id}', [RifaController::class, 'getRifaById']);
     });
 });
 Route::middleware('auth:sanctum')->group(function () 

@@ -18,16 +18,16 @@ import { onMounted, ref, watch} from 'vue';
   ]
 </script>
 <template>
-   <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(8px)">
+   <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(5px)">
       <q-card class="dialog_documentCard" style="border-radius:1rem">
         <q-card-section class="q-pb-sm">
-          <div class="text-h5  text-bold">
+          <div class="text-h5 text-black text-bold">
            Términos y condiciones
           </div>
         </q-card-section>
         <q-card-section class="content__modalSection  modal-temrs" style="">
           <div class="row md:px-2" >
-            <div class="col-12 my-2 " style="font-size:1rem" v-for="(condition, index) in conditions" :key="index">
+            <div class="col-12 my-2 text-black" style="font-size:1rem" v-for="(condition, index) in conditions" :key="index">
               {{ (index+1) }}) {{ condition }}
             </div>
           </div>

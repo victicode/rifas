@@ -1,5 +1,5 @@
 <template>
-  <main  class="h-screen md:py-0 bg-stone-100" >
+  <main  class="h-full md:py-0 bg-stone-100" >
     <RouterView class="appMobile h-full "/>
   </main>
 </template>

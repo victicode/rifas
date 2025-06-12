@@ -24,7 +24,31 @@ const routes = [
         meta:{
           title: 'Bienvenido'
         }
-      }
+      },
+      {
+        path: '/support', 
+        name: 'support',
+        component: () => import('@/view/client/homePage.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
+        path: '/rifas', 
+        name: 'rifas',
+        component: () => import('@/view/client/homePage.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
+        path: '/rifa/:id', 
+        name: 'rifaById',
+        component: () => import('@/view/client/rifaByIdPage.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
     ]
   },
   { 

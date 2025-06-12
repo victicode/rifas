@@ -3,8 +3,8 @@ import logo from '@/assets/images/logo/logo.png'
 
 </script>
 <template>
-  <header class="">
-    <div class="md:px-6 md:py-5 py-4 bg-stone-950 row items-center" style="    background-image: url(https://vergacionderifa.com/static/img/trama.svg;" >
+  <header class="f-full header__client">
+    <div class="md:px-6 md:py-5 py-4 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
       <div class="flex items-center justify-center md:justify-start col-12 col-md-2 mb-2 md:mb-0">
         <img :src="logo" alt="" style="height:3rem">
         <div class=" mx-3 logo-text">
@@ -44,6 +44,9 @@ import logo from '@/assets/images/logo/logo.png'
   </header>
 </template>
 <style lang="scss">
+.header__client{
+  box-shadow: 0px 2px 5px 0px darkgray;
+}
 .logo-text {
   font-family: "Braah One", sans-serif;
   font-weight: 400;
