@@ -271,7 +271,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                         />
                       </div>
-                      <div class="col-md-5 col-10 md:px-2 md:px-1 md:mb-0" >
+                      <div class="col-md-5 col-10 md:px-2 md:mb-0" >
                         <q-input
                           outlined
                           v-model="item.reward_time"

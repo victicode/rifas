@@ -27,6 +27,24 @@ export const useRifaStore = defineStore('rifa', {
         return 'Error al obtener rifas';
       });
     },
+    async getRifasActive() {
+      return await new Promise((resolve, reject) => {
+        ApiService.get('/api/public/rifas/active')
+          .then(({ data }) => {
+            if(data.code!=200) throw data;
+            
+            resolve(data);
+          }).catch(( response ) => {
+            console.log(response)
+            reject('Error al obtener rifas');
+          });
+        
+      })
+      .catch(( response ) => {
+        console.log(response)
+        return 'Error al obtener rifas';
+      });
+    },
     async createRifa(data) {
       return await new Promise((resolve, reject) => {
         

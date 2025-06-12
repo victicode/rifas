@@ -1,12 +1,10 @@
+<script setup>
+import headerClient from '@/components/layouts/headerClient.vue';
+</script>
 <template>
   <section class="h-full ">
-    <div>
-      
-    </div>
-    <div>
-      <div>
-  
-      </div>
+    <headerClient/>
+    <div class="h-5/6" style="overflow: auto;">
       <router-view v-slot="{ Component }">
         <transition name="fade">
           <component :is="Component" />

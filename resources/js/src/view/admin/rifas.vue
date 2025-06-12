@@ -85,24 +85,24 @@ onMounted(() =>{
                       <div class="my-1 text-subtitle2"> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
                       <div class="flex q-my-sm justify-between items-center"> 
                         <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
-                          <div class="px-2 md:px-3">
+                          <div class="px-2 md:px-1">
                             {{rifa.status_label}}
                           </div>
                         </q-chip>
                         <div class="flex justify-end">
-                          <q-btn round color="primary" size="0.81rem" class="mr-1" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
-                          <q-btn round color="primary" size="0.81rem" class="mx-2 " text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
-                          <q-btn round :color="'blue-10'" size="0.81rem" class="mr-2 ml-1" text-color="white" icon="cached" @click="openModal('status', rifa.id)" /> 
-                          <q-btn round color="negative" size="0.81rem" class="ml-1" text-color="white" icon="delete" />
+                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
+                          <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
+                          <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="cached" @click="openModal('status', rifa.id)" /> 
+                          <q-btn round color="negative" size="0.72rem" class="ml-1 button__actionRifa" text-color="white" icon="delete" />
                         </div>
                       </div>
-                      <div v-if="rifa.status == 1 " class="q-mt-sm">
-                        <q-linear-progress stripe rounded size="1.3rem" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
-                          <div class="absolute-full flex flex-center ">
-                            <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
-                          </div>
-                        </q-linear-progress>
-                      </div>
+                    </div>
+                    <div class="q-mt-sm">
+                      <q-linear-progress stripe rounded size="1.3rem" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+                        <div class="absolute-full flex flex-center ">
+                          <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
+                        </div>
+                      </q-linear-progress>
                     </div>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ onMounted(() =>{
   flex-direction: column;
   justify-content: space-between;
   width: 100%; 
-  height: 32rem!important; 
+  height: 33rem!important; 
   overflow: hidden;
   background:white;
   border-radius: 1.2rem;

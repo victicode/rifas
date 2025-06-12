@@ -7,6 +7,11 @@ use App\Http\Controllers\Api\RifaController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::prefix('public')->group(function () {
+    Route::prefix('rifas')->name('rifa.')->group(function () {
+        Route::get('/active', [RifaController::class, 'getRifasActive']);
+    });
+});
 Route::middleware('auth:sanctum')->group(function () 
 {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -18,10 +23,7 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::post('/', [RifaController::class, 'createRifa']);
         Route::post('/u/{id}', [RifaController::class, 'updateRifa']);
         Route::post('/status/u/{id}', [RifaController::class, 'updateStatusRifa']);
-
         Route::post('/rewards/u/{id}', [RifaController::class, 'updateRewards']);
-
-        
     });
 
     Route::prefix('orders')->name('order.')->group(function () {
