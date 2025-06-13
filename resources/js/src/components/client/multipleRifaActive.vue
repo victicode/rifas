@@ -17,14 +17,14 @@ const rifa = ref(props.rifa)
 <template>
   <div>
     <div class="row bg-white pb-1 rifa_containerbuy">
-      <div class="col-12 px-0 relative" >
+      <div class="col-12 px-0 relative" style="height:68%" >
         <img :src="rifa.configuration.banner_img" alt="" style="" class="img__rifa">
         <div class="badge__buy py-1 px-4" style=" " >
           Compra ahora!
         </div>
       </div>
-      <div class="col-12 px-4">
-        <div class="px-4 pt-3 pb-2 flex column justify-between" style=" flex-wrap: nowrap;">
+      <div class="col-12 px-4" style="height:32%">
+        <div class="px-4 pt-1 pb-2 flex column justify-between" style=" flex-wrap: nowrap;">
           <div class="rifa__item--title w-full ellipsis text-h5 text-black text-center">{{rifa.title}}</div>
         </div>
         <div class="q-mt-sm">
@@ -52,24 +52,19 @@ const rifa = ref(props.rifa)
 </template>
 <style lang="scss">
 .rifa_containerbuy{
+  height: 37rem;
   box-shadow: 0px 1px 5px 0px #8f8f8f;
   border-radius: 1rem;
   overflow: hidden;
   border: 1px solid #585858;
 }
-.text-blur{
-  color: #39e1d2!important;
 
-}
-.bg-blur{
-  background-color: #39e1d2!important;
-}
 .img__rifa{
 
 
-  height: max-content;
+  height: 100%;
   object-fit: cover;
-  max-height: 25rem;
+  
   width: 100%;
 }
 .button__BuyRifa{

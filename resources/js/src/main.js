@@ -12,6 +12,7 @@ import '@quasar/extras/ionicons-v4/ionicons-v4.css'
 import '@quasar/extras/eva-icons/eva-icons.css'
 import mitt from 'mitt'
 import 'quasar/src/css/index.sass'
+import '@/plugins/quasar/scss/app.scss'
 import { useAuthStore } from '@/services/store/auth.services';
 const pinia = createPinia()
 const emitter = mitt()

@@ -3,15 +3,15 @@ import logo from '@/assets/images/logo/logo.png'
 
 </script>
 <template>
-  <header class="f-full header__client">
-    <div class="md:px-6 md:py-5 py-4 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center justify-center md:justify-start col-12 col-md-2 mb-2 md:mb-0">
+  <header class="h-full header__client">
+    <div class=" h-full md:px-6 md:py-5 py-4 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
+      <div class="flex items-center justify-center md:justify-start col-12 col-md-3 mb-2 md:mb-0">
         <img :src="logo" alt="" style="height:3rem">
         <div class=" mx-3 logo-text">
           RIFAS APP
         </div>
       </div>
-      <div class=" col-12 col-md-6">
+      <div class=" col-12 col-md-9">
         <ul class="flex justify-center md:justify-start">
           <RouterLink activeClass="active_link" to="/home" >
             <li class="text-white mx-3 nav_header--items" >
