@@ -5,3 +5,18 @@
 .bg-blur{
   background-color: #39e1d2!important;
 }
+
+.close__button{
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 2;
+}
+@media (max-width: 768px){
+  .close__button{
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    z-index: 2;
+  }
+}

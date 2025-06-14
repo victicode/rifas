@@ -12,7 +12,7 @@ class Order extends Model
     
     //
     use SoftDeletes;
-    protected $fillable = ["amount", "quantity", "reference", "vaucher", "pay_date", "status", "client_id", "rifa_id"];
+    protected $fillable = ["amount", "quantity", "reference", "vaucher", "pay_date", "status", "client_id", "rifa_id", "method_id"];
 
     public function rifa(): BelongsTo
     {

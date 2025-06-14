@@ -4,11 +4,12 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
+import buyRifaModal from '@/components/client/buyRifaByClientModal.vue'
 moment.updateLocale('en', {
-    months : [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
-        "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-    ]
+  months : [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+      "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ]
 });
 const rifaStore = useRifaStore();
 const rifa = ref({})
@@ -18,13 +19,24 @@ const getRifaById = () => {
   rifaStore.getRifaById(route.params.id)
   .then((response) =>{
     rifa.value = response.data
-    loading.value = true
+    setTimeout(() => {
+      loading.value = true
+    }, 2000);
 
   })
 }
-const showModal = ref(false)
-const formattDate = (date) => {
+const modal = ref(false)
+const showModal = () => {
+  modal.value = true
+}
+const closeModal = () => {
+  modal.value = false
+}
+const formatDate = (date) => {
   return moment(date).format('DD') +' de '+ moment(date).format('MMMM') + ' de ' + moment(date).format('YYYY')  
+}
+const orderCreate = () => {
+  console.log('eeeee')
 }
 onMounted(() => {
   getRifaById()
@@ -34,16 +46,13 @@ onMounted(() => {
   <div class="md:px-8 px-5">
     <div v-if="loading">
       <div class="row nd:pt-6 pt-3">
-        <div class="col-md-4 col-12 md:pr-8 relative flex md:justify-center">
+        <div class="col-md-4 col-12 md:pt-3 md:pr-8 relative flex md:justify-center">
           <img :src="rifa.configuration.banner_img" alt="" class="img__bannerRifa">
           <div class="badge__buyRifa py-1 px-4" style=" " >
             Compra ahora!
           </div>
-
-          
- 
         </div>
-        <div class="col-md-5 col-12 md:pt-5 pt-4 md:px-2">
+        <div class="col-md-5 col-12 md:pt-2 pt-4 md:px-2">
           <div class="flex w-full justify-between items-center">
             <div>
               <div class="text-bold text-black text-h4">
@@ -57,7 +66,7 @@ onMounted(() => {
             <div class="flex mt-5 md:mt-2 items-end w-full justify-between">
               <div class="date__show md:px-5 px-2 py-3 text-bold">
                 <q-icon name="event" size="1.6rem" class="mr-2" />
-                {{ formattDate()}}
+                {{ formatDate()}}
                 
               </div>
               <div class="text-stone-800 text-subtitle2 blockx md:hidden text-end" style="font-size:1rem" >
@@ -68,7 +77,7 @@ onMounted(() => {
             
           </div>
           <div class="blockx md:hidden my-3">
-            <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" >
+            <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()">
               <div class="py-2 text-subtitle2">
                 Comprar Ahora
               </div>
@@ -93,7 +102,7 @@ onMounted(() => {
             {{ rifa.description }}
           </div>
         </div>
-        <div class="col-md-3 col-12 md:pt-12 pt-4 mb-4 md:pl-8 ">
+        <div class="col-md-3 col-12 md:pt-3 pt-4 mb-4 md:pl-8 ">
           <div class="rifa_content py-3 px-2">
             <div class="text-bold text-center text-black text-h4">
               Premios
@@ -116,7 +125,7 @@ onMounted(() => {
               </div>
             </div>
             <div class="pt-2 px-5 ">
-              <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" >
+              <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()" >
                 <div class="py-1 text-subtitle2">
                   Comprar Ahora
                 </div>
@@ -131,7 +140,7 @@ onMounted(() => {
         </div>
       </div>
       <div>
-
+        <buyRifaModal :dialog="modal" :rifa="rifa" @orderSuccessful="orderCreate" @closeModal="closeModal()"/>
       </div>
     </div>
     <div v-else class="flex justify-center mt-24">
@@ -170,7 +179,7 @@ onMounted(() => {
   width: fit-content;
 }
 .img__bannerRifa{
-  height: 90%;
+  height: 95%;
   object-fit: cover;
   width: 100%;
   border-radius: 1rem;

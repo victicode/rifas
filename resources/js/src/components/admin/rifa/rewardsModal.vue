@@ -192,12 +192,6 @@ import { useRifaStore } from '@/services/store/rifas.store';
   border-radius: 1rem;
   transition: all 0.5 ease;
 }
-.close__button{
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  z-index: 2;
-}
 .dialog_documentCard {
   margin-left: 10%;
   min-width: 600px!important;
@@ -207,12 +201,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
 }
 @media (max-width: 768px){
   
-  .close__button{
-    position: absolute;
-    right: -1rem;
-    top: -1rem;
-    z-index: 2;
-  }
+
   .createRifaDialog .q-dialog__inner--minimized{
     padding: 24px 1rem;
   }

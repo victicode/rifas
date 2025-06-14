@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RifaController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -12,7 +13,12 @@ Route::prefix('public')->group(function () {
         Route::get('/active', [RifaController::class, 'getRifasActive']);
         Route::get('/byId/{id}', [RifaController::class, 'getRifaById']);
     });
+    Route::prefix('order')->name('order.')->group(function () {
+        Route::post('/', [OrderController::class, 'createOrder']);
+    });
 });
+
+
 Route::middleware('auth:sanctum')->group(function () 
 {
     Route::post('/logout', [AuthController::class, 'logout']);
