@@ -52,7 +52,7 @@ import numberUtils from '@/utils/numberUtils.js';
   }
   const updateRifa = () => {
     loadingShow(true)
-    const file = document.getElementById('rifa_img')
+    const file = document.getElementById('rifa_imgUpdate')
  
     const formData = new FormData()
     formData.append('title', rifa.value.title);
@@ -130,7 +130,7 @@ import numberUtils from '@/utils/numberUtils.js';
                 <template v-if="step==1">
                   <div class="px-2">
                     <div class="row mb-8 justify-center column items-center">
-                      <label for="rifa_img" class="label_img">
+                      <label for="rifa_imgUpdate" class="label_img">
                         <div v-if="!previewImg" style="" class="flex justify-center items-center slot__img">
                             <q-icon name="add" color="white" size="5rem"/>
                         </div>
@@ -231,7 +231,7 @@ import numberUtils from '@/utils/numberUtils.js';
                   </div>
                 </template>
               </transition>
-              <input type="file"  id="rifa_img" ref="rifa_img" style="display: none;" @change="onFileChange" >
+              <input type="file"  id="rifa_imgUpdate" ref="rifa_imgUpdate" style="display: none;" @change="onFileChange" >
               
               <div class="flex justify-end mt-5">
 

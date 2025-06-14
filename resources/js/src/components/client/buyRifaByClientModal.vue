@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, ref, watch, } from 'vue';
 import { Notify } from 'quasar'
-import moment from 'moment';
 
 import numberUtils from '@/utils/numberUtils.js';
 import { useOrderStore } from '@/services/store/order.store';
+import { useRouter } from 'vue-router';
   const numberFormat = numberUtils.numberFormat 
-
+  const router = useRouter()
   const props = defineProps({
     dialog: Boolean,
     rifa: Object
@@ -29,12 +29,16 @@ import { useOrderStore } from '@/services/store/order.store';
       value:1
     },
     {
-      title:'Zelle',
+      title:'Transferencia',
       value:2
     },
     {
-      title:'Binance',
+      title:'Zelle',
       value:3
+    },
+    {
+      title:'Binance',
+      value:4
     }
   ]
   const dataPay = [
@@ -42,28 +46,42 @@ import { useOrderStore } from '@/services/store/order.store';
     [
       {
         title:'Banco',
-        value:'Mercantil (0105)'
+        value:'Banplus (0174)'
       },
       {
         title:'Teléfono',
-        value:'04245391538'
+        value:'04121028697'
       },
       {
         title:'Cedula',
-        value:'V27132357'
+        value:'V25401625'
+      }
+    ],
+    [
+      {
+        title:'Banco',
+        value:'Banplus (0174)'
+      },
+      {
+        title:'Número de cuenta',
+        value:'0000 1111 2222 3333 4444 5555'
+      },
+      {
+        title:'Cedula',
+        value:'V25401625'
       }
     ],
     [
       {
         title:'Correo Electrónico',
-        value:'frovic.ve@gmail.com'
+        value:'-----ve@gmail.com'
       }
     ],
       
     [
       {
         title:'Correo Electrónico',
-        value:'frovic.ve@gmail.com'
+        value:'------.ve@gmail.com'
       }
     ],
   ]
@@ -81,15 +99,7 @@ import { useOrderStore } from '@/services/store/order.store';
     payPhoto: null,
 
   })
-  const optionsFn = (date) => {
-    return date >= moment().format('YYYY/MM/DD')
-  }
-  const localeTime = {
-    days:         ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
-    daysShort:    ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-    months:       ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-    monthsShort:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
-  }
+
   const loadingShow = (state) => {
     loading.value = state;
   }
@@ -99,11 +109,7 @@ import { useOrderStore } from '@/services/store/order.store';
     cleanForm()
     emit('closeModal')
   }
-  
 
-  const updateList = () => {
-    hideModal()
-  }
   const showNotify = (type,text) => {
     Notify.create({
       color:type,
@@ -130,9 +136,6 @@ import { useOrderStore } from '@/services/store/order.store';
   }
   const createOrder = () => {
     loadingShow(true)
-    // const file = document.getElementById('rifa_img')
-
-
     const formData = new FormData()
     formData.append('amount', (formInputs.value.quantity * rifa.configuration.price));
     formData.append('quantity', formInputs.value.quantity)
@@ -150,12 +153,15 @@ import { useOrderStore } from '@/services/store/order.store';
 
     orderStore.createOrder(formData)
     .then((response) => {
-      
+      console.log(response)
+
+      if(response.code !== 200 ) throw response
       showNotify('positive', 'Tu orden de compra fue exitosa, serás redirigido en breve...')
 
       loadingShow(false)
+      console.log(response)
       setTimeout(() => {
-        
+        router.push('/order/finish/'+response.data.id)
       }, 2000);
     })
     .catch((response) => {
@@ -203,7 +209,7 @@ import { useOrderStore } from '@/services/store/order.store';
 </script>
 <template>
    <q-dialog v-model="dialog" class="createOrderDialog" persistent backdrop-filter="blur(8px)">
-      <q-card class="dialog_document" style="border-radius:1rem">
+      <q-card class="dialog_document public" style="border-radius:1rem">
         <q-form
           class="md:px-5 pb-5 order__form"
           style="height: 100%; "
@@ -278,7 +284,7 @@ import { useOrderStore } from '@/services/store/order.store';
                       </div>
                       <div class="row mt-5 ">
                         
-                        <div class="col-md-6 col-12 md:pr-2 mb-1 md:mb-0">
+                        <div class="col-md-12 col-12 md:pr-2 mb-1 md:mb-0">
                           <q-input
                             v-model="formInputs.clientName"
                             label="Nombre del comprador"
@@ -286,7 +292,7 @@ import { useOrderStore } from '@/services/store/order.store';
                             :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                           />
                         </div>
-                        <div class="col-md-6 col-12  md:pl-2 mb-1 md:mt-0">
+                        <div class="col-md-12 col-12  mb-1 md:mt-0">
                           <q-input
                             v-model="formInputs.clientCi"
                             label="Cedula de identidad"
@@ -297,7 +303,7 @@ import { useOrderStore } from '@/services/store/order.store';
                             :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                           />
                         </div>
-                        <div class="col-md-6 col-12  md:pl-2 mb-1 md:mt-0">
+                        <div class="col-md-12 col-12  mb-1 md:mt-0">
                           <q-input
                             v-model="formInputs.clientPhone"
                             label="Teléfono"
@@ -308,7 +314,7 @@ import { useOrderStore } from '@/services/store/order.store';
                             :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                           />
                         </div>
-                        <div class="col-md-6 col-12  md:pl-2 mb-1 md:mt-0">
+                        <div class="col-md-12 col-12  mb-1 md:mt-0">
                           <q-input
                             v-model="formInputs.clientEmail"
                             label="Correo Electrónico"
@@ -341,7 +347,7 @@ import { useOrderStore } from '@/services/store/order.store';
                       </div>
                       <div class="mt-4 nonActive" id="dataToPay">
                         <div style="border:2px solid black; border-radius:0.8rem" class="py-1 px-3">
-                          <div class="flex  text-subtitle2  text-stone-900">
+                          <div class="flex   items-center text-subtitle2  text-stone-900">
                             <div class="w-5/6">
                               Procede a realizar el pago con los datos suministrados aqui
                             </div>
@@ -374,7 +380,7 @@ import { useOrderStore } from '@/services/store/order.store';
                           </div>
                         </div>
                         <div class="row mt-10 ">
-                          <div class="col-md-6 col-12 md:pr-2 mb-5 md:mb-0">
+                          <div class="col-12 mb-5 md:mb-5">
                             <q-input
                               v-model="formInputs.payReference"
                               label="Ingresa el número de referencia"
@@ -383,7 +389,7 @@ import { useOrderStore } from '@/services/store/order.store';
                               :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                             />
                           </div>
-                          <div class="col-md-6 col-12 mb-0">
+                          <div class="col-12 mb-0">
                              <q-file  accept=".jpg, image/*"  :rules="[ val => val || 'El campo es obligatorio']" class=" createOrderForm__input"  v-model="formInputs.payPhoto" label="Cargar comprobante">
                                 <template v-slot:append>
                                   <q-icon name="attach_file" />

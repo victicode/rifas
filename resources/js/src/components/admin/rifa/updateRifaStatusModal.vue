@@ -101,13 +101,12 @@ import { useRifaStore } from '@/services/store/rifas.store';
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
         <q-card-section>
-          <div class="text-h5 text-center text-bold">
+          <div class="text-h5 text-center text-bold text-black">
             Cambiar Estado
           </div>
         </q-card-section>
         <section class="content__modalSection">
           <div class="flex justify-center q-pb-sm">
-
             <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
               <div class="px-3">
                 {{rifa.status_label}}
@@ -123,7 +122,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
               <div class="px-2">
      
                 <div class="row my-3">
-                  <div class="col-md-6 col-12 md:pr-2 mb-3 md:mb-0">
+                  <div class="col-md-12 col-12 md:pr-2 mb-3 md:mb-0">
                     <q-select
                       outlined
                       option-value="value"
@@ -153,13 +152,17 @@ import { useRifaStore } from '@/services/store/rifas.store';
 
 </style>
 <style lang="scss">
+.q-item__label{
 
+  color: black!important;
+}
 .q-item--active{
   & .q-item__label{
 
-    color: goldenrod;
+    color: goldenrod!important;
   }
 }
+
 .updateRifaStatusForm__input {
   & .q-field__control {
     border-radius: 10px!important;

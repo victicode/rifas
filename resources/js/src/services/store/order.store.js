@@ -6,13 +6,14 @@ export const useOrderStore = defineStore('Order', {
     async createOrder(data) {
       return await new Promise((resolve, reject) => {
         ApiService.post('/api/public/order', data)
-        .then((data) => {
-          if(data.status !=200) throw data;
+        .then(({data}) => {
+          console.log(data)
+          if(data.code !=200) throw data;
           
           resolve(data);
         }).catch(( response ) => {
           console.log(response)
-          reject(response.response.data.error);
+          reject(response.error);
         });
         
       })

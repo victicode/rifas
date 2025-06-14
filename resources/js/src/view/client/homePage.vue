@@ -40,7 +40,7 @@ onMounted(() => {
         </q-carousel-slide>
         <q-carousel-slide class="q-py-xs" :name="2" >
           <div class="flex items-center justify-center item__slide" >
-            <div class="mx-5" v-for="j in screenDectectd" :key="j" >Nuestras Rifas actuales</div>
+            <div class="mx-5" v-for="j in screenDectectd" :key="j" >!!GUSTOO!!</div>
           </div>
         </q-carousel-slide>
       </q-carousel>
@@ -69,7 +69,7 @@ onMounted(() => {
         </q-carousel-slide>
         <q-carousel-slide class="q-py-xs" :name="1" >
           <div class="flex items-center justify-center item__slide" >
-            <div class="mx-5" v-for="j in screenDectectd" :key="j" >Nuestras Rifas actuales</div>
+            <div class="mx-5" v-for="j in screenDectectd" :key="j" >!!GUSTOO!!</div>
           </div>
         </q-carousel-slide>
       </q-carousel>

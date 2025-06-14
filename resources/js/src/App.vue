@@ -7,9 +7,15 @@
 .dialog_document {
   margin-left: 10%;
   min-width: 600px!important;
-  max-width: 800px!important; 
+  max-width: 600px!important; 
   overflow: visible!important;
+  transition: all 0.5s ease-in;
   position: relative;
+  &.public{
+    margin-left: 0%;
+    overflow: auto!important;
+
+  }
 }
 .appMobile{
   //width: 60%;

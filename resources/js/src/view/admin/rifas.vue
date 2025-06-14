@@ -70,19 +70,19 @@ onMounted(() =>{
                     <img :src="rifa.configuration.banner_img" class="rifa__item--img" />
                     <div style="position: absolute; top: 0; right: 1px;">
                       <q-chip color="white" text-color="primary"  class="">
-                        <div class="text-caption">
+                        <div class="text-caption text-bold">
                           Se juega el {{moment(rifa.due_date).format('DD/MM/YYYY')}}
                         </div>
                       </q-chip>
                     </div>
                   </div>
                   <div class="px-4 pt-3 flex column justify-between" style="height: 46%; flex-wrap: nowrap;">
-                    <div class="rifa__item--title w-full ellipsis">{{rifa.title}}</div>
+                    <div class="rifa__item--title w-full ellipsis text-stone-400">{{rifa.title}}</div>
                     <div class="q-pt-sm">
-                      <div class="my-1 text-subtitle2"> • Cantidad de tickets: <b>{{ numberUtils.numberFormat(rifa.configuration.quantity_tickets) }}</b></div>
-                      <div class="my-1 text-subtitle2"> • Valor del Ticket:    <b>{{ numberUtils.numberFormat(rifa.configuration.price) }} Bs</b></div>
-                      <div class="my-1 text-subtitle2"> • Compra minima: <b>{{ rifa.configuration.minimus_buy }} tickets</b></div>
-                      <div class="my-1 text-subtitle2"> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-400"> • Cantidad de tickets: <b>{{ numberUtils.numberFormat(rifa.configuration.quantity_tickets) }}</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-400"> • Valor del Ticket:    <b>{{ numberUtils.numberFormat(rifa.configuration.price) }} Bs</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-400"> • Compra minima: <b>{{ rifa.configuration.minimus_buy }} tickets</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-400"> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
                       <div class="flex q-my-sm justify-between items-center"> 
                         <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
                           <div class="px-2 md:px-1">

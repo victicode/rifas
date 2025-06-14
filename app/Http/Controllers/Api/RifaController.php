@@ -113,7 +113,7 @@ class RifaController extends Controller
     private function loadImageToStorage(Request $request, $id ){
         $banner = RifaConfiguration::where('rifa_id', $id)->first()->banner_img; 
         if ($request->file('banner_img')) {
-            $banner = '/images/rifas/'.rand(1000000, 9999999).'_'. trim(str_replace(' ', '_', $id )) .'.'. $request->File('banner_img')->extension();
+            $banner = '/public/images/rifas/'.rand(1000000, 9999999).'_'. trim(str_replace(' ', '_', $id )) .'.'. $request->File('banner_img')->extension();
             $request->file('banner_img')->move(public_path() . '/images/rifas/', $banner);
         }  
         

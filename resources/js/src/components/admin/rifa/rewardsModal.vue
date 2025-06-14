@@ -129,7 +129,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                 
                 <div v-for="(reward, index) in rifa.rewards" :key="reward.id" class="q-mb-sm q-pt-sm q-pb-sm  mx-2" style="border-bottom: 1px solid darkgray;">
                   <div class="flex justify-between items-center">
-                    <div class="text-h6 text-bold">
+                    <div class="text-h6 text-bold text-black">
                       Premio n° {{ index+1 }}
                     </div>
                     <q-chip color="black" text-color="white"  class="">
@@ -138,7 +138,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                       </div>
                     </q-chip>
                   </div>
-                  <div class="py-2 text-subtitle1 text-bold">
+                  <div class="py-2 text-subtitle1 text-bold text-black">
                     {{ reward.title }}
                   </div>
                 </div>
@@ -159,6 +159,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     </q-dialog>
 </template>
 <style lang="scss">
+
 .updateRewardForm__input {
   & .q-field__control {
     border-radius: 10px!important;

@@ -49,6 +49,14 @@ const routes = [
           title: 'Bienvenido'
         }
       },
+      {
+        path: '/order/finish/:id', 
+        name: 'orderFinish',
+        component: () => import('@/view/client/orderFinish.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
     ]
   },
   { 

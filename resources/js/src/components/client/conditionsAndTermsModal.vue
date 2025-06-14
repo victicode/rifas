@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch} from 'vue';
 
-  const dialog = ref(false)
+  const dialog = ref(true)
    
   const reject = () => {
     dialog.value = false
@@ -19,7 +19,7 @@ import { onMounted, ref, watch} from 'vue';
 </script>
 <template>
    <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(5px)">
-      <q-card class="dialog_documentCard" style="border-radius:1rem">
+      <q-card class="dialog_documentTerms" style="border-radius:1rem">
         <q-card-section class="q-pb-sm">
           <div class="text-h5 text-black text-bold">
            Términos y condiciones
@@ -48,11 +48,11 @@ import { onMounted, ref, watch} from 'vue';
   border-bottom: 1px solid darkgray;
 
 }
-.dialog_documentCard {
+.dialog_documentTerms {
   margin-left: 10%;
   min-width: 600px!important;
   max-width: 800px!important; 
-  overflow: visible!important;
+  overflow: auto!important;
   position: relative;
 }
 @media (max-width: 768px){
@@ -66,7 +66,7 @@ import { onMounted, ref, watch} from 'vue';
   .createRifaDialog .q-dialog__inner--minimized{
     padding: 24px 1rem;
   }
-  .dialog_documentCard {
+  .dialog_documentTerms {
     margin-left: 0%;
     min-width: 100%!important;
     max-width: 800px!important; 
