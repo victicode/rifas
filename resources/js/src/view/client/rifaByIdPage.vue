@@ -189,7 +189,7 @@ onMounted(() => {
 .badge__buyRifa{
   font-weight:bold;
   border-radius:0.5rem; 
-  background:#39e1d2; width:fit-content;
+  background:#aa13a4; width:fit-content;
   display: flex;
   font-size: 1rem;
   color: rgb(255, 255, 255);

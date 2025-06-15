@@ -30,7 +30,7 @@ import headerClient from '@/components/layouts/headerClient.vue';
     display: none;
   }
   &::-webkit-scrollbar-thumb {
-    background: #39e1d2;
+    background: #aa13a4;
     border-radius: 2rem;
 
   }

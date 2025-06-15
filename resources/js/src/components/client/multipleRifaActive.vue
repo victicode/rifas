@@ -53,10 +53,10 @@ const rifa = ref(props.rifa)
 <style lang="scss">
 .rifa_containerbuy{
   height: 37rem;
-  box-shadow: 0px 1px 5px 0px #8f8f8f;
+  box-shadow: 0px 1px 5px 0px #2b2b2b;
   border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid #585858;
+  border: 1px solid #2b2b2b;
 }
 
 .img__rifa{
@@ -79,7 +79,8 @@ const rifa = ref(props.rifa)
 }
 .badge__buy{
   font-weight:bold;
-  border-radius:0.5rem; background:#39e1d2; width:fit-content;
+  border-radius:0.5rem; 
+  background:#aa13a4; width:fit-content;
   display: flex;
   font-size: 1rem;
   color: rgb(255, 255, 255);

@@ -1,35 +1,35 @@
 <script setup>
-import logo from '@/assets/images/logo/logo.png'
+import logo from '@/assets/images/logo/logo.webp'
 
 </script>
 <template>
   <header class="h-full header__client">
-    <div class=" h-full md:px-6 md:py-5 py-2 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center justify-center md:justify-start col-12 col-md-3 mb-2 md:mb-0">
-        <!-- <img :src="logo" alt="" style="height:3rem"> -->
-        <div class=" mx-3 logo-text">
+    <div class=" h-full md:px-6 md:py-5 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
+      <div class="flex items-center justify-center md:justify-start col-12 col-md-3 mb-0 md:mb-0">
+        <img :src="logo" alt="" style="width: 3.2rem;" >
+        <div class=" md:ml-3 logo-text ">
           Gana con la Hija linda
         </div>
       </div>
-      <div class=" col-12 col-md-9">
+      <div class=" col-12 col-md-9 md:pl-5">
         <ul class="flex justify-center md:justify-start">
           <RouterLink activeClass="active_link" to="/home" >
             <li class="text-white mx-3 nav_header--items" >
-              <div>
+              <div class="px-2">
                 Inicio
               </div>
             </li>
           </RouterLink>
           <RouterLink activeClass="active_link" to="/rifas" >
             <li class="text-white mx-3 nav_header--items" >
-              <div>
+              <div class="px-2">
                 Ganadores
               </div>
             </li>
           </RouterLink>
           <RouterLink activeClass="active_link" to="/support">
             <li class="text-white mx-3 nav_header--items" >
-              <div>
+              <div class="px-2">
                 Soporte
               </div>
             </li>
@@ -51,13 +51,15 @@ import logo from '@/assets/images/logo/logo.png'
   font-family: "Braah One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  color: #39e1d2;
-  font-size: 2rem;
+  color: #ffffff;
+
+  -webkit-text-stroke: 2px #aa13a4;
+  font-size: 1.9rem;
   text-shadow: 0px 5px 5px rgba(82, 82, 82, 0.406);
 }
 .active_link {
   & .nav_header--items{
-    color: #39e1d2!important;
+    color: #aa13a4!important;
     &::before{
       transform: translateX(0rem);
     }
@@ -78,7 +80,7 @@ import logo from '@/assets/images/logo/logo.png'
   }
   &::before{
     content: "";
-    background: #39e1d2;
+    background: #aa13a4;
     transition: all 0.5s ease;
     height: 2.1rem;
     width: 100%;
@@ -88,7 +90,7 @@ import logo from '@/assets/images/logo/logo.png'
     transform: translateX(-10rem);
   }
   &:hover{
-    color: #39e1d2!important;
+    color: #aa13a4!important;
 
     &::before{
       transform: translateX(0rem);

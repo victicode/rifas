@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, ref, watch, } from 'vue';
+import { onMounted, ref, watch, useTemplateRef} from 'vue';
 import { Notify } from 'quasar'
-
 import numberUtils from '@/utils/numberUtils.js';
 import { useOrderStore } from '@/services/store/order.store';
 import { useRouter } from 'vue-router';
@@ -13,7 +12,7 @@ import { useRouter } from 'vue-router';
   })
 
   const emit = defineEmits(['orderSuccessful', 'closeModal'])
-  const step = ref(1)
+  const step = ref(3)
   const orderStore = useOrderStore()
   const loading = ref(false);
   const dialog = ref(props.dialog);
@@ -100,6 +99,12 @@ import { useRouter } from 'vue-router';
 
   })
 
+  const onFileChange = () => {
+    const file = document.getElementById('vaucher').files[0]
+    formInputs.value.payPhoto = file
+
+    console.log(formInputs.value.payPhoto)
+  }
   const loadingShow = (state) => {
     loading.value = state;
   }
@@ -201,8 +206,9 @@ import { useRouter } from 'vue-router';
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
+
   onMounted(() => {
-    
+
   })
   
 
@@ -379,8 +385,8 @@ import { useRouter } from 'vue-router';
 
                           </div>
                         </div>
-                        <div class="row mt-10 ">
-                          <div class="col-12 mb-5 md:mb-5">
+                        <div class="row mt-6 md:mt-10">
+                          <div class="col-12 mb-5 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"
                               label="Ingresa el número de referencia"
@@ -390,11 +396,16 @@ import { useRouter } from 'vue-router';
                             />
                           </div>
                           <div class="col-12 mb-0">
-                             <q-file  accept=".jpg, image/*"  :rules="[ val => val || 'El campo es obligatorio']" class=" createOrderForm__input"  v-model="formInputs.payPhoto" label="Cargar comprobante">
-                                <template v-slot:append>
-                                  <q-icon name="attach_file" />
-                                </template>
-                              </q-file>
+                            <label for="vaucher">
+                              <div ref="dropzone" id="dropzoneFile" class="dropzone" :class="{'load': !(formInputs.payPhoto == null)}">
+                                <div class="dz-message" v-if="formInputs.payPhoto == null">
+                                 Haz click para cargar tu capture <q-icon name="image" size="sm" color="blur" />
+                                </div>
+                                <div v-else class="text-bold">
+                                  Archivo subido con exito <q-icon name="check_circle" size="sm" color="blur" />
+                                </div>
+                              </div>
+                            </label>
                           </div>
                         </div>
                       </div>
@@ -407,6 +418,8 @@ import { useRouter } from 'vue-router';
           </div>
           <section>
             <div class="flex justify-evenly mt-5">
+              <input type="file"  id="vaucher" ref="vaucher" accept="image/*"  style="display: none;" @change="onFileChange" >
+
               <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="step == 1 ? hideModal() : step--" />
               <q-btn :label="step !== 3 ? 'Siguiente' : 'Comprar' "   color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
             </div>
@@ -510,5 +523,44 @@ import { useRouter } from 'vue-router';
   & .q-field__append{
     transform: translateY(5%)
   }
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  &.load{
+  border: 2px solid #aa13a4!important;
+
+  }
+}
+
+.dropzone .dz-message {
+  
+  color: #aaa;
+}
+
+.dropzone.dz-started .dz-message {
+  display: none;
+}
+
+.dropzone .dz-preview.dz-image-preview {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+}
+
+.dropzone .dz-preview .dz-image {
+  width: 150px;
+  height: 150px;
+}
+
+.dropzone .dz-preview .dz-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
