@@ -5,13 +5,13 @@ import logo from '@/assets/images/logo/logo.webp'
 <template>
   <header class="h-full header__client">
     <div class=" h-full md:px-6 md:py-5 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center justify-center md:justify-start col-12 col-md-3 mb-0 md:mb-0">
+      <div class="flex items-center justify-center md:justify-start col-12 col-md-4 mb-0 md:mb-0">
         <img :src="logo" alt="" style="width: 3.2rem;" >
-        <div class=" md:ml-3 logo-text ">
-          Gana con la Hija linda
+        <div class=" md:pl-3 logo-text ">
+          Gana Con La Hija Linda
         </div>
       </div>
-      <div class=" col-12 col-md-9 md:pl-5">
+      <div class=" col-12 col-md-8 md:pl-0">
         <ul class="flex justify-center md:justify-start">
           <RouterLink activeClass="active_link" to="/home" >
             <li class="text-white mx-3 nav_header--items" >

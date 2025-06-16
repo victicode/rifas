@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('pay_methods', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('coin');
-            $table->string('abr');
-            $table->integer('factor');
+            $table->unsignedBigInteger('coin_id');
+            $table->foreign('coin_id')->references('id')->on('coins')->onDelete('cascade');
             $table->integer('status');
             $table->string('user_name')->nullable();
             $table->string('user_phone')->nullable();

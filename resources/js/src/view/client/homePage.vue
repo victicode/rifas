@@ -18,6 +18,7 @@ const getActiveRifas = () =>{
 const slide = ref(1)
 const slidex = ref(1)
 
+
 onMounted(() => {
   getActiveRifas()
 })

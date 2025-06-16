@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PayMethodController;
 use App\Http\Controllers\Api\RifaController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -15,6 +16,9 @@ Route::prefix('public')->group(function () {
     });
     Route::prefix('order')->name('order.')->group(function () {
         Route::post('/', [OrderController::class, 'createOrder']);
+    });
+    Route::prefix('method_pays')->name('methods')->group(function () {
+        Route::get('/', [PayMethodController::class, 'getMethodsActive']);
     });
 });
 

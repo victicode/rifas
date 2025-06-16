@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('value');
+            $table->unsignedBigInteger('method_id');
+            $table->foreign('method_id')->references('id')->on('pay_methods')->onDelete('cascade');
             $table->timestamps();
         });
     }

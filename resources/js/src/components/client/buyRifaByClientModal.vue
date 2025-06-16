@@ -4,6 +4,9 @@ import { Notify } from 'quasar'
 import numberUtils from '@/utils/numberUtils.js';
 import { useOrderStore } from '@/services/store/order.store';
 import { useRouter } from 'vue-router';
+import { useMethodPayStore } from '@/services/store/methodPay.store';
+
+
   const numberFormat = numberUtils.numberFormat 
   const router = useRouter()
   const props = defineProps({
@@ -17,73 +20,24 @@ import { useRouter } from 'vue-router';
   const loading = ref(false);
   const dialog = ref(props.dialog);
   const rifa = props.rifa 
-  const dataPaySelect = ref([])
-  const optionsMethodPay = [
-    {
-      title:'Selecciona un método de pago',
-      value:0
-    },
-    {
-      title:'Pago movil',
-      value:1
-    },
-    {
-      title:'Transferencia',
-      value:2
-    },
-    {
-      title:'Zelle',
-      value:3
-    },
-    {
-      title:'Binance',
-      value:4
-    }
-  ]
-  const dataPay = [
-    [],
-    [
-      {
-        title:'Banco',
-        value:'Banplus (0174)'
-      },
-      {
-        title:'Teléfono',
-        value:'04121028697'
-      },
-      {
-        title:'Cedula',
-        value:'V25401625'
-      }
-    ],
-    [
-      {
-        title:'Banco',
-        value:'Banplus (0174)'
-      },
-      {
-        title:'Número de cuenta',
-        value:'0000 1111 2222 3333 4444 5555'
-      },
-      {
-        title:'Cedula',
-        value:'V25401625'
-      }
-    ],
-    [
-      {
-        title:'Correo Electrónico',
-        value:'-----ve@gmail.com'
-      }
-    ],
-      
-    [
-      {
-        title:'Correo Electrónico',
-        value:'------.ve@gmail.com'
-      }
-    ],
-  ]
+  const payMethodStore = useMethodPayStore()
+  const optionsMethodPay = ref([])
+  const getPayMethods = () => {
+    payMethodStore.getMethodPays()
+    .then((response) => {
+      console.log(response)
+      optionsMethodPay.value = [
+        {
+        name:'Selcciona un método de pago',
+        id:0
+        },
+        ...response.data
+      ]
+    })
+    .catch((response) => {
+      console.log(response)
+    })
+  }
   const formInputs = ref({
     quantity: rifa.configuration.minimus_buy,
     clientName: '',
@@ -91,8 +45,8 @@ import { useRouter } from 'vue-router';
     clientEmail: '',
     clientPhone: '',
     method_pay: {
-      title:'Selcciona un método de pago',
-      value:0
+      name:'Selcciona un método de pago',
+      id:0
     },
     payReference:'',
     payPhoto: null,
@@ -102,13 +56,17 @@ import { useRouter } from 'vue-router';
   const onFileChange = () => {
     const file = document.getElementById('vaucher').files[0]
     formInputs.value.payPhoto = file
-
-    console.log(formInputs.value.payPhoto)
   }
+
   const loadingShow = (state) => {
     loading.value = state;
   }
+  
+  const backButton = () => {
+    step.value == 3 ? formInputs.value.method_pay = { title:'Selcciona un método de pago', value: 0 } : ''
 
+    step.value == 1 ? hideModal() : step.value--
+  }
   const hideModal = () => {
     // cleanForm()
     cleanForm()
@@ -140,6 +98,11 @@ import { useRouter } from 'vue-router';
     step.value = 1;
   }
   const createOrder = () => {
+    
+    if(!formInputs.value.payPhoto){
+      showNotify('negative', 'Debes adjuntar tu capture de forma obligatoria')
+      return
+    }
     loadingShow(true)
     const formData = new FormData()
     formData.append('amount', (formInputs.value.quantity * rifa.configuration.price));
@@ -154,17 +117,15 @@ import { useRouter } from 'vue-router';
     formData.append('client_email', formInputs.value.clientEmail)
 
     formData.append('rifa_id', rifa.id)
-    formData.append('method_id', formInputs.value.method_pay.value)
+    formData.append('method_id', formInputs.value.method_pay.id)
 
     orderStore.createOrder(formData)
     .then((response) => {
-      console.log(response)
-
+ 
       if(response.code !== 200 ) throw response
       showNotify('positive', 'Tu orden de compra fue exitosa, serás redirigido en breve...')
-
       loadingShow(false)
-      console.log(response)
+
       setTimeout(() => {
         router.push('/order/finish/'+response.data.id)
       }, 2000);
@@ -172,9 +133,38 @@ import { useRouter } from 'vue-router';
     .catch((response) => {
       console.log(response)
       loadingShow(false)
-
       showNotify('negative', response)
     })
+  }
+  const copyDataPay = () => {
+    
+    const texto = formatDataPayText();
+    const element = document.getElementById('pasteClipb')
+    const textArea = document.createElement('textarea');
+    textArea.value = texto;
+    textArea.style.opacity = 0;
+    element.appendChild(textArea);
+    textArea.select();
+
+    try {
+      const success = document.execCommand('copy');
+      showNotify('positive', 'Datos copiados con exito')
+    } catch (err) {
+      console.error(err.name, err.message);
+    }
+
+    element.removeChild(textArea);
+
+  }
+
+  const formatDataPayText = () => {
+    let text = ''
+
+    formInputs.value.method_pay.data_pay.forEach((element) => {
+      text += element.value+' '
+    });
+    
+    return text
   }
   const removeCount = () => {
     if(formInputs.value.quantity > rifa.configuration.minimus_buy) formInputs.value.quantity--
@@ -184,11 +174,9 @@ import { useRouter } from 'vue-router';
   }
 
   const changeMethodData = () => {
-    let id =  optionsMethodPay.find( (item) => item.value == formInputs.value.method_pay.value).value
+    let id =  formInputs.value.method_pay.id
     let contentInfo = document.getElementById('dataToPay')
     contentInfo.classList.remove('activeInfo')
-
-
     if(id==0)  {
       contentInfo.classList.add('nonActive')
       return
@@ -196,14 +184,12 @@ import { useRouter } from 'vue-router';
     if(Object.values(contentInfo.classList).includes('nonActive')) {
       contentInfo.classList.remove('nonActive')
       contentInfo.classList.add('activeInfo')
-      dataPaySelect.value = dataPay[id]
     }
     else {
       contentInfo.classList.add('nonActive')
       setTimeout(() =>{
         contentInfo.classList.remove('nonActive')        
         contentInfo.classList.add('activeInfo')
-        dataPaySelect.value = dataPay[id]
       } , 900)
       
     }
@@ -214,7 +200,7 @@ import { useRouter } from 'vue-router';
   });
 
   onMounted(() => {
-
+    getPayMethods()
   })
   
 
@@ -347,8 +333,8 @@ import { useRouter } from 'vue-router';
                           <q-select
                             v-model="formInputs.method_pay"
                             label="Selecciona tu metodo de pago"
-                            option-value="value"
-                            option-label="title"
+                            option-value="id"
+                            option-label="name"
                             behavior="menu"
                             color="primary"
                             :options="optionsMethodPay"
@@ -369,12 +355,20 @@ import { useRouter } from 'vue-router';
                           </div>
                         </div>
                         <div class="row mt-5 ">
-                          <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in dataPaySelect" :key="key" >
+                          <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in formInputs.method_pay.data_pay" :key="key" >
                               <div class="text-subtitle2 text-black">
                                 {{item.title}}:
                               </div>
                               <div class="text-subtitle2 text-black">
-                                {{item.value}}
+                                {{ 
+                                  item.title == 'Banco' 
+                                  ? 'Banplus ('+item.value+')'
+                                  : item.title == 'Teléfono' 
+                                  ? item.value.slice(0, 4)+'-'+item.value.slice(4) 
+                                  : item.title == 'Documento'
+                                  ? 'V'+item.value 
+                                  : item.value
+                                }}
                               </div>
                           </div>
                           <div class=" col-12 py-2 flex justify-between " style="border-bottom: 1px solid darkgray;" >
@@ -386,10 +380,11 @@ import { useRouter } from 'vue-router';
                               </div>
                           </div>
                           <div class=" col-12 pt-5 flex justify-between ">
-                            <q-btn outline label="Copiar datos" color="black"  class="q-mx-sm " 
+                            <q-btn @click="copyDataPay()"  outline label="Copiar datos" color="black"  class="q-mx-sm " 
                             style="width: 100%; border-radius: 0.5rem;"  />
 
                           </div>
+                          <div id="pasteClipb"></div>
                         </div>
                         <div class="row mt-6 md:mt-10">
                           <div class="col-12 mb-5 md:mb-6">
@@ -426,7 +421,7 @@ import { useRouter } from 'vue-router';
             <div class="flex justify-evenly mt-5">
               <input type="file"  id="vaucher" ref="vaucher" accept="image/*"  style="display: none;" @change="onFileChange" >
 
-              <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="step == 1 ? hideModal() : step--" />
+              <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="backButton()" />
               <q-btn :label="step !== 3 ? 'Siguiente' : 'Comprar' "   color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
             </div>
           </section>

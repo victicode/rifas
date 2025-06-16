@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@quasar/extras": "^1.16.15",
+        "@vueuse/core": "^13.3.0",
         "dropzone": "^6.0.0-beta.2",
         "mitt": "^3.0.1",
         "moment": "^2.30.1",
