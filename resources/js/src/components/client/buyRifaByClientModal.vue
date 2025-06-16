@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router';
   })
 
   const emit = defineEmits(['orderSuccessful', 'closeModal'])
-  const step = ref(3)
+  const step = ref(1)
   const orderStore = useOrderStore()
   const loading = ref(false);
   const dialog = ref(props.dialog);
@@ -187,6 +187,12 @@ import { useRouter } from 'vue-router';
     let id =  optionsMethodPay.find( (item) => item.value == formInputs.value.method_pay.value).value
     let contentInfo = document.getElementById('dataToPay')
     contentInfo.classList.remove('activeInfo')
+
+
+    if(id==0)  {
+      contentInfo.classList.add('nonActive')
+      return
+    }
     if(Object.values(contentInfo.classList).includes('nonActive')) {
       contentInfo.classList.remove('nonActive')
       contentInfo.classList.add('activeInfo')
@@ -401,7 +407,7 @@ import { useRouter } from 'vue-router';
                                 <div class="dz-message" v-if="formInputs.payPhoto == null">
                                  Haz click para cargar tu capture <q-icon name="image" size="sm" color="blur" />
                                 </div>
-                                <div v-else class="text-bold">
+                                <div v-else class="text-bold text-black">
                                   Archivo subido con exito <q-icon name="check_circle" size="sm" color="blur" />
                                 </div>
                               </div>

@@ -16,8 +16,11 @@ onMounted(() => {
     <template v-if="loading">
 
       <div class="text-black mt-5 text-center text-h5"> 
-        <div>Gracias por su compra</div>
-        <div>
+        <div class="flex jusitfy-center">
+          <q-icon name="check_circle_outline" size="md"/>
+        </div>
+        <div class="text-black">Gracias por su compra</div>
+        <div class="text-black">
           Tu orden de compra ha sido procedada satisfactoriamente, en las próximas 24 horas estarás recibiendo un correo y un whatsapp con tus tickets, 
           siempre puedes consultar tu compra en nuestro botones de consulta, también puedes usar el whatsapp de soporte si teines alguna duda.
         </div>
@@ -33,7 +36,7 @@ onMounted(() => {
         </div>
         <div>
           <div></div>
-          <div>Simplemente selecciona la rifa en la que participaste ingresa tu número de cedula en el verificador de tickets y presiona el boton de buscar. Se mostrará toda la información de tu compra y tus tickets asignados </div>
+          <div class="text-black">Simplemente selecciona la rifa en la que participaste ingresa tu número de cedula en el verificador de tickets y presiona el boton de buscar. Se mostrará toda la información de tu compra y tus tickets asignados </div>
         </div>
       </div>
       
