@@ -3,16 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PayMethod extends Model
 {
     //
     protected $table = "pay_methods";
-    protected $fillable = ["name", "coin", "abr", "factor", "status", "user_name", "user_phone", "user_dni", "user_account", "user_bank"];
+    protected $fillable = ["name", "coin_id", "abr", "factor", "status"];
    
     public function dataPay(): HasMany
     {
         return $this->hasMany(DataPay::class, 'method_id');
+    }
+    public function coin(): BelongsTo
+    {
+        return $this->belongsTo(Coin::class, 'coin_id');
     }
 }

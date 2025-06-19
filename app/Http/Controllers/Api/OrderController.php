@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 
@@ -48,12 +49,24 @@ class OrderController extends Controller
             
         } catch (Exception $th) {
             //throw $th;
-           return $this->returnFail(500, 'Error en sistema');
+           return $this->returnFail(500, $th->getMessage());
         }
+
+        $sendMail = $this->sendMail($order->id);
+        return $this->returnSuccess(200, ['order' => $order, 'others' =>$sendMail]);
+
+
+    }
+    public function getOrderById($id){
+        $order = Order::find($id);
         
-       return $this->returnSuccess(200, $order);
-
-
+        if(!$order) return $this->returnFail(400, 'Orden no encotrada');
+        
+        return $this->returnSuccess(200, $order);
+    }
+    public function getOrderByIdHtml($id){
+        $order = Order::with(['methodPay.coin'])->find($id);
+        return view('emails.orderCreateClient', ['order' => $order ]);
     }
     private function loadImageToStorage(Request $request ){
         $vaucher = ''; 
@@ -124,5 +137,37 @@ class OrderController extends Controller
 
         return $validator->all() ;
 
+    }
+    public function sendMail($id){
+
+        $order = Order::with(['methodPay.coin', 'client'])->find($id);
+        try{
+            // Mail::send('emails.newUser',['name'=>'virgilio'], function ($message)  {  
+            //     $message->from('administrations@wozpayments.com', 'wozpayment');
+            //     $message->to('frovic.ve@gmail.com', 'Operaciones wozpayment')->subject('oooooo');
+            // });
+            Mail::send('emails.orderCreateClient',['order'=>$order], function ($message) use ($order)  {  
+                $message->from('notificacion@ganaconlahijalinda.com', 'Gana Con La Hija Linda');
+                $message->to($order->client->email)->subject('Gracias por tu compra');
+ 
+            });
+            // Mail::send('emails.boletas.boletaTemplate',['name'=>$request->employee, 'url' => $request->link], function ($message) use ($request, $extension)  {  
+            //     $message->from('administrations@wozpayments.com', 'Blue Comunicadores');
+            //     $message->to($request->email2)->subject('Boleta PLANILLA ');
+            //     if($request->frontfile){
+
+            //         $message->attach($request->frontfile, [
+            //             'as' => 'boleta.'.$extension[2],
+            //             'mime' => 'application/pdf,image/jpeg,png,jfif',
+            //         ]);
+            //     }
+            // });
+
+
+        }
+        catch(Exception $e){
+            return  $e->getMessage();
+        }
+        return 'bien';
     }
 }

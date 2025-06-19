@@ -16,7 +16,11 @@ Route::prefix('public')->group(function () {
     });
     Route::prefix('order')->name('order.')->group(function () {
         Route::post('/', [OrderController::class, 'createOrder']);
+        Route::get('/byId/{id}', [OrderController::class, 'getOrderById']);
+        Route::get('/byId/html/{id}', [OrderController::class, 'getOrderByIdHtml']);
+
     });
+    
     Route::prefix('method_pays')->name('methods')->group(function () {
         Route::get('/', [PayMethodController::class, 'getMethodsActive']);
     });

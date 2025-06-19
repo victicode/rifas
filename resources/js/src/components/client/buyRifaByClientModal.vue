@@ -124,10 +124,9 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
  
       if(response.code !== 200 ) throw response
       showNotify('positive', 'Tu orden de compra fue exitosa, serás redirigido en breve...')
-      loadingShow(false)
-
+     
       setTimeout(() => {
-        router.push('/order/finish/'+response.data.id)
+        router.push('/order/finish/'+response.data.order.id)
       }, 2000);
     })
     .catch((response) => {

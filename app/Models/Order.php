@@ -18,9 +18,13 @@ class Order extends Model
     {
         return $this->belongsTo(Rifa::class, "rifa_id");
     }
+    public function methodPay(): BelongsTo
+    {
+        return $this->belongsTo(PayMethod::class, "method_id");
+    }
 
     public function client(): BelongsTo
     {
-        return $this->belongsTo(client::class, "client_id");
+        return $this->belongsTo(Client::class, "client_id");
     }
 }
