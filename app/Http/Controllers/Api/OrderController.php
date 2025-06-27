@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Rifa;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Exception;
@@ -36,6 +37,7 @@ class OrderController extends Controller
             $order = Order::create([
                 'amount'    => $request->amount,
                 'quantity'  => $request->quantity,
+                'number'    => $this->createNumberOrder($request->rifa_id),
                 'reference' => $request->reference,
                 'vaucher'   => $vaucher,
                 'pay_date'  => date("Y-m-d"),
@@ -52,13 +54,15 @@ class OrderController extends Controller
            return $this->returnFail(500, $th->getMessage());
         }
 
-        $sendMail = $this->sendMail($order->id);
-        return $this->returnSuccess(200, ['order' => $order, 'others' =>$sendMail]);
+         $this->sendMail($order->id, 'client');
+         $this->sendMail($order->id, 'admin');
+
+        return $this->returnSuccess(200, ['order' => $order]);
 
 
     }
     public function getOrderById($id){
-        $order = Order::find($id);
+        $order = Order::with('client')->find($id);
         
         if(!$order) return $this->returnFail(400, 'Orden no encotrada');
         
@@ -66,7 +70,7 @@ class OrderController extends Controller
     }
     public function getOrderByIdHtml($id){
         $order = Order::with(['methodPay.coin'])->find($id);
-        return view('emails.orderCreateClient', ['order' => $order ]);
+        return view('emails.orderCreateAdmin', ['order' => $order ]);
     }
     private function loadImageToStorage(Request $request ){
         $vaucher = ''; 
@@ -138,32 +142,30 @@ class OrderController extends Controller
         return $validator->all() ;
 
     }
-    public function sendMail($id){
+    private function createNumberOrder($rifa){
+        $rifa = Rifa::withCount("orders")->find($rifa);
+        $text = "0000";
+        $text2 = "0000";
+        $firstPart = substr($text2, 0, (strlen($text2) - strlen($rifa->id.''))) . $rifa->id;
+        $secondPart = substr($text, 0, (strlen($text) - strlen($rifa->orders_count.''))) . $rifa->orders_count;
 
-        $order = Order::with(['methodPay.coin', 'client'])->find($id);
+        return $firstPart.$secondPart;
+    }
+    public function sendMail($id, $templateType){
+        $order = Order::with(['methodPay.coin', 'client', 'rifa'])->find($id);
+
+        $template = $templateType == 'client' ? 'emails.orderCreateClient' : 'emails.orderCreateAdmin';
+        $subject = $templateType == 'client' ? 'Gracias por tu compra' : 'Orden creada pendiente';
+        $client = $templateType == 'client' ? $order->client->email : 'ganaconlahijalinda@gmail.com';
+
+        if($templateType == 'orderComplete')  $template = 'emails.orderCompleteClient';
+
         try{
-            // Mail::send('emails.newUser',['name'=>'virgilio'], function ($message)  {  
-            //     $message->from('administrations@wozpayments.com', 'wozpayment');
-            //     $message->to('frovic.ve@gmail.com', 'Operaciones wozpayment')->subject('oooooo');
-            // });
-            Mail::send('emails.orderCreateClient',['order'=>$order], function ($message) use ($order)  {  
+            Mail::send($template, ['order'=>$order], function ($message) use ($order, $subject, $client)  {  
                 $message->from('notificacion@ganaconlahijalinda.com', 'Gana Con La Hija Linda');
-                $message->to($order->client->email)->subject('Gracias por tu compra');
+                $message->to($client)->subject($subject);
  
             });
-            // Mail::send('emails.boletas.boletaTemplate',['name'=>$request->employee, 'url' => $request->link], function ($message) use ($request, $extension)  {  
-            //     $message->from('administrations@wozpayments.com', 'Blue Comunicadores');
-            //     $message->to($request->email2)->subject('Boleta PLANILLA ');
-            //     if($request->frontfile){
-
-            //         $message->attach($request->frontfile, [
-            //             'as' => 'boleta.'.$extension[2],
-            //             'mime' => 'application/pdf,image/jpeg,png,jfif',
-            //         ]);
-            //     }
-            // });
-
-
         }
         catch(Exception $e){
             return  $e->getMessage();

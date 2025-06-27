@@ -112,7 +112,7 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
     formData.append('status', 1)
 
     formData.append('client_name',  formInputs.value.clientName)
-    formData.append('client_ci',    formInputs.value.clientCi)
+    formData.append('client_ci',    parseInt(formInputs.value.clientCi.replace(/\./g, '')))
     formData.append('client_phone', formInputs.value.clientPhone)
     formData.append('client_email', formInputs.value.clientEmail)
 

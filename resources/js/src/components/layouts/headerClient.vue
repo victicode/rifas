@@ -60,9 +60,6 @@ import logo from '@/assets/images/logo/logo.webp'
 .active_link {
   & .nav_header--items{
     color: #aa13a4!important;
-    &::before{
-      transform: translateX(0rem);
-    }
   }
 }
 .nav_header--items{
@@ -76,11 +73,12 @@ import logo from '@/assets/images/logo/logo.webp'
   & div {
     z-index: 2;
     position: relative;
-    background: #0c0a09;
+    transition: background 0.5s ease;
+    
   }
   &::before{
     content: "";
-    background: #aa13a4;
+    
     transition: all 0.5s ease;
     height: 2.1rem;
     width: 100%;
@@ -91,8 +89,11 @@ import logo from '@/assets/images/logo/logo.webp'
   }
   &:hover{
     color: #aa13a4!important;
-
+    & div{
+      background: #0c0a09;
+    }
     &::before{
+      background: #aa13a4;
       transform: translateX(0rem);
 
     }
