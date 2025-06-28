@@ -35,5 +35,20 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
+    async getPaginationOrders(data) {
+      return await new Promise((resolve, reject) => {
+        ApiService.get('/api/orders?search='+data.search+'&searchType='+data.searchType+'&')
+        .then(({data}) => {
+          console.log(data)
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+    }
   },
 })

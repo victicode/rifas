@@ -42,7 +42,7 @@ onMounted(() =>{
           </RouterLink>
         </div>
         <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/pagos" @click="showMovil()">
+          <RouterLink activeClass="active_link" to="/admin/pays" @click="showMovil()">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Pagos
             </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PayMethodController;
 use App\Http\Controllers\Api\RifaController;
 
+
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::prefix('public')->group(function () {
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function ()
     });
 
     Route::prefix('orders')->name('order.')->group(function () {
+        Route::get('/', [OrderController::class, 'getOrderPagination']);
 
     });
 

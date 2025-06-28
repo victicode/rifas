@@ -94,10 +94,11 @@ const routes = [
         }
       },
       {
-        path:'/admin/pagos',
-        component: () => import('@/view/admin/dashboard.vue'),
+        path:'/admin/pays',
+        component: () => import('@/view/admin/pays.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Bienvenido',
+          titlePage: 'Ordenes de pago'
         }
       },
       {
