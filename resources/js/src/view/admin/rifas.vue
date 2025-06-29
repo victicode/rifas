@@ -9,10 +9,10 @@ import updateRifaModal from '@/components/admin/rifa/updateRifaModal.vue';
 import updateRifaStatusModal from '@/components/admin/rifa/updateRifaStatusModal.vue';
 const ready = ref(false)
 const rifaStore = useRifaStore()
-const actualPage = ref(1)
 const rifas = ref([]) 
 const showModal = ref('')
 const lastPage = ref(0);
+const actualPage = ref(1)
 const selectedRifa = ref({})
 const openModal = (modal, rifa) =>{
   selectedRifa.value = rifas.value.find(item => item.id == rifa)

@@ -14,6 +14,26 @@ class Order extends Model
     use SoftDeletes;
     protected $fillable = ["amount", "quantity", "number", "reference", "vaucher", "pay_date", "status", "client_id", "rifa_id", "method_id"];
 
+    public $appends     = ["status_label","status_color"];
+    
+    public function getstatusLabelAttribute()
+    {   
+        $status = [
+            "Rechazada",
+            "Pendiente",
+            "Procesada",
+        ];
+        return $status[$this->status];
+    }
+     public function getstatusColorAttribute()
+    {   
+        $status = [
+            "bg-negative",
+            "bg-warning",
+            "bg-positive",
+        ];
+        return $status[$this->status];
+    }
     public function rifa(): BelongsTo
     {
         return $this->belongsTo(Rifa::class, "rifa_id");

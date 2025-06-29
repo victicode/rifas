@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     //
     public function getOrderPagination(Request $request){
-        $rifas = Order::with(["methodPay", "client",])->orderBy("created_at", "asc")->paginate(10);
+        $rifas = Order::with(["methodPay.coin", "client", "rifa"])->orderBy("created_at", "asc")->paginate(15);
         
         return $this->returnSuccess(200, $rifas);
     }
@@ -148,10 +148,10 @@ class OrderController extends Controller
     }
     private function createNumberOrder($rifa){
         $rifa = Rifa::withCount("orders")->find($rifa);
-        $text = "0000";
+        $text = "00";
         $text2 = "0000";
         $firstPart = substr($text2, 0, (strlen($text2) - strlen($rifa->id.""))) . $rifa->id;
-        $secondPart = substr($text, 0, (strlen($text) - strlen($rifa->orders_count.""))) . $rifa->orders_count;
+        $secondPart = substr($text, 0, (strlen($text) - strlen($rifa->orders_count.""))) . ($rifa->orders_count == 0 ? 1 : $rifa->orders_count+1);
 
         return $firstPart.$secondPart;
     }
