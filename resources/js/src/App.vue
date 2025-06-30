@@ -4,6 +4,13 @@
   </main>
 </template>
 <style lang="scss">
+.icon_badge{
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.3rem;
+  background: black;
+  border: 1px solid #7f7f7f;
+}
 .dialog_document {
   margin-left: 10%;
   min-width: 600px!important;

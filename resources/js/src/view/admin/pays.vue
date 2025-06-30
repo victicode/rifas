@@ -47,7 +47,7 @@ const optionsTable = {
       sorteable:false,
       render: function (data, type, full, meta) {
        
-        return full.method_pay.coin.symbol+' '+ numberFormat(full.amount)
+        return full.method_pay.coin.symbol+' '+ numberFormat(full.amount)+',00'
       }
     },
     {
@@ -95,15 +95,7 @@ const optionsTable = {
       targets: 7,
       orderable: false,
       render: function (data, type, full, meta) {
-        let view = `
-          <button data-order="${full.id}" class="viewOrder q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
-            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
-            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-              <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">visibility</i>
-            </span>
-          </button>
-          
-        `
+        let view = ` `
         
         // view += `
         // `
@@ -114,6 +106,16 @@ const optionsTable = {
               <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">arrow_circle_right</i>
             </span>
           </button>`
+        }
+        if(full.status == 2 || full.status == 0 ){
+          view += `
+          <button data-order="${full.id}" class="viewOrder q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
+            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+              <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">visibility</i>
+            </span>
+          </button>
+          `
         }
         if(full.status == 2 ){
           view += `
@@ -160,6 +162,12 @@ const activeOptionsTable = () => {
       showModal.value = 'view'
     })	
   })
+  document.querySelectorAll('.updateOrder').forEach( item => {
+    item.addEventListener('click', event => {
+      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      showModal.value = 'update'
+    })	
+  })
 }
   const getOrders = () => {
     const data = {
@@ -194,9 +202,9 @@ const activeOptionsTable = () => {
           {{route.meta.titlePage}}
         </h4>
       </div>
-      <div>
+      <div class="md:mt-0 mt-2">
         <q-btn unelevated style="border-radius:0.4rem" icon="add" color="black" 
-        class="q-py-sm mx-2" label="Orden manual" no-caps />
+        class="q-py-sm md:mx-2 " label="Orden manual" no-caps />
       </div>
     </div>
     <section id="filterAndSearch" class="w-full  px-4 py-2 md:py-3 mt-4">
@@ -237,8 +245,8 @@ const activeOptionsTable = () => {
 
       </div>
     </section>
-    <section id="tablePays" class="p-0  md:mt-8 mt-2 relative">
-        <DataTable class="display table_pay" :options="optionsTable" :data="orders">
+    <section id="tablePays" class="p-0  md:mt-8 mt-4 relative">
+        <DataTable class="display table_pay" :options="optionsTable" :data="orders" >
           <thead class="tablePayHead">
               <tr>
                 <th>Fecha de pago</th>
@@ -249,10 +257,8 @@ const activeOptionsTable = () => {
                 <th>Tickets</th>
                 <th>Estado</th>
                 <th>Acción</th>
-
               </tr>
           </thead>
-          
         </DataTable>
         <div class="pb-3 px-8 flex justify-end">
           <q-pagination
@@ -277,7 +283,8 @@ const activeOptionsTable = () => {
           </div>
     </section>
     <template v-if="Object.values(selectedOrder).length > 0">
-      <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder"  @closeModal="closeModal()" />
+      <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getOrders() "/>
+      <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="2" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
     </template>
   </div>
 </template>
@@ -364,7 +371,11 @@ const activeOptionsTable = () => {
 #tablePays{
   background: white;
   border-radius: 1rem;
+  overflow: hidden;
   box-shadow: 0px 0px 10px 0px rgb(218, 218, 218);
+  & .datatable{
+    overflow: auto;
+  }
   & .dt-info{
     font-size: 0.9rem;
     font-weight: 700;

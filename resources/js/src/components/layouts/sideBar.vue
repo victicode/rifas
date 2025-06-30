@@ -27,48 +27,48 @@ onMounted(() =>{
         RIFAS APP
       </div>
       <div class="q-px-md " style="border-top: 1px solid darkgrey;">
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/dashboard" @click="showMovil()">
+        <RouterLink activeClass="active_link" to="/admin/dashboard" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Inicio
             </div>
-          </RouterLink>
-        </div>
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/rifas" @click="showMovil()">
+          </div>
+        </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/rifas" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Rifas
             </div>
-          </RouterLink>
-        </div>
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/pays" @click="showMovil()">
+          </div>
+        </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/pays" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Pagos
             </div>
-          </RouterLink>
-        </div>
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/pay_methods" @click="showMovil()">
+          </div>
+        </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/pay_methods" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Metodos de pago
             </div>
-          </RouterLink>
-        </div>
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/clients" @click="showMovil()">
+          </div>
+        </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/clients" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Clientes
             </div>
-          </RouterLink>
-        </div>
-        <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
-          <RouterLink activeClass="active_link" to="/admin/configuration" @click="showMovil()">
+          </div>
+        </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/configuration" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
               Sistema
             </div>
-          </RouterLink>
-        </div>
+          </div>
+        </RouterLink>
       </div>
     </div>
   </aside>

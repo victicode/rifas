@@ -7,6 +7,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Rifa;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Exception;
@@ -20,8 +21,6 @@ class OrderController extends Controller
         return $this->returnSuccess(200, $rifas);
     }
     public function createOrder(Request $request){
-
-
         $validated = $this->validateFieldsFromInput($request->all(), true);
         if (count($validated) > 0) return $this->returnFail(400, $validated[0]);
 
@@ -76,7 +75,16 @@ class OrderController extends Controller
         $order = Order::with(["methodPay.coin"])->find($id);
         return view("emails.orderCreateAdmin", ["order" => $order ]);
     }
-    private function loadImageToStorage(Request $request ){
+
+    public function changeStatus(Request $request, $id){
+        $order = Order::find($id);
+
+        $order->update([
+            'status'  => $request->status
+        ]);
+        return $this->returnSuccess(200, $order);
+    }
+    private function loadImageToStorage(Request $request){
         $vaucher = ""; 
 
         if ($request->file("vaucher")) {
@@ -175,5 +183,36 @@ class OrderController extends Controller
             return  $e->getMessage();
         }
         return "bien";
+    }
+    private function makeTickets($order){
+        // 1. Usando un bucle y una condición if
+
+        $numeros = range(1, 9999); // Crear un arreglo con números del 1 al 20
+        $excluir = [5, 10, 15]; // Números a excluir
+
+        $resultado = [];
+        foreach ($numeros as $numero) {
+            if (!in_array($numero, $excluir)) {
+                $resultado[] = $numero;
+            }
+        }
+
+        print_r($resultado);
+
+        // 2. Usando array_diff
+        $numeros = range(1, 20);
+        $excluir = [5, 10, 15];
+        $resultado = array_diff($numeros, $excluir);
+
+        print_r($resultado);
+
+    }
+    private function getAvaibleTicket($rifa) {
+        $allTickets = Ticket::where('rifa_id', $rifa);
+        $avaibleTickets = [];
+        foreach ($allTickets as $key) {
+            array_push($avaibleTickets, $key->number);
+        }
+
     }
 }

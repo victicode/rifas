@@ -158,13 +158,7 @@ onMounted(() =>{
 .rifas__container{
   flex-direction: row;
 }
-.icon_badge{
-  height: 3rem;
-  width: 3rem;
-  border-radius: 0.3rem;
-  background: black;
-  border: 1px solid #7f7f7f;
-}
+
 .text-empty{
   font-size: 2.5rem;
   font-weight: bold;

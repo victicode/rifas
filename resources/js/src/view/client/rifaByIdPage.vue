@@ -69,9 +69,9 @@ onMounted(() => {
                 {{ formatDate()}}
                 
               </div>
-              <div class="text-stone-800 text-subtitle2 blockx md:hidden text-end" style="font-size:1rem" >
+              <div class="text-stone-800 text-subtitle2 blockx md:hidden text-end" style="font-size:0.9rem" >
                 Boleto: <br> 
-                <b style="font-size:1.2rem">Bs. {{ numberUtils.numberFormat(rifa.configuration.price) }},00</b>
+                <b style="font-size:1rem">Bs. {{ numberUtils.numberFormat(rifa.configuration.price) }},00</b>
               </div>
             </div>
             

@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::prefix('orders')->name('order.')->group(function () {
         Route::get('/', [OrderController::class, 'getOrderPagination']);
+        Route::post('/changeStatus/{id}', [OrderController::class, 'changeStatus']);
+
 
     });
 

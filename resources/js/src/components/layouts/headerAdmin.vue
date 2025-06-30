@@ -29,9 +29,9 @@ const showSidebar = () => {
           <div class="text-white text-subtitle1  hiddenx md:block" style="font-weight: 500;">
             {{ clock }}
           </div>
-          <q-btn flat round color="white" class="mx-2" text-color="white" icon="settings" />
-          <q-btn flat round color="white" class="mx-2" text-color="white" icon="notifications" />
-          <q-btn outline style="color: white;" class="mx-2" label="Cerrar Sesion" />
+          <q-btn flat round color="white" class="mx-1" text-color="white" icon="settings" />
+          <q-btn flat round color="white" class="mx-1" text-color="white" icon="notifications" />
+          <q-btn outline style="color: white;" class="mx-1" label="Cerrar Sesion" />
         </div>
       </div> 
     </div>

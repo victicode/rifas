@@ -3,22 +3,19 @@ import { onMounted, ref, watch} from 'vue';
 import { Notify } from 'quasar'
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
-import { useOrderStore } from '@/services/store/order.store';
   const numberFormat = numberUtils.numberFormat 
-  const emit = defineEmits(['closeModal', 'updateList'])
+  const emit = defineEmits(['closeModal'])
   const props = defineProps({
     dialog: Boolean,
     order: Object,
-    type: Number,
   })
 
-  const orderStore = useOrderStore()
   const order = ref({
     facturation:[],
     order:[],
   })
   const dialog    = ref(props.dialog); 
-  const loading = ref(false)
+
   const formatInfo = () =>{
     order.value.client = [
       {
@@ -37,6 +34,11 @@ import { useOrderStore } from '@/services/store/order.store';
         title: 'Fecha de pago',
         value: moment(props.order.pay_date).format('DD/MM/YYYY')
       },
+      // {
+      //   title: 'Rifa',
+      //   value: '['+props.order.rifa.title+']'
+      // },
+      
     ]
     order.value.order = [
       {
@@ -73,7 +75,6 @@ import { useOrderStore } from '@/services/store/order.store';
   const hideModal = () => {
     emit('closeModal')
   }
-
   const showNotify = (type,text) => {
     Notify.create({
       color:type,
@@ -81,37 +82,15 @@ import { useOrderStore } from '@/services/store/order.store';
       timeout:2000
     })
   }
-
-  
-  const updateStatusOrden = (status) => {
-    loading.value = true 
-    const data = {
-      id: props.order.id,
-      status,
-    }
-    orderStore.updateStatus(data)
-    .then((response) => {
-      
-      showNotify(status == 2 ? 'positive': 'negative', status == 2 ? 'Pago verificado con exito':'Pago rechazado')
-      setTimeout(() => {
-        loading.value = false
-        emit('updateList')
-      },1000)
-    })
-  }
-
-
   watch(() => props.dialog, (newValue) => {
+
     dialog.value = newValue
     formatInfo()
   });
   watch(() => props.order, (newValue) => {
     dialog.value = newValue
-  });
-  watch(() => props.type, (newValue) => {
-    type.value = newValue
-  });
 
+  });
   onMounted(() => {
     formatInfo()
   })
@@ -119,12 +98,12 @@ import { useOrderStore } from '@/services/store/order.store';
 </script>
 <template>
    <q-dialog v-model="dialog" class="orderViewDialog" persistent backdrop-filter="blur(8px)">
-      <q-card class="dialog_documentCardOrder "  style="border-radius:1rem">
+      <q-card class="dialog_documentCardOrder" style="border-radius:1rem">
         <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
         <q-card-section class="text-center q-pb-xs">
-          <div class="text-h5 text-center text-bold mb-2 text-black">
+          <div class="text-h5 text-center text-bold mb-2">
            Orden [#{{props.order.number}}]
           </div>
           <q-chip class="" :color="props.order.status == 1 ? 'warning' : props.order.status == 2 ? 'positive' :'negative'" text-color="white" >
@@ -133,7 +112,7 @@ import { useOrderStore } from '@/services/store/order.store';
               </div>
             </q-chip>
         </q-card-section>
-        <section class="content__modalSectionOrder px-5 " >
+        <section class="content__modalSection px-5">
           <div class="">
             <div class="my-2 row">
               <div v-for="(item,index) in order.client" :key="index" :class="'col-6 mb-1 ' + (index%2 == 0 ? 'justify-start ':'justify-end text-end')" >
@@ -151,7 +130,7 @@ import { useOrderStore } from '@/services/store/order.store';
               <table style="width:100%">
                 <thead class="tablePayViewHead">
                     <tr>
-                      <th class="text-subtitle2 text-black" v-for=" (item,key) in order.order" :key="key " :class="key==0 ? 'text-start':'text-center'">
+                      <th class="text-subtitle2" v-for=" (item,key) in order.order" :key="key " :class="key==0 ? 'text-start':'text-center'">
                         {{ item.title }}
                       </th>
 
@@ -159,7 +138,7 @@ import { useOrderStore } from '@/services/store/order.store';
                 </thead>
                 <tbody> 
                   <tr>
-                    <th class="text-subtitle2 text-bold py-3 text-black" v-for=" (item,key) in order.order" :key="key" :class="key==0 ? 'text-start':'text-center'">
+                    <th class="text-subtitle2 text-bold py-3" v-for=" (item,key) in order.order" :key="key" :class="key==0 ? 'text-start':'text-center'">
                       {{ item.value }}
                     </th>
                   </tr>
@@ -181,26 +160,23 @@ import { useOrderStore } from '@/services/store/order.store';
                   <img :src="props.order.vaucher" alt="" class="w-full h-full">
                 </div>
               </div>
+              <!-- <div v-for="(item,index) in order.order" :key="index" :class="'item__orderModal flex items-center my-1 py-1 px-5 it-' +index" >
+                <div class="text-subtitle1 text-bold  text-stone-500 mr-1 ">
+                  {{item.title}}:
+                </div>
+                <div class="text-subtitle1 text-black text-bold ">
+                  {{item.value}}
+                </div>
+              </div> -->
             </div>
           </div>
 
         </section>
-         <q-card-section class="q-pt-none q-px-sm q-pb-sm" v-if="type == 2">
-          <div class="flex flex-center pt-0 " >
-    
-            <q-btn  style="border-radius: 0.5rem;" size="0.8rem" color="negative"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(0)"  >
-              <div class="py-1">
-                Rechazar pago
-              </div>
-            </q-btn>
-
-            <q-btn  style="border-radius: 0.5rem;" size="0.8rem" color="positive"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(2)">
-              <div class="py-1">
-                Validar pago
-              </div>
-            </q-btn>
+        <!-- <q-card-section class="q-pt-none">
+          <div class="flex justify-end mt-0" >
+            <q-btn style="border-radius: 0.5rem;" size="0.8rem" color="primary"  class="" label="Editar" :loading="loading"  />
           </div>
-        </q-card-section>
+        </q-card-section> -->
       </q-card>
     </q-dialog>
 </template>
@@ -216,23 +192,17 @@ import { useOrderStore } from '@/services/store/order.store';
 }
 
 .dialog_documentCardOrder {
-  max-height: 95vh!important;
+  height: max-content !important;
+  max-height: 48rem !important;
   margin-left: 10%;
-  min-width: 700px !important;
-  max-width: 800px !important;
-  overflow: visible !important;
+  min-width: 700px!important;
+  max-width: 800px!important; 
+  overflow: visible!important;
   position: relative;
-  height: 85vh;
-}
-.content__modalSectionOrder{
-  overflow: auto; max-height: 80%; 
 }
 @media (max-width: 768px){
-  .content__modalSectionOrder{
-    min-height: 76%;
-    max-height: 76%;
+  
 
-  }
   .orderViewDialog .q-dialog__inner--minimized{
     padding: 24px 0.5rem;
   }

@@ -18,6 +18,7 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
+    
     async getOrderById(id) {
       return await new Promise((resolve, reject) => {
         ApiService.get('/api/public/order/byId/'+id)
@@ -46,6 +47,21 @@ export const useOrderStore = defineStore('Order', {
         });
         
       })
-    }
+    },
+    async updateStatus(data) {
+      return await new Promise((resolve, reject) => {
+        ApiService.post('/api/orders/changeStatus/'+data.id, data)
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
   },
 })
