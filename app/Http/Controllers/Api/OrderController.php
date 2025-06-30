@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     //
     public function getOrderPagination(Request $request){
-        $rifas = Order::with(["methodPay.coin", "client", "rifa"])->orderBy("created_at", "asc")->paginate(15);
+        $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration"])->orderBy("created_at", "asc")->paginate(15);
         
         return $this->returnSuccess(200, $rifas);
     }

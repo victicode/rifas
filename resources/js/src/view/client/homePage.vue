@@ -95,7 +95,7 @@ onMounted(() => {
   bottom: 0;
   z-index: 1;
   background: rgba(46, 46, 46, 0.185);
-  backdrop-filter: blur(0.1rem);
+  backdrop-filter: blur(0.08rem);
 }
 </style>
 
