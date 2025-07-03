@@ -19,8 +19,13 @@ const orders = ref([])
 const orderStore = useOrderStore()
 const loading = ref(true) 
 const showModal = ref('')
-
 const selectedOrder = ref({})
+const closeModal = () => {
+  showModal.value = ''
+  setTimeout(() => {
+    activeOptionsTable()
+  },1000)
+}
 const optionsTable = { 
   scrollX: false,
   columnDefs: [
@@ -129,8 +134,18 @@ const optionsTable = {
         }
         return view
       }
-    }
-
+    },
+    {
+      // status
+      className:'text-center',
+      targets: 8,
+      orderable: false,
+      visible:false,
+      render: function (data, type, full, meta) {
+        return full.id
+      }
+    },
+    
   ],
   language: {
     sLengthMenu: '_MENU_',
@@ -149,21 +164,25 @@ const optionsTable = {
     },
     
   },
-  order: [[0, 'desc']],
+  order:[9, 'asc'],
   dom:
     '<"mb-3" t>',													
 
 }
 
 const activeOptionsTable = () => {
+  
+
   document.querySelectorAll('.viewOrder').forEach( item => {
     item.addEventListener('click', event => {
+      console.log(event)
       selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
       showModal.value = 'view'
     })	
   })
   document.querySelectorAll('.updateOrder').forEach( item => {
     item.addEventListener('click', event => {
+      console.log(event)
       selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
       showModal.value = 'update'
     })	
@@ -183,10 +202,10 @@ const activeOptionsTable = () => {
       setTimeout(() => {
         
         activeOptionsTable()
-      }, 500);
+      }, 1000);
     })
   }
-  const closeModal = () => showModal.value = ''
+
  onMounted(() => {
   getOrders()
  })
@@ -352,6 +371,7 @@ const activeOptionsTable = () => {
     padding: 0px 10px;
     font-size: 0.8rem;
     transform: translateY(-110%) translateX(-0.5rem) !important;
+    border: 0px;
   }
   
   & .q-field__native{

@@ -72,8 +72,8 @@ class OrderController extends Controller
         return $this->returnSuccess(200, $order);
     }
     public function getOrderByIdHtml($id){
-        $order = Order::with(["methodPay.coin"])->find($id);
-        return view("emails.orderCreateAdmin", ["order" => $order ]);
+        $order = Order::with(["methodPay.coin", "tickets", "rifa.configuration"])->find($id);
+        return view("emails.orderCompleteClient", ["order" => $order ]);
     }
 
     public function changeStatus(Request $request, $id){
@@ -82,7 +82,12 @@ class OrderController extends Controller
         $order->update([
             'status'  => $request->status
         ]);
-        return $this->returnSuccess(200, $order);
+        if($request->status == 2 ) {
+            $this->makeTickets($order);
+            $this->sendMail($order->id, "orderComplete");
+            
+        }
+        return $this->returnSuccess(200, [$order->load('tickets')]);
     }
     private function loadImageToStorage(Request $request){
         $vaucher = ""; 
@@ -164,13 +169,18 @@ class OrderController extends Controller
         return $firstPart.$secondPart;
     }
     public function sendMail($id, $templateType){
-        $order = Order::with(["methodPay.coin", "client", "rifa"])->find($id);
+        $order = Order::with(["methodPay.coin", "client", "tickets", "rifa.configuration"])->find($id);
 
         $template = $templateType == "client" ? "emails.orderCreateClient" : "emails.orderCreateAdmin";
         $subject = $templateType == "client" ? "Gracias por tu compra" : "Orden creada pendiente";
         $client = $templateType == "client" ? $order->client->email : "ganaconlahijalinda@gmail.com";
 
-        if($templateType == "orderComplete")  $template = "emails.orderCompleteClient";
+        if($templateType == "orderComplete")  {
+            $template = "emails.orderCompleteClient";
+            $client = $order->client->email;
+            $subject = "Su compra fue aporbada";
+
+        }
 
         try{
             Mail::send($template, ["order"=>$order], function ($message) use ($order, $subject, $client)  {  
@@ -185,34 +195,32 @@ class OrderController extends Controller
         return "bien";
     }
     private function makeTickets($order){
-        // 1. Usando un bucle y una condición if
+        // // 1. Usando un bucle y una condición if
+        $tickets = $this->getAvaibleTicket($order->rifa_id) ;
 
-        $numeros = range(1, 9999); // Crear un arreglo con números del 1 al 20
-        $excluir = [5, 10, 15]; // Números a excluir
+        $selectedTickets = array_rand($tickets , $order->quantity);
+        shuffle($selectedTickets);
 
-        $resultado = [];
-        foreach ($numeros as $numero) {
-            if (!in_array($numero, $excluir)) {
-                $resultado[] = $numero;
-            }
+        for ($i=0; $i < count($selectedTickets) ; $i++) { 
+           Ticket::create([
+            "rifa_id"   =>  $order->rifa_id,
+            "order_id"  =>  $order->id,
+            "status"    =>  2,
+            "number"    => $tickets[$selectedTickets[$i]]
+           ]);
         }
 
-        print_r($resultado);
-
-        // 2. Usando array_diff
-        $numeros = range(1, 20);
-        $excluir = [5, 10, 15];
-        $resultado = array_diff($numeros, $excluir);
-
-        print_r($resultado);
 
     }
     private function getAvaibleTicket($rifa) {
-        $allTickets = Ticket::where('rifa_id', $rifa);
-        $avaibleTickets = [];
+        $allTickets = Ticket::where('rifa_id', $rifa)->get();
+        $allTicketsNumber = range(0, 9999);
+        $notAvaibleTickets = [];
         foreach ($allTickets as $key) {
-            array_push($avaibleTickets, $key->number);
+            array_push($notAvaibleTickets, $key->number);
         }
+        $avaibleTickets = array_diff($allTicketsNumber, $notAvaibleTickets);
+        return $avaibleTickets;
 
     }
 }

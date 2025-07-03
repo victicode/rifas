@@ -68,7 +68,7 @@ onMounted(() => {
            </div>
 
           </q-btn>
-          <q-btn 
+          <!-- <q-btn 
             style="border-radius: 0.5rem;" 
             size="" color="primary"  class="md:mt-4 md:mb-4 mt-2 mb-4 md:mx-2 mx-0" 
             @click="goTo('/tickets/finder?ci='+order.client.ci)"
@@ -77,7 +77,7 @@ onMounted(() => {
               Consulta tus tickets aqui
            </div>
 
-          </q-btn>
+          </q-btn> -->
         </div>
         <div>
           <div></div>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -46,5 +47,9 @@ class Order extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, "client_id");
+    }
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'order_id');
     }
 }

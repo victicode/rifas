@@ -11,6 +11,12 @@
   background: black;
   border: 1px solid #7f7f7f;
 }
+.q-date__calendar-item{
+  color:black;
+}
+.q-date__navigation{
+  color:black!important;
+}
 .dialog_document {
   margin-left: 10%;
   min-width: 600px!important;
@@ -61,6 +67,7 @@
   }
   .dialog_document {
     margin-left: 0%;
+    max-height: 40rem !important;
     min-width: 100%!important;
     max-width: 800px!important; 
   }
