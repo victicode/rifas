@@ -12,7 +12,7 @@ class Rifa extends Model
     //
     use SoftDeletes;
     protected $fillable = ["title", "description", "due_date", "status"];
-    public $appends     = ["status_label"];
+    public $appends     = ["status_label", "soldTickets"];
     
     public function getstatusLabelAttribute()
     {   
@@ -21,6 +21,11 @@ class Rifa extends Model
             "Activa",
         ];
         return $status[$this->status];
+    }
+    public function getSoldTicketsAttribute()
+    {   
+        $t = (count($this->tickects)/$this->configuration->quantity_tickets)*100;
+        return round($t, 2);
     }
     public function configuration() : HasOne {
         return $this->hasOne(RifaConfiguration::class, "rifa_id");
@@ -33,7 +38,7 @@ class Rifa extends Model
     {
         return $this->hasMany(Reward::class);
     }
-    public function Tickects(): HasMany
+    public function tickects(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }

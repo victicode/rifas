@@ -51,9 +51,8 @@ import logo from '@/assets/images/logo/logo.webp'
   font-family: "Braah One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  color: #ffffff;
-
-  -webkit-text-stroke: 2px #aa13a4;
+  color: #000000;
+  -webkit-text-stroke: 2px #ffffff;
   font-size: 1.9rem;
   text-shadow: 0px 5px 5px rgba(82, 82, 82, 0.406);
 }

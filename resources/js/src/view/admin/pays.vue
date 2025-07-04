@@ -22,9 +22,6 @@ const showModal = ref('')
 const selectedOrder = ref({})
 const closeModal = () => {
   showModal.value = ''
-  setTimeout(() => {
-    activeOptionsTable()
-  },1000)
 }
 const optionsTable = { 
   scrollX: false,
@@ -164,6 +161,7 @@ const optionsTable = {
     },
     
   },
+  pageLength: 15,
   order:[9, 'asc'],
   dom:
     '<"mb-3" t>',													

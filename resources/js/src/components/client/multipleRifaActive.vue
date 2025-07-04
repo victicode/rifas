@@ -28,9 +28,9 @@ const rifa = ref(props.rifa)
           <div class="rifa__item--title w-full ellipsis text-h5 text-black text-center">{{rifa.title}}</div>
         </div>
         <div class="q-mt-sm">
-          <q-linear-progress stripe rounded size="1.5rem" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+          <q-linear-progress stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
             <div class="absolute-full flex flex-center ">
-              <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
+              <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
             </div>
           </q-linear-progress>
         </div>

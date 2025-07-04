@@ -47,7 +47,7 @@
     </head>
 
 
-    <body class="font-sans antialiased  " style="background:#aa13a4; padding-top: 2rem; height: 100vh"> 
+    <body class="font-sans antialiased  " style="background:#aa13a4; padding-top: 2rem; height: max-content"> 
         <div class=""  style="background:white;height: max-content; padding-top: 1.1rem; width:90%; margin:auto" >
           <div style="text-align:center">
             <img src="https://ganaconlahijalinda.com/public/images/logo/logo2.jpeg" style="width:7rem; margin:auto"/>
@@ -61,12 +61,12 @@
             
           </div> 
             
-          <div class="content-email-body" style="width:100%; margin:auto ; padding-bottom:5rem">
-            <img src="{{ $order->rifa->configuration->banner_img }}" class="imag__rifa"  style="width:90%; margin:auto; border-radius:1rem;box-shadow: 0px 5px 5px 0px #c6c6c6a8;"/>
+          <div class="content-email-body" style="width:100%; margin:auto ; padding-bottom:5rem; text-align:center">
+            <img src="https://ganaconlahijalinda.com/{{ $order->rifa->configuration->banner_img }}" class="imag__rifa"  style="width:30%; margin:auto; border-radius:1rem;box-shadow: 0px 5px 5px 0px #c6c6c6a8;"/>
             <div  class="title__rifa" style="font-size:1.9rem; font-weight:bold; text-align:center;margin-top:1rem">
               {{ $order->rifa->title }}🎰
             </div>
-            <div class="sectionOfEmail" style="width:80%; margin:auto ; margin-top:2rem">
+            <div class="sectionOfEmail" style="width:90%; margin:auto ; margin-top:2rem">
               <div style="flex-wrap:wrap; display:flex; width:100%; margin-top:1.5rem;" >
                 <div style="font-size:0.95rem; font-weight:bold; width:33%; text-align:center;text-align:start;" class="client__data">
                   Cliente: {{ $order->client->name }}
@@ -79,7 +79,7 @@
                 </div>
               </div>
             </div>
-            <div class="sectionOfEmail" style="width:80%; margin:auto ; margin-top:2rem">
+            <div class="sectionOfEmail" style="width:90%; margin:auto ; margin-top:2rem">
               <table style="width:100%">
                 <thead class="tablePayViewHead">
                     <tr>
@@ -117,7 +117,7 @@
               </table>
             </div>
             
-            <div class="sectionOfEmail" style="width:80%; margin:auto ; margin-top:2rem">
+            <div class="sectionOfEmail" style="width:90%; margin:auto ; margin-top:2rem">
               <div style="">
                 <div class="text__date-rifa" style=" font-weight:600; border: 1px solid darkgrey; padding:0.5rem 4rem; border-radius:0.8rem; font-size:1.1rem; width:max-content; margin:auto; margin-top:1rem; text-align:center">
                   <div class="rifa__date2" style="font-size:0.9rem; font-weight:600;">Se juega el:</div>
@@ -125,18 +125,38 @@
                 </div>
               </div>
             </div>
-            <div class="sectionOfEmail" style="width:80%; margin:auto ; margin-top:2rem">
+            <div class="sectionOfEmail" style="width:90%; margin:auto ; margin-top:2rem">
               <div  class="text__ticket" style="font-weight:bold; text-align:center;margin-top:1.5rem; font-size:1.5rem; ">
                 Tus Tickets:🎟
               </div>
               
-              <div style="display:flex; width:100%; margin-top:0.8rem; justify-content:center; flex-wrap:wrap ">
+              {{-- <div style="display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; width: 100%;">
                 @foreach ($order->tickets as $key)
-                  <div  class="item__ticket-number" style="font-size:1.2rem; width:30%;   font-weight:600; border: 1px solid darkgrey; padding:0.5rem 0rem; border-radius:0.4rem;  text-align:center; margin: 0.3rem 1%;">
+                  <div  class="item__ticket-number" style="font-size:1.2rem; width:30%; font-weight:600; border: 1px solid darkgrey; padding:0.5rem 0rem; border-radius:0.4rem;  text-align:center; margin: 0.3rem 1%;">
                     {{ $key->number }}
                   </div>
                 @endforeach
-              </div>
+              </div> --}}
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+               @foreach ($order->tickets as $key => $ticket)
+                  @if ($key % 3 == 0)
+                    <tr>
+                  @endif
+                    <td width="30%" style="padding: 1%">
+                      <div  class="item__ticket-number" style="font-size:1.2rem; width:100%; font-weight:600; border: 1px solid darkgrey; padding:0.5rem 0rem; border-radius:0.4rem;  text-align:center; ">
+                        {{ $ticket->number }}
+                      </div>
+                    </td>
+                  @if (($key % 3 == 2) || $loop->last)
+                    </tr>
+                  @endif 
+                  
+                @endforeach
+                
+                  
+               
+    
+              </table>
             
             </div>
           </div>

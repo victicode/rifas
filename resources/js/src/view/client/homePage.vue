@@ -25,8 +25,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class=" " :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" >
-    <div class="overflowBody"/>
+  <div class=" " style="position: relative; background-position: -3rem 0rem;" >
+  <!-- <div class=" " :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" > -->
+
+    <!-- <div class="overflowBody"/> -->
 
     <div style="position: relative; z-index: 2;">
       <div class="mb-2 mt-0 text-center text-white text-h5 text-bold bg-black">

@@ -63,7 +63,7 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
   }
   
   const backButton = () => {
-    step.value == 3 ? formInputs.value.method_pay = { title:'Selcciona un método de pago', value: 0 } : ''
+    step.value == 3 ? formInputs.value.method_pay = { name:'Selcciona un método de pago', id:0 } : ''
 
     step.value == 1 ? hideModal() : step.value--
   }
@@ -429,6 +429,7 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
     </q-dialog>
 </template>
 <style lang="scss">
+
 .createOrderDialog{
   margin-left: 0%;
   min-width: 100%!important;

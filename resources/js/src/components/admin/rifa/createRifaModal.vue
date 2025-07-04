@@ -136,7 +136,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
 </script>
 <template>
    <q-dialog v-model="dialog" class="createRifaDialog" persistent backdrop-filter="blur(8px)">
-      <q-card class="dialog_document" style="border-radius:1rem">
+      <q-card class="dialog_document rifa" style="border-radius:1rem">
         <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
@@ -145,11 +145,11 @@ import { useRifaStore } from '@/services/store/rifas.store';
             {{ step == 1 ? 'Crear Rifa' : step == 2 ? 'Configuracion de Ticket' : 'Premios' }}
           </div>
         </q-card-section>
-        <section class="content__modalSection">
+        <section class="content__modalSection rifa">
           
           <q-card-section class="q-pt-none q-px-sm">
            <q-form
-              class="md:px-5"
+              class="md:px-5 pb-5"
               style="overflow: hidden; "
               @submit="step == 3 ? createRifa() : step++"
             >
@@ -315,6 +315,13 @@ import { useRifaStore } from '@/services/store/rifas.store';
     </q-dialog>
 </template>
 <style lang="scss">
+.dialog_document.rifa{
+  max-height: 43rem !important;
+  height: max-content!important;
+}
+.content__modalSection.rifa{
+  max-height: 38rem;
+}
 .img__container{
   position: relative;
    transition: all 0.5 ease;
