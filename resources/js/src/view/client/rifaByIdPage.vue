@@ -130,9 +130,9 @@ onMounted(() => {
                   Comprar Ahora
                 </div>
               </q-btn>
-              <q-linear-progress stripe rounded size="1.5rem" class="mt-3" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+              <q-linear-progress stripe rounded size="1.5rem" class="mt-3" :value="(rifa.soldTickets/100)" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
                 <div class="absolute-full flex flex-center ">
-                  <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
+                  <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                 </div>
               </q-linear-progress>
             </div>

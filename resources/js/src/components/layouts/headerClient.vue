@@ -1,11 +1,11 @@
 <script setup>
 import logo from '@/assets/images/logo/logo.webp'
-
+import { useRouter } from 'vue-router';
 </script>
 <template>
   <header class="h-full header__client">
     <div class=" h-full md:px-6 md:py-5 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center justify-center md:justify-start col-12 col-md-4 mb-0 md:mb-0">
+      <div class="flex items-center justify-center md:justify-start col-12 col-md-4 mb-0 md:mb-0" @click="useRouter().push('/home')">
         <img :src="logo" alt="" style="width: 3.2rem;" >
         <div class=" md:pl-3 logo-text ">
           Gana Con La Hija Linda
@@ -51,18 +51,28 @@ import logo from '@/assets/images/logo/logo.webp'
   font-family: "Braah One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  color: #ffffff;
-
-  -webkit-text-stroke: 2px #aa13a4;
+  // color: #000000;
+  color: #fff;
+  // -webkit-text-stroke: 2px #ffffff;
   font-size: 1.9rem;
   text-shadow: 0px 5px 5px rgba(82, 82, 82, 0.406);
 }
 .active_link {
   & .nav_header--items{
-    color: #aa13a4!important;
+    color: #000!important;
+    & div{
+      background: #d6d8e2;
+    }
+    &::before{
+      background: #d6d8e2;
+      transform: translateX(0rem);
+
+    }
   }
+  
 }
 .nav_header--items{
+  border-radius:0.7rem;
   transition: all 0.5s ease;
   cursor: pointer;
   position: relative;

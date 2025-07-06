@@ -25,8 +25,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class=" " :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" >
-    <div class="overflowBody"/>
+  <div class=" " style="position: relative; background-position: -3rem 0rem;" >
+  <!-- <div class=" " :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" > -->
+
+    <!-- <div class="overflowBody"/> -->
 
     <div style="position: relative; z-index: 2;">
       <div class="mb-2 mt-0 text-center text-white text-h5 text-bold bg-black">
@@ -56,7 +58,6 @@ onMounted(() => {
         <multipleRifaActive v-for="rifa in rifasActive" :rifa="rifa" :key="rifa.id" class="my-4 md:my-0 md:mt-4 col-12 col-md-3 md:px-3 " />
       </div>
       <div>
-  
       </div>
       <div class="mt-4 text-center text-white text-h5 text-bold bg-black">
         <q-carousel

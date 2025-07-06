@@ -63,7 +63,7 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
   }
   
   const backButton = () => {
-    step.value == 3 ? formInputs.value.method_pay = { title:'Selcciona un método de pago', value: 0 } : ''
+    step.value == 3 ? formInputs.value.method_pay = { name:'Selcciona un método de pago', id:0 } : ''
 
     step.value == 1 ? hideModal() : step.value--
   }
@@ -193,7 +193,19 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
       
     }
   }
-  
+  const formatTicket = (value) =>{
+      // Filtra solo números (elimina todo lo que no sea dígito)
+      
+      formInputs.value.quantity = value.replace(/[^0-9]/g, '');
+      formInputs.value.quantity = parseInt(formInputs.value.quantity)
+      
+      if(isNaN(formInputs.value.quantity)){
+        formInputs.value.quantity = 0
+        return
+      }
+      formInputs.value.quantity = parseInt(formInputs.value.quantity)
+
+  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
@@ -258,11 +270,13 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
                       <div class="row">
                         <div class="col-md-12 col-12 mt-5">
                           <q-input
-                            type="number"
+                            type="text"
                             v-model="formInputs.quantity"
                             label="Cantidad de tickects"
                             class=" createOrderForm__input quantity"
-                            readonly
+
+                           @update:model-value="formatTicket"
+                            :rules="[ val => !!val  || 'El campo es obligatorio', val => val >= 2 || 'El minimo son 2 tickets', val => val <= 10000 || 'El minimo son 2 tickets',]"
                           />
                         </div>
                         <div class="col-md-12 col-12 mt-5 flex justify-between  px-12">
@@ -429,6 +443,7 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
     </q-dialog>
 </template>
 <style lang="scss">
+
 .createOrderDialog{
   margin-left: 0%;
   min-width: 100%!important;

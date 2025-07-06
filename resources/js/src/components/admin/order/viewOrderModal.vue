@@ -106,10 +106,11 @@ import { useOrderStore } from '@/services/store/order.store';
     formatInfo()
   });
   watch(() => props.order, (newValue) => {
-    dialog.value = newValue
+    formatInfo()
   });
   watch(() => props.type, (newValue) => {
     type.value = newValue
+    formatInfo()
   });
 
   onMounted(() => {

@@ -42,8 +42,9 @@ onMounted(() => {
 })
 </script>
 <template>
+  <div class=" " style="position: relative; background-position: -3rem 0rem;" >
 
-  <div class="h-full md:px-12" :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" >
+  <!-- <div class="h-full md:px-12" :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" > -->
     <div class="overflowBody"/>
     <template v-if="loading">
 
