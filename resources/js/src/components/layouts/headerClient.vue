@@ -88,12 +88,12 @@ import logo from '@/assets/images/logo/logo.webp'
     transform: translateX(-10rem);
   }
   &:hover{
-    color: #aa13a4!important;
+    color: #000!important;
     & div{
-      background: #0c0a09;
+      background: #d6d8e2;
     }
     &::before{
-      background: #aa13a4;
+      background: #d6d8e2;
       transform: translateX(0rem);
 
     }
