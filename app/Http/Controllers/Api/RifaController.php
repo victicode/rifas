@@ -15,19 +15,18 @@ class RifaController extends Controller
 {
     //
     public function getRifas(Request $request){
-        $rifas = Rifa::with('configuration', 'rewards')->orderBy('created_at', 'asc')->paginate(10);
+        $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')->orderBy('created_at', 'asc')->paginate(10);
         
         return $this->returnSuccess(200, $rifas);
     }
     public function getRifasActive(Request $request) {
-        $rifas = Rifa::with('configuration', 'rewards')
+        $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')
         ->where('status', 1)->orderBy('created_at', 'asc')->get();
 
         return $this->returnSuccess(200, $rifas);
     }
     public function getRifaById($id) {
-        $rifa = Rifa::with('configuration', 'rewards')->find($id);
-
+        $rifa = Rifa::with('configuration', 'rewards')->withCount('tickets')->find($id);
         return $this->returnSuccess(200, $rifa);
     }
     public function createRifa(Request $request){

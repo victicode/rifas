@@ -15,6 +15,7 @@ const rifaStore = useRifaStore();
 const rifa = ref({})
 const loading = ref(false)
 const route = useRoute()
+const showDrescription = ref( window.screen.width < 780 ? false : true)
 const getRifaById = () => {
   rifaStore.getRifaById(route.params.id)
   .then((response) =>{
@@ -35,9 +36,7 @@ const closeModal = () => {
 const formatDate = (date) => {
   return moment(date).format('DD') +' de '+ moment(date).format('MMMM') + ' de ' + moment(date).format('YYYY')  
 }
-const orderCreate = () => {
-  console.log('eeeee')
-}
+
 onMounted(() => {
   getRifaById()
 })
@@ -82,25 +81,29 @@ onMounted(() => {
                 Comprar Ahora
               </div>
             </q-btn>
-            <q-linear-progress stripe rounded size="1.5rem" class="mt-3" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
-              <div class="absolute-full flex flex-center ">
-                <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
-              </div>
-            </q-linear-progress>
+            <q-linear-progress stripe rounded size="1.5rem" class="mt-3" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
+            <div class="absolute-full flex flex-center ">
+              <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
+            </div>
+          </q-linear-progress>
             <q-btn  color="blur" size="0.72rem" unelevated class=" mt-4 button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" >
               <div class="py-2 text-subtitle2">
                Consultar mis tickets
               </div>
             </q-btn>
-            <q-btn  color="blur" size="0.72rem" unelevated class=" mt-4 button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" >
+            <q-btn  color="blur" size="0.72rem" unelevated class=" mt-4 button__BuyRifa w-2/6" text-color="white" 
+              style="border-radius:0.5rem" @click="showDrescription = !showDrescription ">
               <div class="py-2 text-subtitle2">
-               Detalles de la rifa
+              {{ !showDrescription ?  'Detalles de la rifa' : 'Mostrar menos' }} 
               </div>
             </q-btn>
           </div>
-          <div class="md:mt-8 mt-4 text-stone-700 text-subtitle1 text-bold hiddenx md:block">
-            {{ rifa.description }}
-          </div>
+          <transition name="fadeM">
+
+            <div class="md:mt-8 mt-4 text-stone-700 text-subtitle1 text-bold " v-show="showDrescription">
+              {{ rifa.description }}
+            </div>
+          </transition>
         </div>
         <div class="col-md-3 col-12 md:pt-3 pt-4 mb-4 md:pl-8 ">
           <div class="rifa_content py-3 px-2">
@@ -140,7 +143,7 @@ onMounted(() => {
         </div>
       </div>
       <div>
-        <buyRifaModal :dialog="modal" :rifa="rifa" @orderSuccessful="orderCreate" @closeModal="closeModal()"/>
+        <buyRifaModal :dialog="modal" :rifa="rifa"  @closeModal="closeModal()"/>
       </div>
     </div>
     <div v-else class="flex justify-center mt-24">
@@ -153,6 +156,22 @@ onMounted(() => {
   </div>
 </template>
 <style lang="scss">
+.fadeM-enter-active,
+.fadeM-leave-active {
+  transition: all 0.4s ease;
+}
+
+.fadeM-enter-from{
+  opacity: 0;
+  position: absolute!important;
+  top: 0;
+  // transform: scale(0);
+}
+.fadeM-leave-to {
+  opacity: 0;
+  position: relative;
+  top: 0;
+}
 .button__BuyRifa{
   width: 100%;
   transition: all 1s ease;
@@ -189,7 +208,8 @@ onMounted(() => {
 .badge__buyRifa{
   font-weight:bold;
   border-radius:0.5rem; 
-  background:#050505; width:fit-content;
+  background:#050505; 
+  width:fit-content;
   display: flex;
   font-size: 1rem;
   color: rgb(255, 255, 255);

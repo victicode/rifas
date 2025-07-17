@@ -1,17 +1,30 @@
 <script setup>
-import logo from '@/assets/images/logo/logo.webp'
+import logo from '@/assets/images/logo/logo3.png'
+import supergana from '@/assets/images/logo/supergana.png'
+import { inject } from 'vue';
+import conalot from '@/assets/images/logo/conalot.png'
+
 import { useRouter } from 'vue-router';
+const emitter = inject('emitter')
+const router = useRouter()
+const showSidebar = () => {
+  emitter.emit('showSidebarClient')
+}
 </script>
 <template>
   <header class="h-full header__client">
-    <div class=" h-full md:px-6 md:py-5 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center justify-center md:justify-start col-12 col-md-4 mb-0 md:mb-0" @click="useRouter().push('/home')">
-        <img :src="logo" alt="" style="width: 3.2rem;" >
-        <div class=" md:pl-3 logo-text ">
-          Gana Con La Hija Linda
-        </div>
+    <div class=" h-full md:px-6 md:py-0 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
+      <div class="flex items-center  md:justify-start col-6 col-md-1 mb-0 md:mb-0 pl-4">
+        <img :src="logo" alt=""  style="width:5.5rem" @click="router.push('/home')">
       </div>
-      <div class=" col-12 col-md-8 md:pl-0">
+      <div class="flex md:hiddenx text-end col-6 ">
+        <img :src="supergana" alt=""  style="width:3rem; height:3rem" class="mr-2">
+        <img :src="conalot" alt=""  style="width:3rem; height:3rem" class="ml-2">
+        <q-btn flat round  color="white" class="mx-2" text-color="white"  @click="showSidebar()" >
+          <q-icon name="menu" size="1.7rem" />
+        </q-btn>
+      </div>
+      <div class="col-12 col-md-6 md:pl-0  hiddenx md:flex">
         <ul class="flex justify-center md:justify-start">
           <RouterLink activeClass="active_link" to="/home" >
             <li class="text-white mx-3 nav_header--items" >
@@ -35,6 +48,10 @@ import { useRouter } from 'vue-router';
             </li>
           </RouterLink>
         </ul>
+      </div>
+      <div class="col-12 col-md-5 md:pl-0  hiddenx md:flex justify-end">
+        <img :src="supergana" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
+        <img :src="conalot" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
       </div>
       <!-- <div class="col-12 col-md-4 flex md:justify-end">
         <q-btn  outline style="border-radius: 0.5rem;" color="white" class="mx-2" text-color="white" icon="settings" />

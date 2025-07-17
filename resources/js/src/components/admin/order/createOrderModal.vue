@@ -1,57 +1,47 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, useTemplateRef} from 'vue';
 import { Notify } from 'quasar'
 import numberUtils from '@/utils/numberUtils.js';
 import { useOrderStore } from '@/services/store/order.store';
 import { useRouter } from 'vue-router';
 import { useMethodPayStore } from '@/services/store/methodPay.store';
-import bankLabels from '@/utils/bankLabelUtils';
-  
+import { useRifaStore } from '@/services/store/rifas.store';
+
+
   const numberFormat = numberUtils.numberFormat 
+  const rifaStore = useRifaStore()
   const router = useRouter()
   const props = defineProps({
     dialog: Boolean,
-    rifa: Object
   })
 
-  const emit = defineEmits(['closeModal'])
-  const step = ref(1)
+  const emit = defineEmits(['orderSuccessfull', 'closeModal'])
+  const step = ref(0)
   const orderStore = useOrderStore()
   const loading = ref(false);
   const dialog = ref(props.dialog);
-  const rifa = props.rifa 
+  const rifa = ref({
+      title:'Selcciona la rifa',
+      id:0
+    })
+  const rifasOption = ref([])
   const payMethodStore = useMethodPayStore()
   const optionsMethodPay = ref([])
-  const getPayMethods = () => {
-    payMethodStore.getMethodPays()
-    .then((response) => {
-      optionsMethodPay.value = [
-        {
-        name:'Selecciona un método de pago',
-        id:0
-        },
-        ...response.data
-      ]
-    })
-    .catch((response) => {
-      console.log(response)
-    })
-  }
+
   const formInputs = ref({
-    quantity: rifa.configuration.minimus_buy,
+    quantity: 0,
     clientName: '',
     clientCi: '',
     clientEmail: '',
     clientPhone: '',
     method_pay: {
-      name:'Selecciona un método de pago',
+      name:'Selecciona el método de pago',
       id:0
     },
     payReference:'',
     payPhoto: null,
-
   })
-  const dataPays = ref([]);
+
   const onFileChange = () => {
     const file = document.getElementById('vaucher').files[0]
     formInputs.value.payPhoto = file
@@ -60,13 +50,11 @@ import bankLabels from '@/utils/bankLabelUtils';
   const loadingShow = (state) => {
     loading.value = state;
   }
-  const bankLabelAssign = (code) => {
-     return bankLabels.find((bank) => bank.code == code)? bankLabels.find((bank) => bank.code == code).name  : 'S/B'
-  }
+  
   const backButton = () => {
-    step.value == 3 ? formInputs.value.method_pay = { name:'Selecciona un método de pago', id:0 } : ''
+    step.value == 3 ? formInputs.value.method_pay = { name:'Selcciona un método de pago', id:0 } : ''
 
-    step.value == 1 ? hideModal() : step.value--
+    step.value == 0 ? hideModal() : step.value--
   }
   const hideModal = () => {
     // cleanForm()
@@ -83,13 +71,13 @@ import bankLabels from '@/utils/bankLabelUtils';
   }
   const cleanForm = () => {
     formInputs.value = {
-      quantity: rifa.configuration.minimus_buy,
+      quantity: 0,
       clientName: '',
       clientCi: '',
       clientEmail: '',
       clientPhone: '',
       method_pay: {
-        title:'Selecciona un método de pago',
+        title:'Selcciona un método de pago',
         value:0
       },
       payReference:'',
@@ -106,29 +94,31 @@ import bankLabels from '@/utils/bankLabelUtils';
     }
     loadingShow(true)
     const formData = new FormData()
-    formData.append('amount', (formInputs.value.quantity * rifa.configuration.price));
+    formData.append('amount', (formInputs.value.quantity * rifa.value.configuration.price));
     formData.append('quantity', formInputs.value.quantity)
     formData.append('reference', formInputs.value.payReference)
     formData.append('vaucher', formInputs.value.payPhoto)
-    formData.append('status', 1)
+    formData.append('status', 2)
 
     formData.append('client_name',  formInputs.value.clientName)
     formData.append('client_ci',    parseInt(formInputs.value.clientCi.replace(/\./g, '')))
     formData.append('client_phone', formInputs.value.clientPhone)
     formData.append('client_email', formInputs.value.clientEmail)
 
-    formData.append('rifa_id', rifa.id)
+    formData.append('rifa_id', rifa.value.id)
     formData.append('method_id', formInputs.value.method_pay.id)
+    formData.append('isAdmin', true)
+
 
     orderStore.createOrder(formData)
     .then((response) => {
  
       if(response.code !== 200 ) throw response
-      showNotify('positive', 'Tu orden de compra fue exitosa, serás redirigido en breve...')
-     
+      showNotify('positive', 'Orden creada con exito')
       setTimeout(() => {
-        router.push('/order/finish/'+response.data.order.id)
-      }, 2000);
+        loading.value = false
+        emit('orderSuccessfull')
+      },1000)
     })
     .catch((response) => {
       console.log(response)
@@ -167,10 +157,10 @@ import bankLabels from '@/utils/bankLabelUtils';
     return text
   }
   const removeCount = () => {
-    if(formInputs.value.quantity > rifa.configuration.minimus_buy) formInputs.value.quantity--
+    if(formInputs.value.quantity > rifa.value.configuration.minimus_buy) formInputs.value.quantity--
   }
   const addCount = () => {
-    if(formInputs.value.quantity < rifa.configuration.quantity_tickets) formInputs.value.quantity++
+    if(formInputs.value.quantity < rifa.value.configuration.quantity_tickets) formInputs.value.quantity++
   }
 
   const changeMethodData = () => {
@@ -184,13 +174,10 @@ import bankLabels from '@/utils/bankLabelUtils';
     if(Object.values(contentInfo.classList).includes('nonActive')) {
       contentInfo.classList.remove('nonActive')
       contentInfo.classList.add('activeInfo')
-      dataPays.value = formInputs.value.method_pay.data_pay
-
     }
     else {
       contentInfo.classList.add('nonActive')
       setTimeout(() =>{
-        dataPays.value = formInputs.value.method_pay.data_pay
         contentInfo.classList.remove('nonActive')        
         contentInfo.classList.add('activeInfo')
       } , 900)
@@ -210,12 +197,40 @@ import bankLabels from '@/utils/bankLabelUtils';
       formInputs.value.quantity = parseInt(formInputs.value.quantity)
 
   }
+  const getPayMethods = () => {
+    payMethodStore.getMethodPays()
+    .then((response) => {
+      optionsMethodPay.value = [
+        {
+        name:'Selcciona un método de pago',
+        id:0
+        },
+        ...response.data
+      ]
+    })
+    .catch((response) => {
+      console.log(response)
+    })
+  }
+  const getActiveRifas  = () => {
+    rifaStore.getRifasActive()
+    .then((response) => {
+      rifasOption.value = [
+        {
+        title:'Selcciona la rifa',
+        id:0
+        },
+        ...response.data
+      ]
+    })
+  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
 
   onMounted(() => {
     getPayMethods()
+    getActiveRifas()
   })
   
 
@@ -234,18 +249,39 @@ import bankLabels from '@/utils/bankLabelUtils';
           <div>
             <q-card-section class="">
               <div class="text-h6 text-center text-black">
-                {{ step == 1 ? 'Selecciona tu compra' : step == 2 ? 'Ingresa tus datos' : 'Realiza tu pago' }}
+                {{ step == 0 ? 'Selecciona la rifa' : step == 1 ? 'Selecciona tu compra' : step == 2 ? 'Ingresar datos' : 'Datos del pago' }}
               </div>
               
             </q-card-section>
-            <section class="content__modalSectionRifaBuy md:mt-5 mt-0">
+            <section class="content__modalSectionRifa md:mt-5 mt-0">
               
-              <q-card-section class="q-py-none q-px-sm pb-0">
+              <q-card-section class="q-pt-none q-px-sm ">
+                <transition name="fade">
+                  <template v-if="step==0">
+                    <div class="px-2 ">
+                      <div class="row mt-1 ">
+                        <div class="col-12  md:pl-2 mb-3 md:mt-0">
+                          <q-select
+                            v-model="rifa"
+                            label="Selecciona la rifa en la cual participa"
+                            option-value="id"
+                            option-label="title"
+                            behavior="menu"
+                            color="primary"
+                            :options="rifasOption"
+                            class="createOrderForm__input"
+                            :rules="[ (val, rules) => val.id != 0 || 'Debes seleccionar una rifa activa' ]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </transition> 
                 <transition name="fade">
                   <template v-if="step==1">
                     <div class="px-2 ">
                       <div class="text-subtitle1 text-center text-black">
-                        Verifica el monto antes de continuar
+                        Verifica el monto y demás datos proporcionados por el cliente
                       </div>
                       <div class="row py-3  my-3" style="border-bottom: 1px solid #dedede;">
                         <div class=" col-6  text-black " >
@@ -294,7 +330,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                   <template v-if="step==2">
                     <div class="px-2">
                       <div class="text-subtitle2  text-center text-stone-500">
-                        Debes ingresar los datos del titular de la compra y medios de contacto
+                        Debes ingresar los datos del titular de la compra y medios de contacto proporcionados
                       </div>
                       <div class="row mt-5 ">
                         
@@ -348,7 +384,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                         <div class="col-12  md:pl-2 mb-3 md:mt-0">
                           <q-select
                             v-model="formInputs.method_pay"
-                            label="Selecciona tu metodo de pago"
+                            label="Selecciona el método de pago del cliente"
                             option-value="id"
                             option-label="name"
                             behavior="menu"
@@ -363,34 +399,31 @@ import bankLabels from '@/utils/bankLabelUtils';
                         <div style="border:2px solid black; border-radius:0.8rem" class="py-1 px-3">
                           <div class="flex   items-center text-subtitle2  text-stone-900">
                             <div class="w-5/6">
-                              Procede a realizar el pago con los datos suministrados aqui
+                              Procede a ingresar los datos del pago
                             </div>
                             <div class="w-1/6 flex items-center justify-end">
                               <q-icon name="info" size="2rem" color="primary" class="pb-1"/>
                             </div>
                           </div>
                         </div>
-                        <div class="row mt-5 ">
-                          <div class="row mb-2"  v-for="(i, k) in dataPays" :key="k"  style="border-bottom:1px solid darkgray;"> 
-                            <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in JSON.parse(i.data)" :key="key"  >
-                                <div class="text-subtitle2 text-black">
-                                  {{item.title}}:
-                                </div>
-                                <div class="text-subtitle2 text-black">
-                                  {{ 
-                                    item.title == 'Banco' 
-
-                                    ? bankLabelAssign(item.value)+' ('+item.value+')'
-                                    : item.title == 'Teléfono' 
-                                    ? item.value.slice(0, 4)+'-'+item.value.slice(4) 
-                                    : item.title == 'Documento'
-                                    ? 'V'+item.value 
-                                    : item.value
-                                  }}
-                                </div>
-                            </div>
+                        <!-- <div class="row mt-5 ">
+                          <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in formInputs.method_pay.data_pay" :key="key" >
+                              <div class="text-subtitle2 text-black">
+                                {{item.title}}:
+                              </div>
+                              <div class="text-subtitle2 text-black">
+                                {{ 
+                                  item.title == 'Banco' 
+                                  ? 'Banplus ('+item.value+')'
+                                  : item.title == 'Teléfono' 
+                                  ? item.value.slice(0, 4)+'-'+item.value.slice(4) 
+                                  : item.title == 'Documento'
+                                  ? 'V'+item.value 
+                                  : item.value
+                                }}
+                              </div>
                           </div>
-                          <div class=" col-12 pb-3 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
+                          <div class=" col-12 py-2 flex justify-between " style="border-bottom: 1px solid darkgray;" >
                               <div class="text-subtitle2 text-black">
                                 Monto
                               </div>
@@ -404,22 +437,23 @@ import bankLabels from '@/utils/bankLabelUtils';
 
                           </div>
                           <div id="pasteClipb"></div>
-                        </div>
+                        </div> -->
                         <div class="row mt-6 md:mt-10">
                           <div class="col-12 mb-5 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"
                               label="Ingresa el número de referencia"
                               class=" createOrderForm__input"
+                              maxlength="8"
                               hint="*Asegurate de copiar correctamente la referencia"
                               :rules="[ val => val && val.length > 0 || 'El campo es obligatorio', val => (/^\d+$/.test(val) == true )  || 'Formato no valido']"
                             />
                           </div>
-                          <div class="col-12 mb-5">
+                          <div class="col-12 mb-0">
                             <label for="vaucher">
                               <div ref="dropzone" id="dropzoneFile" class="dropzone" :class="{'load': !(formInputs.payPhoto == null)}">
                                 <div class="dz-message" v-if="formInputs.payPhoto == null">
-                                 Haz click para cargar tu capture <q-icon name="image" size="sm" color="blur" />
+                                 Haz click para cargar el capture <q-icon name="image" size="sm" color="blur" />
                                 </div>
                                 <div v-else class="text-bold text-black">
                                   Archivo subido con exito <q-icon name="check_circle" size="sm" color="blur" />
@@ -437,9 +471,9 @@ import bankLabels from '@/utils/bankLabelUtils';
             </section>
           </div>
           <section>
-            <div class="flex justify-evenly md:mt-5 mt-1">
+            <div class="flex justify-evenly mt-5">
               <input type="file"  id="vaucher" ref="vaucher" accept="image/*"  style="display: none;" @change="onFileChange" >
-              <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="backButton()" />
+              <q-btn :label="step == 0 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="backButton()" />
               <q-btn :label="step !== 3 ? 'Siguiente' : 'Comprar' "   color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
             </div>
           </section>
@@ -469,9 +503,9 @@ import bankLabels from '@/utils/bankLabelUtils';
   flex-direction: column;
   justify-content: space-between;
 }
-.content__modalSectionRifaBuy{
+.content__modalSectionRifa{
     overflow: auto;
-    max-height: 80vh;
+    max-height: max-content;
 
 }
 #dataToPay{
@@ -484,7 +518,8 @@ import bankLabels from '@/utils/bankLabelUtils';
   border-bottom: 5px solid ;
 }
 .activeInfo{
-  height: 34rem;
+  height: 31rem;
+  overflow: hidden;
 }
 .q-item__label{
 

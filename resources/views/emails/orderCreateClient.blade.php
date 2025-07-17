@@ -49,7 +49,7 @@
         <div class=" text-center text-white " style="font-size:1.5rem; font-weight:bold; padding-bottom:1rem; height: 12%; color:white; text-align:center"> ¡Gracias por comprar con Gana Con La Hija Linda!</div> 
         <div class=""  style="background:white; border-top-left-radius:4rem; border-top-right-radius:4rem;height: 88%; padding-top: 1.5rem" >
             <div style="text-align:center">
-              <img src="https://ganaconlahijalinda.com/public/images/logo/logo2.jpeg" style="width:12rem; margin:auto" />
+              <img src="https://ganaconlahijalinda.com/public/images/logo/logo3.png" style="width:12rem; margin:auto" />
             </div>
             <div style="width:90%; margin:auto">
                 <div style="display:flex; width:100%;  font-size:1.1rem; border-bottom:1px solid #e0e0e0; font-weight:bold; margin:0.5rem 0px; padding:0.5rem 0rem" class="">

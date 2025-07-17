@@ -48,6 +48,13 @@ onMounted(() =>{
             </div>
           </div>
         </RouterLink>
+        <RouterLink activeClass="active_link" to="/admin/data_pays" @click="showMovil()">
+          <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
+            <div class="text-center font-bold" style="transition:all ease 0.5s">
+              Datos de pago
+            </div>
+          </div>
+        </RouterLink>
         <RouterLink activeClass="active_link" to="/admin/pay_methods" @click="showMovil()">
           <div class=" py-3 q-px-md text-subtitle1 item__menu-aside mt-6">
             <div class="text-center font-bold" style="transition:all ease 0.5s">
@@ -104,12 +111,14 @@ onMounted(() =>{
       color: white
     }
   }
-  &:has(.active_link){
-    background: #414141;
-    & .text-center {
-      color: white
-    }
 
+}
+.active_link{
+  .item__menu-aside{
+    background: #414141;
+  }
+  & .text-center {
+    color: white
   }
 
 }

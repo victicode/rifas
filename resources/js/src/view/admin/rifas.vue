@@ -7,6 +7,8 @@ import createRifaModal from '@/components/admin/rifa/createRifaModal.vue';
 import rewardsModal from '@/components/admin/rifa/rewardsModal.vue'
 import updateRifaModal from '@/components/admin/rifa/updateRifaModal.vue';
 import updateRifaStatusModal from '@/components/admin/rifa/updateRifaStatusModal.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const ready = ref(false)
 const rifaStore = useRifaStore()
 const rifas = ref([]) 
@@ -79,10 +81,13 @@ onMounted(() =>{
                   <div class="px-4 pt-3 flex column justify-between" style="height: 46%; flex-wrap: nowrap;">
                     <div class="rifa__item--title w-full ellipsis text-stone-400">{{rifa.title}}</div>
                     <div class="q-pt-sm">
-                      <div class="my-1 text-subtitle2 text-stone-400"> • Cantidad de tickets: <b>{{ numberUtils.numberFormat(rifa.configuration.quantity_tickets) }}</b></div>
-                      <div class="my-1 text-subtitle2 text-stone-400"> • Valor del Ticket:    <b>{{ numberUtils.numberFormat(rifa.configuration.price) }} Bs</b></div>
-                      <div class="my-1 text-subtitle2 text-stone-400"> • Compra minima: <b>{{ rifa.configuration.minimus_buy }} tickets</b></div>
-                      <div class="my-1 text-subtitle2 text-stone-400"> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-500 "> 
+                        • Cantidad de tickets: <b>{{ numberUtils.numberFormat(rifa.configuration.quantity_tickets) }}</b>
+                      </div>
+                      <div class="my-1 text-subtitle2 text-stone-500 "> • Valor del Ticket:    <b>{{ numberUtils.numberFormat(rifa.configuration.price) }} Bs</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-500 "> • Compra minima: <b>{{ rifa.configuration.minimus_buy }} tickets</b></div>
+                      <div class="my-1 text-subtitle2 text-stone-500 "> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
+
                       <div class="flex q-my-sm justify-between items-center"> 
                         <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
                           <div class="px-2 md:px-1">
@@ -90,6 +95,9 @@ onMounted(() =>{
                           </div>
                         </q-chip>
                         <div class="flex justify-end">
+                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white"  @click="router.push('/rifa/'+rifa.id +'/tickects')" >
+                            <q-icon name="local_activity" />
+                          </q-btn> 
                           <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
                           <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
                           <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="cached" @click="openModal('status', rifa.id)" /> 
@@ -98,11 +106,12 @@ onMounted(() =>{
                       </div>
                     </div>
                     <div class="q-mt-sm">
-                      <q-linear-progress stripe rounded size="1.3rem" :value="0" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+                      <q-linear-progress stripe rounded size="1.3rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
                         <div class="absolute-full flex flex-center ">
-                          <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+0+'%'" />
+                          <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                         </div>
                       </q-linear-progress>
+                       <b class="ml-1 text-positive">Disponibles: {{ numberUtils.numberFormat(rifa.available_tickets) }} tickets</b>
                     </div>
                   </div>
                 </div>
@@ -172,7 +181,7 @@ onMounted(() =>{
   flex-direction: column;
   justify-content: space-between;
   width: 100%; 
-  height: 33rem!important; 
+  height: 35rem!important; 
   overflow: hidden;
   background:white;
   border-radius: 1.2rem;

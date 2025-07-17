@@ -6,7 +6,7 @@
 
   const authServices = useAuthStore()
   const login = reactive({
-    username: '',
+    email: '',
     password: ''
   })
   const isPwd =  ref(true)
@@ -16,7 +16,7 @@
   const rules = (id) => {
     if(id=='user') return [ 
       val => val && val.length > 0 || 'Usuario no puede quedar vacio',
-      val => (/[,$}#*. %"'()\-;&|<>]/.test(val) == false ) || 'No debe contener "[](),%|&;\'" ',
+      val => (/[,$}#*%"'()\-;&|<>]/.test(val) == false ) || 'No debe contener "[](),%|&;\'" ',
     ]
     if(id=='password') return [ 
       val => val && val.length > 0 || 'Contraseña no puede quedar vacio',
@@ -67,7 +67,7 @@
           <div class="w-full ">
             <div class="relative px-10 h-full w-full form pt-12 md:pt-0 ">
               <div class="w-full pt-0 md:mt-5">
-                <q-input v-model="login.username" :rules="rules('user')" placeholder="Usuario" color="primary" >
+                <q-input v-model="login.email" :rules="rules('user')" placeholder="Usuario" color="primary" >
                   <template v-slot:prepend>
                     <q-icon name="eva-person-outline" color="primary" />
                   </template>

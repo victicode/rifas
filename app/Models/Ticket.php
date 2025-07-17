@@ -17,7 +17,7 @@ class Ticket extends Model
         return $this->belongsTo(Rifa::class, "rifa_id");
     }
 
-     public function order(): BelongsTo
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, "order_id");
     }

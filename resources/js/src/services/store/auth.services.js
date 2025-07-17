@@ -30,8 +30,11 @@ export const useAuthStore = defineStore('auth', {
       if(credentials.remember == true) this.setRememberAccount(credentials)
     },
     saveToken(token){
-      storage.setItem("access_token",token);
-
+      storage.setItem("access_token",token)
+    },
+    logoutAction(){
+      storage.deleteItem("access_token");
+      this.user = {};
     },
     async login(credentials) {
       return await new Promise((resolve, reject) => {
@@ -88,17 +91,19 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout(){
       return await new Promise((resolve) => {
-        if (JwtService.getToken()) {
-          ApiService.setHeader();
-          ApiService.get("api/auth/logout")
-            .then(({ data }) => {
-              if(data.code !== 200){
-                throw data;
-              }
-              this.logoutAction()
-              resolve(data)
-            })
+        if (!ApiService.getToken()) {
+          throw '';
         }
+        ApiService.setHeader();
+        ApiService.get("/api/auth/logout")
+        .then(({ data }) => {
+            if(data.code !== 200){
+              throw data;
+            }
+            this.logoutAction()
+            resolve(data)
+        })
+        
       })
       .catch(( response ) => {
         console.log(response)

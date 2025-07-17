@@ -47,10 +47,10 @@
     </head>
 
 
-    <body class="font-sans antialiased  " style="background:#050505; padding-top: 2rem; height: 100vh"> 
+    <body class="font-sans antialiased  " style="background:#050505; padding-top: 2rem; height: 100vh; overflow:auto"> 
         <div class=""  style="background:white;height: max-content; padding-top: 1.1rem; width:90%; margin:auto" >
           <div style="text-align:center">
-            <img src="https://ganaconlahijalinda.com/public/images/logo/logo2.jpeg" style="width:7rem; margin:auto"/>
+            <img src="https://ganaconlahijalinda.com/public/images/logo/logo3.png" style="width:7rem; margin:auto"/>
           </div>
           <div class=" text-center header__text" style="font-size:1.3rem; font-weight:bold; padding-bottom:1rem; height: 12%; color:#000; text-align:center; margin-top:1rem"> 
             <b class="principal__text" style="letter-spacing:2px; color:#050505;">

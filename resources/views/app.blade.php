@@ -20,6 +20,9 @@
             .blockx{
                 display: block;
             }
+            .flexX{
+                display: flex;
+            }
             @media (min-width: 768px){
                 .md\:justify-end{
                     justify-content: end!important;
@@ -29,6 +32,9 @@
                 }
                 .md\:block {
                     display: block!important;
+                }
+                .md\:flex {
+                    display: flex!important;
                 }
                 .md\:justify-start{
                     justify-content: start!important;

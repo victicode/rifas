@@ -49,7 +49,6 @@ import { onMounted, ref, watch} from 'vue';
 
 }
 .dialog_documentTerms {
-  margin-left: 10%;
   min-width: 600px!important;
   max-width: 800px!important; 
   overflow: auto!important;

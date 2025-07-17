@@ -1,11 +1,13 @@
 <script setup>
 import { useAuthStore } from '@/services/store/auth.services';
 import moment from 'moment';
-import { storeToRefs } from 'pinia'
 import { ref,onMounted, inject } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const clock = ref(moment().format('DD/MM/YYYY, h:mm:ss a'))
 const emitter = inject('emitter')
+const loading = ref(false)
 onMounted(() => {
   setInterval(() => {
     clock.value = moment().format('DD/MM/YYYY, h:mm:ss a')
@@ -14,6 +16,17 @@ onMounted(() => {
 
 const showSidebar = () => {
   emitter.emit('showSidebar')
+}
+const logout = () => {
+  loading.value = true;
+  useAuthStore().logout()
+  .then((response) => {
+    setTimeout(() => {
+      
+      router.push('/login')
+      loading.value = false;
+    }, 1000);
+  })
 }
 
 </script>
@@ -31,7 +44,7 @@ const showSidebar = () => {
           </div>
           <q-btn flat round color="white" class="mx-1" text-color="white" icon="settings" />
           <q-btn flat round color="white" class="mx-1" text-color="white" icon="notifications" />
-          <q-btn outline style="color: white;" class="mx-1" label="Cerrar Sesion" />
+          <q-btn outline style="color: white;" :loading="loading" class="mx-1" label="Cerrar Sesion"  @click="logout()"/>
         </div>
       </div> 
     </div>

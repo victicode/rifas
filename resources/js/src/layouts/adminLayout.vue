@@ -1,16 +1,17 @@
 <script setup>
 import sideBar from '@/components/layouts/sideBar.vue';
 import headerAdmin from '@/components/layouts/headerAdmin.vue';
-import {  inject, onMounted, ref, watch} from 'vue';
+import { onMounted, ref, watch} from 'vue';
 import { useAuthStore } from '@/services/store/auth.services';
 import { Notify } from 'quasar'
 import { useRoute, useRouter } from 'vue-router';
+import storage from '@/services/storage'
+
   const store = useAuthStore();
   const router = useRouter();
   const route = useRoute()
   const user = ref({})
-  const emitter = inject('emitter')
-  const showXs = ref(false)
+
     // listen
   const showNotify = (type,text) => {
     Notify.create({
@@ -23,16 +24,18 @@ import { useRoute, useRouter } from 'vue-router';
   // methods
   const getCurrentUser = () =>{
     store.currentUser().then((data)=>{
-      if(data.status !== 200 ) throw data
+      if(data.status !== 200 ) 
+      {
+        router.push('/login')
+        throw data
+
+      }
       user.value = data.data
     }).catch((e) => { 
+      storage.deleteItem("access_token");
       showNotify ( 'negative', 'El tiempo activo de su sesión ha caducado, vuelve a iniciar sesión')
       router.push('/login')
     })
-  }
-  const showMovil = () => {
-    console.log('se logró')
-    showXs.value = !showXs.value
   }
   watch(route, () => {
     getCurrentUser()
@@ -40,8 +43,6 @@ import { useRoute, useRouter } from 'vue-router';
 
   onMounted(() =>{
     getCurrentUser()
-    emitter.on('showSidebar', showMovil) 
-
   })
 </script>
 <template>

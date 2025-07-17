@@ -14,7 +14,7 @@ class PayMethod extends Model
    
     public function dataPay(): HasMany
     {
-        return $this->hasMany(DataPay::class, 'method_id');
+        return $this->hasMany(DataPay::class, 'method_id')->where('status', 1);
     }
     public function coin(): BelongsTo
     {

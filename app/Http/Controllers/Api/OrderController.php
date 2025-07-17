@@ -16,7 +16,7 @@ class OrderController extends Controller
 {
     //
     public function getOrderPagination(Request $request){
-        $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration"])->orderBy("created_at", "asc")->paginate(15);
+        $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration", "tickets"])->withCount("tickets")->orderBy("created_at", "desc")->paginate(15);
         
         return $this->returnSuccess(200, $rifas);
     }
@@ -24,19 +24,19 @@ class OrderController extends Controller
         $validated = $this->validateFieldsFromInput($request->all(), true);
         if (count($validated) > 0) return $this->returnFail(400, $validated[0]);
 
-        $client = Client::where("ci", $request->client_ci)->first();
+        $client = Client::updateOrCreate(
+            ['ci' => $request->client_ci, ],
+            [
+                "ci" => $request->client_ci,
+                "name" => $request->client_name,
+                "email" => $request->client_email,
+                "phone" => $request->client_phone,
+            ]
+        );
         $vaucher = $this->loadImageToStorage($request);
 
         try {
             //code...
-            if(!$client){
-                $client = Client::create([
-                    "ci" => $request->client_ci,
-                    "name" => $request->client_name,
-                    "email" => $request->client_email,
-                    "phone" => $request->client_phone,
-                ]);
-            }
 
             $order = Order::create([
                 "amount"    => $request->amount,
@@ -45,11 +45,12 @@ class OrderController extends Controller
                 "reference" => $request->reference,
                 "vaucher"   => $vaucher,
                 "pay_date"  => date("Y-m-d"),
-                "status"    => $request->status,
+                "status"    => $request->isAdmin ? 2 : 1,
                 "rifa_id"   => $request->rifa_id,
                 "method_id" => $request->method_id,
                 "client_id" => $client->id,
             ]);
+            
 
             
         } catch (Exception $th) {
@@ -57,8 +58,14 @@ class OrderController extends Controller
            return $this->returnFail(500, $th->getMessage());
         }
 
-         $this->sendMail($order->id, "client");
-         $this->sendMail($order->id, "admin");
+        $this->sendMail($order->id, "admin");
+
+        if($request->isAdmin){
+            $this->makeTickets($order);
+            $this->sendMail($order->id, "orderComplete");
+        }else{
+            $this->sendMail($order->id, "client");
+        }
 
         return $this->returnSuccess(200, ["order" => $order]);
 
@@ -172,13 +179,13 @@ class OrderController extends Controller
         $order = Order::with(["methodPay.coin", "client", "tickets", "rifa.configuration"])->find($id);
 
         $template = $templateType == "client" ? "emails.orderCreateClient" : "emails.orderCreateAdmin";
-        $subject = $templateType == "client" ? "Gracias por tu compra" : "Orden creada pendiente";
+        $subject = $templateType == "client" ? "Gracias por tu compra N°[".$order->number."]"  : "Orden creada pendiente N°[".$order->number."]" ;
         $client = $templateType == "client" ? $order->client->email : "ganaconlahijalinda@gmail.com";
 
         if($templateType == "orderComplete")  {
             $template = "emails.orderCompleteClient";
             $client = $order->client->email;
-            $subject = "Su compra fue aporbada";
+            $subject = "Su compra fue aprobada N°[".$order->number."]";
 
         }
 

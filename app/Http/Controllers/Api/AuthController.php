@@ -13,11 +13,11 @@ class AuthController extends Controller
     public function login()
     {
         request()->validate([
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        $user = User::where('username', request()->username)->first();
+        $user = User::where('email', request()->email)->first();
 
         if (! $user || ! Hash::check(request()->password, $user->password)) {
             return $this->returnFail(505, 'Credenciales no validas');
@@ -33,8 +33,9 @@ class AuthController extends Controller
     {
         auth()->user()->tokens()->delete();
 
-        return response()->json([
-            'message' => 'Logged out'
-        ]);
+        return $this->returnSuccess(
+            200,
+            'ok'
+        );
     }
 }

@@ -5,8 +5,6 @@ import auth from './middlewares/auth'
 import guest from './middlewares/guest'
 import ClientLayout from '@/layouts/clientLayout.vue'
 import AdminLayout from '@/layouts/adminLayout.vue'
-import pays from '@/view/admin/pays.vue'
-
 const routes = [
   {
     path: '/', 
@@ -95,15 +93,22 @@ const routes = [
       },
       {
         path:'/admin/pays',
-        component: pays,
+        component: () => import('@/view/admin/pays.vue'),
         meta:{
           title: 'Bienvenido',
           titlePage: 'Ordenes de pago'
         }
       },
       {
+        path:'/admin/data_pays',
+        component: () => import('@/view/admin/payData.vue'),
+        meta:{
+          title: 'Bienvenido'
+        }
+      },
+      {
         path:'/admin/pay_methods',
-        component: () => import('@/view/admin/dashboard.vue'),
+        component: () => import('@/view/admin/payData.vue'),
         meta:{
           title: 'Bienvenido'
         }

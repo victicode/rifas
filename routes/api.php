@@ -30,7 +30,7 @@ Route::prefix('public')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () 
 {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -48,6 +48,14 @@ Route::middleware('auth:sanctum')->group(function ()
 
 
     });
+    Route::prefix('methods_pay')->name('methods')->group(function () {
+        Route::get('/', [PayMethodController::class, 'getMethodsData']);
+        Route::post('/data', [PayMethodController::class, 'createMethodData']);
+        Route::post('/data/u/{id}', [PayMethodController::class, 'updateMethodData']);
+        Route::post('/data/d/{id}', [PayMethodController::class, 'deleteMethodData']);
+
+    });
+    
 
     Route::prefix('configuration')->name('configuration.')->group(function () {
 

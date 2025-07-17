@@ -7,6 +7,9 @@ import DataTablesLib from 'datatables.net';
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
 import viewOrderModal from '@/components/admin/order/viewOrderModal.vue';
+import createOrderModal from '@/components/admin/order/createOrderModal.vue'
+import viewTicketModal from '@/components/admin/order/viewTicketModal.vue'
+
 DataTable.use(DataTablesLib);
 
 const lastPage = ref(1);
@@ -164,49 +167,50 @@ const optionsTable = {
   pageLength: 15,
   order:[9, 'asc'],
   dom:
-    '<"mb-3" t>',													
-
+  '<"mb-3" t>',													
 }
 
 const activeOptionsTable = () => {
-  
-
   document.querySelectorAll('.viewOrder').forEach( item => {
     item.addEventListener('click', event => {
-      console.log(event)
       selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
       showModal.value = 'view'
     })	
   })
   document.querySelectorAll('.updateOrder').forEach( item => {
     item.addEventListener('click', event => {
-      console.log(event)
       selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
       showModal.value = 'update'
     })	
   })
+  document.querySelectorAll('.viewTicket').forEach( item => {
+    item.addEventListener('click', event => {
+      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      showModal.value = 'ticket'
+    })	
+  })
 }
-  const getOrders = () => {
-    const data = {
-      search: search.value,
-      searchType: searchType.value,
-      page:actualPage.value
-    }
-    orderStore.getPaginationOrders(data)
-    .then((response) => {
-      lastPage.value = response.data.last_page
-      loading.value = false
-      orders.value = response.data.data
-      setTimeout(() => {
-        
-        activeOptionsTable()
-      }, 1000);
-    })
+const getOrders = () => {
+  const data = {
+    search: search.value,
+    searchType: searchType.value,
+    page:actualPage.value
   }
+  orderStore.getPaginationOrders(data)
+  .then((response) => {
+    lastPage.value = response.data.last_page
+    loading.value = false
+    orders.value = response.data.data
+    setTimeout(() => {
+      
+      activeOptionsTable()
+    }, 1000);
+  })
+}
 
- onMounted(() => {
+onMounted(() => {
   getOrders()
- })
+})
 </script>
 <template>
   <div class="h-full">
@@ -221,7 +225,7 @@ const activeOptionsTable = () => {
       </div>
       <div class="md:mt-0 mt-2">
         <q-btn unelevated style="border-radius:0.4rem" icon="add" color="black" 
-        class="q-py-sm md:mx-2 " label="Orden manual" no-caps />
+        class="q-py-sm md:mx-2 " label="Orden manual" no-caps @click="showModal = 'create'" />
       </div>
     </div>
     <section id="filterAndSearch" class="w-full  px-4 py-2 md:py-3 mt-4">
@@ -273,7 +277,7 @@ const activeOptionsTable = () => {
                 <th>N° referencia</th>
                 <th>Tickets</th>
                 <th>Estado</th>
-                <th>Acción</th>
+                <th>Acción<b style="opacity:0; text-align:center">nnnnnn</b></th>
               </tr>
           </thead>
         </DataTable>
@@ -299,9 +303,11 @@ const activeOptionsTable = () => {
             />
           </div>
     </section>
+    <createOrderModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @orderSuccessfull="showModal=''; getOrders()" />
     <template v-if="Object.values(selectedOrder).length > 0">
       <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getOrders() "/>
-      <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="2" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
+      <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="1" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
+      <viewTicketModal :dialog="(showModal == 'ticket')"  :order="selectedOrder"  @closeModal="closeModal()"  />
     </template>
   </div>
 </template>

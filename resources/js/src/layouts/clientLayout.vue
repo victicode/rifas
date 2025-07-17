@@ -1,8 +1,11 @@
 <script setup>
 import headerClient from '@/components/layouts/headerClient.vue';
+import sideBarClient from '@/components/layouts/sideBarClient.vue';
 </script>
 <template>
   <section class="h-full ">
+    <sideBarClient  />
+
     <headerClient class="header-height"/>
     <div class="body-height" style="overflow: auto;">
       <router-view v-slot="{ Component }">
@@ -38,7 +41,7 @@ import headerClient from '@/components/layouts/headerClient.vue';
 }
 @media (max-width: 768px){
 .header-height{
-  height: 14vh;
+  height: 13vh;
 }
 .body-height{
   height: 86vh;
