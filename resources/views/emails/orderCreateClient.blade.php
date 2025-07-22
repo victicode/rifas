@@ -45,7 +45,7 @@
             </style>
         @endif
     </head>
-    <body class="font-sans antialiased  " style="background:#aa13a4; padding-top: 2rem; height: 100vh"> 
+    <body class="font-sans antialiased  " style="background:#aa13a4; padding-top: 2rem; height: 100vh; overflow:auto"> 
         <div class=" text-center text-white " style="font-size:1.5rem; font-weight:bold; padding-bottom:1rem; height: 12%; color:white; text-align:center"> ¡Gracias por comprar con Gana Con La Hija Linda!</div> 
         <div class=""  style="background:white; border-top-left-radius:4rem; border-top-right-radius:4rem;height: 88%; padding-top: 1.5rem" >
             <div style="text-align:center">

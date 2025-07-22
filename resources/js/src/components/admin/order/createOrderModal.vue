@@ -21,7 +21,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
   const loading = ref(false);
   const dialog = ref(props.dialog);
   const rifa = ref({
-      title:'Selcciona la rifa',
+      title:'Selecciona la rifa',
       id:0
     })
   const rifasOption = ref([])
@@ -35,8 +35,9 @@ import { useRifaStore } from '@/services/store/rifas.store';
     clientEmail: '',
     clientPhone: '',
     method_pay: {
-      name:'Selecciona el método de pago',
-      id:0
+      name:'Pago Movil',
+      id:1,
+      coin_id:1
     },
     payReference:'',
     payPhoto: null,
@@ -52,9 +53,17 @@ import { useRifaStore } from '@/services/store/rifas.store';
   }
   
   const backButton = () => {
-    step.value == 3 ? formInputs.value.method_pay = { name:'Selcciona un método de pago', id:0 } : ''
-
     step.value == 0 ? hideModal() : step.value--
+  }
+  const nextStep = () => {
+    if(step.value == 3) {
+      createOrder()
+      return
+    }
+    if(step.value == 2) {
+      changeMethodData()
+    }
+    step.value++
   }
   const hideModal = () => {
     // cleanForm()
@@ -77,8 +86,9 @@ import { useRifaStore } from '@/services/store/rifas.store';
       clientEmail: '',
       clientPhone: '',
       method_pay: {
-        title:'Selcciona un método de pago',
-        value:0
+        name:'Pago Movil',
+        id:1,
+        coin_id:1
       },
       payReference:'',
       payPhoto: null,
@@ -93,8 +103,10 @@ import { useRifaStore } from '@/services/store/rifas.store';
       return
     }
     loadingShow(true)
+    const amount = formInputs.value.method_pay.coin_id == 1 ? rifa.value.configuration.price : rifa.value.configuration.price_usd
+
     const formData = new FormData()
-    formData.append('amount', (formInputs.value.quantity * rifa.value.configuration.price));
+    formData.append('amount', (formInputs.value.quantity * amount));
     formData.append('quantity', formInputs.value.quantity)
     formData.append('reference', formInputs.value.payReference)
     formData.append('vaucher', formInputs.value.payPhoto)
@@ -126,63 +138,54 @@ import { useRifaStore } from '@/services/store/rifas.store';
       showNotify('negative', response)
     })
   }
-  const copyDataPay = () => {
-    
-    const texto = formatDataPayText();
-    const element = document.getElementById('pasteClipb')
-    const textArea = document.createElement('textarea');
-    textArea.value = texto;
-    textArea.style.opacity = 0;
-    element.appendChild(textArea);
-    textArea.select();
 
-    try {
-      const success = document.execCommand('copy');
-      showNotify('positive', 'Datos copiados con exito')
-    } catch (err) {
-      console.error(err.name, err.message);
-    }
-
-    element.removeChild(textArea);
-
-  }
-
-  const formatDataPayText = () => {
-    let text = ''
-
-    formInputs.value.method_pay.data_pay.forEach((element) => {
-      text += element.value+' '
-    });
-    
-    return text
-  }
   const removeCount = () => {
-    if(formInputs.value.quantity > rifa.value.configuration.minimus_buy) formInputs.value.quantity--
+    let min = formInputs.value.method_pay.coin_id  == 2
+    ? rifa.value.configuration.minimus_buy_usd
+    : rifa.value.configuration.minimus_buy
+    if(formInputs.value.quantity > min) formInputs.value.quantity--
   }
   const addCount = () => {
     if(formInputs.value.quantity < rifa.value.configuration.quantity_tickets) formInputs.value.quantity++
   }
 
   const changeMethodData = () => {
-    let id =  formInputs.value.method_pay.id
-    let contentInfo = document.getElementById('dataToPay')
-    contentInfo.classList.remove('activeInfo')
-    if(id==0)  {
-      contentInfo.classList.add('nonActive')
-      return
+    let id =  formInputs.value.method_pay.id 
+    
+
+    try {
+      setTimeout(() => {
+        
+        let contentInfo = document.getElementById('dataToPay')
+        contentInfo.classList.remove('activeInfo')
+        if(id==0)  {
+          contentInfo.classList.add('nonActive')
+          return
+        }
+        if(Object.values(contentInfo.classList).includes('nonActive')) {
+          contentInfo.classList.remove('nonActive')
+          contentInfo.classList.add('activeInfo')
+          formInputs.value.quantity = formInputs.value.method_pay.coin_id  == 2 && formInputs.value.quantity < rifa.value.configuration.minimus_buy_usd
+          ? rifa.value.configuration.minimus_buy_usd
+          : formInputs.value.quantity
+  
+        }
+        else {
+          contentInfo.classList.add('nonActive')
+          setTimeout(() =>{
+            contentInfo.classList.remove('nonActive')        
+            contentInfo.classList.add('activeInfo')
+            formInputs.value.quantity = formInputs.value.method_pay.coin_id  == 2 && formInputs.value.quantity < rifa.value.configuration.minimus_buy_usd
+            ? rifa.value.configuration.minimus_buy_usd
+            : formInputs.value.quantity
+          } , 900)
+          
+        }
+      }, 100);
+    } catch (error) {
+        console.log(error)
     }
-    if(Object.values(contentInfo.classList).includes('nonActive')) {
-      contentInfo.classList.remove('nonActive')
-      contentInfo.classList.add('activeInfo')
-    }
-    else {
-      contentInfo.classList.add('nonActive')
-      setTimeout(() =>{
-        contentInfo.classList.remove('nonActive')        
-        contentInfo.classList.add('activeInfo')
-      } , 900)
-      
-    }
+    
   }
   const formatTicket = (value) =>{
       // Filtra solo números (elimina todo lo que no sea dígito)
@@ -198,7 +201,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
 
   }
   const getPayMethods = () => {
-    payMethodStore.getMethodPays()
+    payMethodStore.getMethodPaysActive()
     .then((response) => {
       optionsMethodPay.value = [
         {
@@ -217,7 +220,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     .then((response) => {
       rifasOption.value = [
         {
-        title:'Selcciona la rifa',
+        title:'Selecciona la rifa',
         id:0
         },
         ...response.data
@@ -241,7 +244,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
         <q-form
           class="md:px-5 pb-5 order__form"
           style="height: 100%; "
-          @submit="step == 3 ? createOrder() : step++"
+          @submit="nextStep()"
         >
         <!-- <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
@@ -287,8 +290,12 @@ import { useRifaStore } from '@/services/store/rifas.store';
                         <div class=" col-6  text-black " >
                           Precio de boleto
                         </div>
-                        <div class=" col-6  text-black text-end " >
-                          Bs. {{ numberFormat(rifa.configuration.price) }},00
+                        <div class=" col-6  text-black text-end  text-subtitle2" >
+                          {{ 
+                            formInputs.method_pay.coin_id == 1
+                            ? `Bs. ${numberFormat(rifa.configuration.price)},00` 
+                            : `$  ${(rifa.configuration.price_usd+'').replace('.', ',')}`
+                          }}
                         </div>
                       </div>
                       <div class="row py-3 my-3 " style="border-bottom: 1px solid #dedede;">
@@ -304,7 +311,12 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           Total a pagar
                         </div>
                         <div class=" col-6  text-black text-end text-subtitle2">
-                          Bs. {{ numberFormat((rifa.configuration.price * formInputs.quantity)) }},00
+                          {{ 
+                            formInputs.method_pay.coin_id == 1
+                            ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                            : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                          }}
+                          
                         </div>
                       </div>
                       <div class="row">
@@ -406,8 +418,16 @@ import { useRifaStore } from '@/services/store/rifas.store';
                             </div>
                           </div>
                         </div>
-                        <!-- <div class="row mt-5 ">
-                          <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in formInputs.method_pay.data_pay" :key="key" >
+                        <div class="row mt-5 ">
+                          <div class=" col-12 pb-1 flex justify-between my-2 "  >
+                            <div class="text-subtitle2 text-black">
+                              Tickets
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              x {{ numberFormat( formInputs.quantity) }}
+                            </div>
+                          </div>
+                          <!-- <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in formInputs.method_pay.data_pay" :key="key" >
                               <div class="text-subtitle2 text-black">
                                 {{item.title}}:
                               </div>
@@ -422,22 +442,26 @@ import { useRifaStore } from '@/services/store/rifas.store';
                                   : item.value
                                 }}
                               </div>
-                          </div>
+                          </div> -->
                           <div class=" col-12 py-2 flex justify-between " style="border-bottom: 1px solid darkgray;" >
                               <div class="text-subtitle2 text-black">
                                 Monto
                               </div>
                               <div class="text-subtitle2 text-black">
-                               Bs. {{ numberFormat((rifa.configuration.price * formInputs.quantity)) }},00
+                                {{ 
+                                  formInputs.method_pay.coin_id == 1
+                                  ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                                  : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                                }}
                               </div>
                           </div>
-                          <div class=" col-12 pt-5 flex justify-between ">
+                          <!-- <div class=" col-12 pt-5 flex justify-between ">
                             <q-btn @click="copyDataPay()"  outline label="Copiar datos" color="black"  class="q-mx-sm " 
                             style="width: 100%; border-radius: 0.5rem;"  />
 
                           </div>
-                          <div id="pasteClipb"></div>
-                        </div> -->
+                          <div id="pasteClipb"></div> -->
+                        </div>
                         <div class="row mt-6 md:mt-10">
                           <div class="col-12 mb-5 md:mb-6">
                             <q-input

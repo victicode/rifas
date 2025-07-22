@@ -12,7 +12,7 @@ class RifaConfiguration extends Model
     //
     use SoftDeletes;
     protected $table = "configuration_rifas";
-    protected $fillable = ["quantity_tickets", "price", "minimus_buy", "auto_select", "banner_img", "all_img", "rifa_id", "create_by"];
+    protected $fillable = ["quantity_tickets", "price", "minimus_buy", "price_usd", "minimus_buy_usd", "auto_select", "banner_img", "all_img", "rifa_id", "create_by"];
     
     public function create_by(): BelongsTo
     {

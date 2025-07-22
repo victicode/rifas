@@ -92,6 +92,13 @@ const routes = [
         }
       },
       {
+        path:'/admin/rifas/:id/tickets',
+        component: () => import('@/view/admin/listNumberInRifas.vue'),
+        meta:{
+          title: 'Rifas'
+        }
+      },
+      {
         path:'/admin/pays',
         component: () => import('@/view/admin/pays.vue'),
         meta:{
@@ -108,7 +115,7 @@ const routes = [
       },
       {
         path:'/admin/pay_methods',
-        component: () => import('@/view/admin/payData.vue'),
+        component: () => import('@/view/admin/payMethods.vue'),
         meta:{
           title: 'Bienvenido'
         }

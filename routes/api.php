@@ -36,6 +36,8 @@ Route::middleware('auth:sanctum')->group(function ()
     });
     Route::prefix('rifas')->name('rifa.')->group(function () {
         Route::get('/', [RifaController::class, 'getRifas']);
+        Route::get('/tickets/{id}', [RifaController::class, 'getTicketsInRifa']);
+
         Route::post('/', [RifaController::class, 'createRifa']);
         Route::post('/u/{id}', [RifaController::class, 'updateRifa']);
         Route::post('/status/u/{id}', [RifaController::class, 'updateStatusRifa']);
@@ -44,12 +46,16 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::prefix('orders')->name('order.')->group(function () {
         Route::get('/', [OrderController::class, 'getOrderPagination']);
+        Route::post('/d/{id}', [OrderController::class, 'deleteOrder']);
+
         Route::post('/changeStatus/{id}', [OrderController::class, 'changeStatus']);
 
 
     });
     Route::prefix('methods_pay')->name('methods')->group(function () {
         Route::get('/', [PayMethodController::class, 'getMethodsData']);
+        Route::get('/methods', [PayMethodController::class, 'getPayMethods']);
+        Route::post('/methods/u/{id}', [PayMethodController::class, 'updatePayMethod']);
         Route::post('/data', [PayMethodController::class, 'createMethodData']);
         Route::post('/data/u/{id}', [PayMethodController::class, 'updateMethodData']);
         Route::post('/data/d/{id}', [PayMethodController::class, 'deleteMethodData']);

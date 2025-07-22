@@ -37,9 +37,9 @@ const formatMethodData = (data) => {
 const closeModal = () => {
   showModal.value = ''
 }
-  const bankLabelAssign = (code) => {
-     return bankLabels.find((bank) => bank.code == code)? bankLabels.find((bank) => bank.code == code).name  : 'S/B'
-  }
+const bankLabelAssign = (code) => {
+    return bankLabels.find((bank) => bank.code == code)? bankLabels.find((bank) => bank.code == code).name  : 'S/B'
+}
 onMounted(() =>{
   getMethods()
 })
@@ -65,7 +65,7 @@ onMounted(() =>{
           <template v-if="dataPays.length > 0">
             <div class="row items-center md:justify-start  methods__container w-100">
               <div v-for="(dataPay, key) in dataPays" :key="key" class="  col-12 col-md-3 px-1 md:px-2 md:my-2 my-3" >
-                <div style="border-radius:1rem; overflow:hidden; border: 2px solid black " class=" w-full bg-white" >
+                <div style="border-radius:1rem; overflow:hidden; border: 2px solid black; height:15rem; overflow:hidden;  " class=" w-full bg-white flex column justify-between" >
                   <div class="p-3 bg-black text-white method-item__header text-center">
                     {{ dataPay.method_type.name }}
                   </div>
@@ -104,7 +104,7 @@ onMounted(() =>{
           <template v-else>
             <div class="h-full flex column items-center justify-center md:mt-12">
               <div class="text-empty">
-                No hay métodos de pagos creados😢😢
+                No hay datos de pagos creados😢😢
               </div>
               <q-btn unelevated style="border-radius:0.4rem" icon="add" color="black" 
               class="q-py-md mt-5 mx-2" label="Agregar método de pago" no-caps @click="showModal = 'create'" />

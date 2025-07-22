@@ -27,8 +27,10 @@ import { useRifaStore } from '@/services/store/rifas.store';
     due_date:moment().format('YYYY/MM/DD'),
     quantity_tickets:'10000',
     price:'',
+    price_usd:'',
     minimus_buy:2,
-    auto_select:false,
+    minimus_buy_usd:5,
+    auto_select:true,
     all_image:'',
   })
   const optionsFn = (date) => {
@@ -67,8 +69,10 @@ import { useRifaStore } from '@/services/store/rifas.store';
       due_date:moment().format('YYYY/MM/DD'),
       quantity_tickets:'10000',
       price:'',
+      price_usd:'',
       minimus_buy:2,
-      auto_select:false,
+      minimus_buy_usd:5,
+      auto_select:true,
       all_image:'',
     }
     rewards.value = [
@@ -92,6 +96,8 @@ import { useRifaStore } from '@/services/store/rifas.store';
     formData.append('quantity_tickets', parseInt(formInputs.value.quantity_tickets.replace(/\./g, '')))
     formData.append('price', parseInt(formInputs.value.price.replace(/\./g, '')))
     formData.append('minimus_buy', formInputs.value.minimus_buy)
+    formData.append('price_usd', parseFloat((formInputs.value.price_usd.replace(/\./g, '')).replace(',','.')))
+    formData.append('minimus_buy_usd', formInputs.value.minimus_buy_usd)
     formData.append('auto_select', formInputs.value.auto_select)
     formData.append('banner_img', file.files[0])
     formData.append('rewards', JSON.stringify(rewards.value))
@@ -217,7 +223,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                 <template v-if="step==2">
                   <div class="px-2">
                     <div class="row my-3 ">
-                      <div class="col-md-6 col-12 md:pr-2 mb-1 md:mb-0">
+                      <div class=" col-12  mb-1 md:mb-0">
                         <q-input
                           outlined
                           v-model="formInputs.quantity_tickets"
@@ -228,7 +234,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                         />
                       </div>
-                      <div class="col-md-6 col-12  md:pl-2 mt-1 md:mt-0">
+                      <div class="col-md-6 col-12  md:pr-2 mt-1 md:mt-0">
                         <q-input
                           outlined
                           v-model="formInputs.price"
@@ -239,9 +245,18 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
                         />
                       </div>
-                    </div>
-                    <div class="row my-3">
-                      <div class="col-md-6 col-12 q-mb-xs q-mb-md-none">
+                      <div class="col-md-6 col-12  md:pl-2 q-mb-xs q-mb-md-none">
+                        <q-input
+                          outlined
+                          v-model="formInputs.price_usd"
+                          mask="###.###.###,##"
+                          reverse-fill-mask
+                          label="Valor del ticket en $"
+                          class=" createRifaForm__input"
+                          :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12  md:pr-2 mt-2 md:mt-4  ">
                         <q-input
                           outlined
                           v-model="formInputs.minimus_buy"
@@ -251,6 +266,18 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
                         />
                       </div>
+                      <div class="col-md-6 col-12 q-mb-xs q-mb-md-none md:pl-2 mt-2 md:mt-4  ">
+                        <q-input
+                          outlined
+                          v-model="formInputs.minimus_buy_usd"
+                          type="number"
+                          label="Compra minima en $"
+                          class=" createRifaForm__input"
+                          :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
+                        />
+                      </div>
+                      
+
                       <div class="col-12 q-mt-xs q-mt-md-none">
                         <q-checkbox  v-model="formInputs.auto_select" label="Selección aleatoria de tickets" color="teal" />
                       </div>

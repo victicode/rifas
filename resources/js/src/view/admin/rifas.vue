@@ -95,7 +95,7 @@ onMounted(() =>{
                           </div>
                         </q-chip>
                         <div class="flex justify-end">
-                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white"  @click="router.push('/rifa/'+rifa.id +'/tickects')" >
+                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white"  @click="router.push('/admin/rifas/'+rifa.id +'/tickets')" >
                             <q-icon name="local_activity" />
                           </q-btn> 
                           <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 

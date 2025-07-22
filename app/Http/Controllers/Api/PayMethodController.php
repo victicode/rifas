@@ -12,29 +12,39 @@ class PayMethodController extends Controller
     //
     public function getMethodsActive(Request $request) {
 
-        $methods = PayMethod::with('dataPay')->where('status', 1)->get();
+        $methods = PayMethod::has('dataPay')->with('dataPay')->where('status', 1)->get();
+
+        return $this->returnSuccess(200, $methods);
+    }
+    public function getPayMethods(Request $request) {
+
+        $methods = PayMethod::with(['coin', 'dataPay'])->withCount('dataPay')->get();
 
         return $this->returnSuccess(200, $methods);
     }
     public function getMethodsData(Request $request) {
 
          $methods = DataPay::with('methodType')->where('data', '!=', null)->get();
-        // $methods = DataPay::with('methodType')->get()->groupBy([
-        //     'data',
-        //     function ($item) {
-        //         return $item->methodType->name; 
-        //     },
-        // ], $preserveKeys = false);
-
-        
 
         return $this->returnSuccess(200, $methods);
     }
     public function createMethodData(Request $request) {
+        DataPay::where('method_id', $request->method_id)->update([
+            'status' => 0
+        ]);
+        
         $data =  DataPay::create([
             'data' => $request->data_pay,
             'method_id' => $request->method_id,
             'status' => 1,
+         ]);
+        return $this->returnSuccess(200, $data);
+    }
+    public function updatePayMethod($id, Request $request) {
+        $data =  PayMethod::find($id)->update([
+            'name'   => $request->name,
+            'min_buy'   => $request->min_buy,
+            'status' => $request->status
          ]);
         return $this->returnSuccess(200, $data);
     }

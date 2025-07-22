@@ -45,7 +45,7 @@ import { useOrderStore } from '@/services/store/order.store';
       },
       {
         title: 'Precio',
-        value: props.order.method_pay.coin.symbol+' '+ numberFormat(props.order.rifa.configuration.price) 
+        value: `${props.order.method_pay.coin.symbol} ${ props.order.method_pay.coin_id == 1  ? numberFormat(props.order.rifa.configuration.price) : props.order.rifa.configuration.price_usd+''.replace('.',',')} `
       },
       {
         title: 'Tickets',
@@ -120,7 +120,7 @@ import { useOrderStore } from '@/services/store/order.store';
 </script>
 <template>
    <q-dialog v-model="dialog" class="orderViewDialog" persistent backdrop-filter="blur(8px)">
-      <q-card class="dialog_documentCardOrder "  style="border-radius:1rem">
+      <q-card class="dialog_documentViewCardOrder "  style="border-radius:1rem">
         <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
@@ -184,17 +184,14 @@ import { useOrderStore } from '@/services/store/order.store';
               </div>
             </div>
           </div>
-
         </section>
-         <q-card-section class="q-pt-none q-px-sm q-pb-sm" v-if="type == 2">
+         <q-card-section class="q-pt-none q-px-sm q-pb-sm">
           <div class="flex flex-center pt-0 " >
-    
             <q-btn  style="border-radius: 0.5rem;" size="0.8rem" color="negative"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(0)"  >
               <div class="py-1">
                 Rechazar pago
               </div>
             </q-btn>
-
             <q-btn  style="border-radius: 0.5rem;" size="0.8rem" color="positive"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(2)">
               <div class="py-1">
                 Validar pago
@@ -216,7 +213,7 @@ import { useOrderStore } from '@/services/store/order.store';
   border-top: 1px solid darkgrey;
 }
 
-.dialog_documentCardOrder {
+.dialog_documentViewCardOrder {
   max-height: 95vh!important;
   margin-left: 10%;
   min-width: 700px !important;
@@ -237,7 +234,7 @@ import { useOrderStore } from '@/services/store/order.store';
   .orderViewDialog .q-dialog__inner--minimized{
     padding: 24px 0.5rem;
   }
-  .dialog_documentCardOrder {
+  .dialog_documentViewCardOrder {
     margin-left: 0%;
     min-width: 100%!important;
     max-width: 800px!important; 

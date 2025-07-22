@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Reward;
 use App\Models\RifaConfiguration;
+use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Types\This;
@@ -15,7 +16,7 @@ class RifaController extends Controller
 {
     //
     public function getRifas(Request $request){
-        $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')->orderBy('created_at', 'asc')->paginate(10);
+        $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')->orderBy('created_at', 'desc')->paginate(10);
         
         return $this->returnSuccess(200, $rifas);
     }
@@ -45,6 +46,8 @@ class RifaController extends Controller
                 'quantity_tickets'  => $request->quantity_tickets,
                 'price'             => $request->price,
                 'minimus_buy'       => $request->minimus_buy,
+                'price_usd'         => $request->price_usd,
+                'minimus_buy_usd'   => $request->minimus_buy_usd,
                 'auto_select'       => $request->auto_select ? 1 : 0,
                 'rifa_id'           => $newRifa->id,
                 'create_by'         => 1,
@@ -108,7 +111,12 @@ class RifaController extends Controller
         $this->addRewards(json_decode($request->rewards, true), $id);
         return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
     }
+    public function getTicketsInRifa($id){
+        $tickets = Ticket::with('order.client')->where('rifa_id', $id)->get();
+        $rifa = Rifa::withCount('tickets')->find($id);
+        return $this->returnSuccess(200, ['tickets' =>$tickets, 'rifa' => $rifa]);
 
+    }
     private function loadImageToStorage(Request $request, $id ){
         $banner = RifaConfiguration::where('rifa_id', $id)->first()->banner_img; 
         if ($request->file('banner_img')) {

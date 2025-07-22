@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('quantity_tickets');
             $table->integer('price');
-            $table->integer('minumus_buy');
+            $table->integer('minimus_buy');
             $table->integer('auto_select');
             $table->longText('banner_img');
             $table->longText('all_image');

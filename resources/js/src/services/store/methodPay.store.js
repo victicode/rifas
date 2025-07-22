@@ -3,8 +3,9 @@ import ApiService from '@/services/axios'
 import storage from '@/services/storage'
 export const useMethodPayStore = defineStore('MethodPay', {
   actions: {
+    
 
-    async getMethodPays() {
+    async getMethodPaysActive() {
       return await new Promise((resolve, reject) => {
         ApiService.get('/api/public/method_pays')
         .then(({data}) => {
@@ -19,11 +20,50 @@ export const useMethodPayStore = defineStore('MethodPay', {
       })
 
     },
-    async getMethodsData() {
-      if (!ApiService.getToken()) {
-        throw '';
-      }
+    async getPayMethods() {
       return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
+        ApiService.get('/api/methods_pay/methods')
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response} ) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
+    async updatePayMethod(data) {
+      return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
+        ApiService.post('/api/methods_pay/methods/u/'+data.id, data.data)
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response} ) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
+    async getMethodsData() {
+      return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
         ApiService.get('/api/methods_pay')
         .then(({data}) => {
           if(data.code !=200) throw data;

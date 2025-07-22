@@ -23,8 +23,9 @@ import bankLabels from '@/utils/bankLabelUtils';
   const payMethodStore = useMethodPayStore()
   const optionsMethodPay = ref([])
   const getPayMethods = () => {
-    payMethodStore.getMethodPays()
+    payMethodStore.getMethodPaysActive()
     .then((response) => {
+      formInputs.value.method_pay = response.data.find(item => item.id == formInputs.value.method_pay.id)
       optionsMethodPay.value = [
         {
         name:'Selecciona un método de pago',
@@ -32,6 +33,7 @@ import bankLabels from '@/utils/bankLabelUtils';
         },
         ...response.data
       ]
+      
     })
     .catch((response) => {
       console.log(response)
@@ -44,8 +46,9 @@ import bankLabels from '@/utils/bankLabelUtils';
     clientEmail: '',
     clientPhone: '',
     method_pay: {
-      name:'Selecciona un método de pago',
-      id:0
+      name:'Pago Movil',
+      coin_id:1,
+      id:1
     },
     payReference:'',
     payPhoto: null,
@@ -64,9 +67,19 @@ import bankLabels from '@/utils/bankLabelUtils';
      return bankLabels.find((bank) => bank.code == code)? bankLabels.find((bank) => bank.code == code).name  : 'S/B'
   }
   const backButton = () => {
-    step.value == 3 ? formInputs.value.method_pay = { name:'Selecciona un método de pago', id:0 } : ''
+
 
     step.value == 1 ? hideModal() : step.value--
+  }
+  const nextStep = () => {
+    if(step.value == 3) {
+      createOrder()
+      return
+    }
+    if(step.value == 2) {
+      changeMethodData()
+    }
+    step.value++
   }
   const hideModal = () => {
     // cleanForm()
@@ -89,34 +102,32 @@ import bankLabels from '@/utils/bankLabelUtils';
       clientEmail: '',
       clientPhone: '',
       method_pay: {
-        title:'Selecciona un método de pago',
-        value:0
+        name:'Pago Movil',
+        coin_id:1,
+        id:1
       },
       payReference:'',
       payPhoto: null,
-
     }
     step.value = 1;
   }
   const createOrder = () => {
-    
     if(!formInputs.value.payPhoto){
       showNotify('negative', 'Debes adjuntar tu capture de forma obligatoria')
       return
     }
     loadingShow(true)
+    const amount = formInputs.value.method_pay.coin_id == 1 ? rifa.configuration.price : rifa.configuration.price_usd
     const formData = new FormData()
-    formData.append('amount', (formInputs.value.quantity * rifa.configuration.price));
+    formData.append('amount', (formInputs.value.quantity * amount));
     formData.append('quantity', formInputs.value.quantity)
     formData.append('reference', formInputs.value.payReference)
     formData.append('vaucher', formInputs.value.payPhoto)
     formData.append('status', 1)
-
     formData.append('client_name',  formInputs.value.clientName)
     formData.append('client_ci',    parseInt(formInputs.value.clientCi.replace(/\./g, '')))
     formData.append('client_phone', formInputs.value.clientPhone)
     formData.append('client_email', formInputs.value.clientEmail)
-
     formData.append('rifa_id', rifa.id)
     formData.append('method_id', formInputs.value.method_pay.id)
 
@@ -137,7 +148,6 @@ import bankLabels from '@/utils/bankLabelUtils';
     })
   }
   const copyDataPay = () => {
-    
     const texto = formatDataPayText();
     const element = document.getElementById('pasteClipb')
     const textArea = document.createElement('textarea');
@@ -152,50 +162,67 @@ import bankLabels from '@/utils/bankLabelUtils';
     } catch (err) {
       console.error(err.name, err.message);
     }
-
     element.removeChild(textArea);
-
   }
 
   const formatDataPayText = () => {
     let text = ''
-
-    formInputs.value.method_pay.data_pay.forEach((element) => {
+    JSON.parse(formInputs.value.method_pay.data_pay[0].data).forEach((element) => {
       text += element.value+' '
     });
     
     return text
   }
   const removeCount = () => {
-    if(formInputs.value.quantity > rifa.configuration.minimus_buy) formInputs.value.quantity--
+    let min = formInputs.value.method_pay.coin_id  == 2
+    ? rifa.configuration.minimus_buy_usd
+    : rifa.configuration.minimus_buy
+
+
+    if(formInputs.value.quantity > min) formInputs.value.quantity--
   }
   const addCount = () => {
     if(formInputs.value.quantity < rifa.configuration.quantity_tickets) formInputs.value.quantity++
   }
 
   const changeMethodData = () => {
-    let id =  formInputs.value.method_pay.id
-    let contentInfo = document.getElementById('dataToPay')
-    contentInfo.classList.remove('activeInfo')
-    if(id==0)  {
-      contentInfo.classList.add('nonActive')
-      return
-    }
-    if(Object.values(contentInfo.classList).includes('nonActive')) {
-      contentInfo.classList.remove('nonActive')
-      contentInfo.classList.add('activeInfo')
-      dataPays.value = formInputs.value.method_pay.data_pay
+    let id =  formInputs.value.method_pay.id 
+    
 
+    try {
+      setTimeout(() => {
+        
+        let contentInfo = document.getElementById('dataToPay')
+        contentInfo.classList.remove('activeInfo')
+        if(id==0)  {
+          contentInfo.classList.add('nonActive')
+          return
+        }
+        if(Object.values(contentInfo.classList).includes('nonActive')) {
+          contentInfo.classList.remove('nonActive')
+          contentInfo.classList.add('activeInfo')
+          dataPays.value = formInputs.value.method_pay.data_pay
+          formInputs.value.quantity = formInputs.value.method_pay.coin_id  == 2 && formInputs.value.quantity < rifa.configuration.minimus_buy_usd
+          ? rifa.configuration.minimus_buy_usd
+          : formInputs.value.quantity
+        }
+        else {
+          contentInfo.classList.add('nonActive')
+          setTimeout(() =>{
+            dataPays.value = formInputs.value.method_pay.data_pay
+            contentInfo.classList.remove('nonActive')        
+            contentInfo.classList.add('activeInfo')
+            formInputs.value.quantity = formInputs.value.method_pay.coin_id  == 2 && formInputs.value.quantity < rifa.configuration.minimus_buy_usd
+            ? rifa.configuration.minimus_buy_usd
+            : formInputs.value.quantity
+          } , 900)
+          
+        }
+      }, 100);
+    } catch (error) {
+        console.log(error)
     }
-    else {
-      contentInfo.classList.add('nonActive')
-      setTimeout(() =>{
-        dataPays.value = formInputs.value.method_pay.data_pay
-        contentInfo.classList.remove('nonActive')        
-        contentInfo.classList.add('activeInfo')
-      } , 900)
-      
-    }
+    
   }
   const formatTicket = (value) =>{
       // Filtra solo números (elimina todo lo que no sea dígito)
@@ -226,11 +253,8 @@ import bankLabels from '@/utils/bankLabelUtils';
         <q-form
           class="md:px-5 pb-5 order__form"
           style="height: 100%; "
-          @submit="step == 3 ? createOrder() : step++"
+          @submit="nextStep()"
         >
-        <!-- <div class="close__button">
-          <q-btn round color="primary" icon="close" @click="hideModal()" />
-        </div> -->
           <div>
             <q-card-section class="">
               <div class="text-h6 text-center text-black">
@@ -251,8 +275,12 @@ import bankLabels from '@/utils/bankLabelUtils';
                         <div class=" col-6  text-black " >
                           Precio de boleto
                         </div>
-                        <div class=" col-6  text-black text-end " >
-                          Bs. {{ numberFormat(rifa.configuration.price) }},00
+                        <div class=" col-6  text-black text-end  text-subtitle2" >
+                          {{ 
+                            formInputs.method_pay.coin_id == 1
+                            ? `Bs. ${numberFormat(rifa.configuration.price)},00` 
+                            : `$  ${(rifa.configuration.price_usd+'').replace('.', ',')}`
+                          }}
                         </div>
                       </div>
                       <div class="row py-3 my-3 " style="border-bottom: 1px solid #dedede;">
@@ -268,7 +296,12 @@ import bankLabels from '@/utils/bankLabelUtils';
                           Total a pagar
                         </div>
                         <div class=" col-6  text-black text-end text-subtitle2">
-                          Bs. {{ numberFormat((rifa.configuration.price * formInputs.quantity)) }},00
+                          {{ 
+                            formInputs.method_pay.coin_id == 1
+                            ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                            : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                          }}
+                          
                         </div>
                       </div>
                       <div class="row">
@@ -354,7 +387,8 @@ import bankLabels from '@/utils/bankLabelUtils';
                             behavior="menu"
                             color="primary"
                             :options="optionsMethodPay"
-                            class="createOrderForm__input"
+                            class="createOrderForm__input methodSelectInput"
+                            :hint="formInputs.method_pay.coin_id == 1 ? 'La compra minima es de 2 tickets': 'La compra minima es de '+rifa.configuration.minimus_buy_usd+' tickets'"
                             @update:model-value="changeMethodData()"
                           />
                         </div>
@@ -371,7 +405,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                           </div>
                         </div>
                         <div class="row mt-5 ">
-                          <div class="row mb-2"  v-for="(i, k) in dataPays" :key="k"  style="border-bottom:1px solid darkgray;"> 
+                          <div class="row mb-2 w-full"  v-for="(i, k) in dataPays" :key="k"  style="border-bottom:1px solid darkgray;"> 
                             <div class=" col-12 py-2 flex justify-between " v-for="(item, key) in JSON.parse(i.data)" :key="key"  >
                                 <div class="text-subtitle2 text-black">
                                   {{item.title}}:
@@ -390,22 +424,34 @@ import bankLabels from '@/utils/bankLabelUtils';
                                 </div>
                             </div>
                           </div>
-                          <div class=" col-12 pb-3 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
-                              <div class="text-subtitle2 text-black">
-                                Monto
-                              </div>
-                              <div class="text-subtitle2 text-black">
-                               Bs. {{ numberFormat((rifa.configuration.price * formInputs.quantity)) }},00
-                              </div>
+                          <div class=" col-12 pb-1 flex justify-between my-2 "  >
+                            <div class="text-subtitle2 text-black">
+                              Tickets
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              x {{ numberFormat( formInputs.quantity) }}
+                            </div>
                           </div>
-                          <div class=" col-12 pt-5 flex justify-between ">
+                          <div class=" col-12 pb-1 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
+                            <div class="text-subtitle2 text-black">
+                              Monto
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              {{ 
+                                formInputs.method_pay.coin_id == 1
+                                ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                                : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                              }}
+                            </div>
+                          </div>
+                          <div class=" col-12 pt-3 flex justify-between ">
                             <q-btn @click="copyDataPay()"  outline label="Copiar datos" color="black"  class="q-mx-sm " 
                             style="width: 100%; border-radius: 0.5rem;"  />
 
                           </div>
                           <div id="pasteClipb"></div>
                         </div>
-                        <div class="row mt-6 md:mt-10">
+                        <div class="row mt-5 md:mt-6">
                           <div class="col-12 mb-5 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"
@@ -448,6 +494,10 @@ import bankLabels from '@/utils/bankLabelUtils';
     </q-dialog>
 </template>
 <style lang="scss">
+.methodSelectInput .q-field__messages {
+  color:rgb(93, 92, 92);
+  font-size: 0.85rem;
+}
 
 .createOrderDialog{
   margin-left: 0%;
@@ -522,12 +572,15 @@ import bankLabels from '@/utils/bankLabelUtils';
     font-size: 0.8rem;
     text-align: center;
     transform: translateY(-110%) !important;
+
   }
   &.q-field--focused .q-field__label, &.q-field--float .q-field__label{
     z-index: 100;
     background: white!important;
     font-weight: 600;
     width: 100%;
+
+
     padding: 0px 10px;
     font-size: 0.8rem;
     transform: translateY(-110%) translateX(-0.5rem) !important;

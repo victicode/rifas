@@ -13,7 +13,7 @@ class Order extends Model
     
     //
     use SoftDeletes;
-    protected $fillable = ["amount", "quantity", "number", "reference", "vaucher", "pay_date", "status", "client_id", "rifa_id", "method_id"];
+    protected $fillable = ["amount", "quantity", "number", "reference", "vaucher", "pay_date", "status", "client_id", "rifa_id", "method_id", "data_pay_id"];
 
     public $appends     = ["status_label","status_color"];
     

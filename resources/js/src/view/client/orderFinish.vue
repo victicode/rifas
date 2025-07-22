@@ -42,7 +42,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class=" " style="position: relative; background-position: -3rem 0rem;" >
+  <div class=" " style="position: relative; background-position: -3rem 0rem; height:100%" >
 
   <!-- <div class="h-full md:px-12" :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" > -->
     <div class="overflowBody"/>

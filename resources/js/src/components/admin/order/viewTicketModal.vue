@@ -1,7 +1,5 @@
 <script setup>
-import { onMounted, ref, watch} from 'vue';
-import { Notify } from 'quasar'
-import moment from 'moment';
+import { ref, watch} from 'vue';
 import numberUtils from '@/utils/numberUtils.js';
   const numberFormat = numberUtils.numberFormat 
   const emit = defineEmits(['closeModal'])
@@ -23,7 +21,7 @@ import numberUtils from '@/utils/numberUtils.js';
     dialog.value = newValue
   });
   watch(() => props.order, (newValue) => {
-    dialog.value = newValue
+    order.value = newValue
 
   });
 
@@ -54,16 +52,16 @@ import numberUtils from '@/utils/numberUtils.js';
           <div class="">
             <div class=" row">
               <div class="flex col-6">
-                <div style="font-weight:500">Titular:</div>
-                <div class="ml-2 text-bold">{{ order.client.name }}</div>
+                <div style="font-weight:500" class="text-subtitle2">Titular:</div>
+                <div class="text-subtitle2 ml-2 text-bold">{{ order.client.name }}</div>
               </div>
               <div class="flex col-6 justify-end">
-                <div style="font-weight:500">C.I:</div>
-                <div class="ml-2 text-bold">{{ numberFormat(order.client.ci) }}</div>
+                <div style="font-weight:500" class="text-subtitle2">C.I:</div>
+                <div class="text-subtitle2 ml-2 text-bold">{{ numberFormat(order.client.ci) }}</div>
               </div>
               <div class="flex col-12 mt-2">
-                <div style="font-weight:500">Contacto:</div>
-                <div class="ml-2 text-bold"> {{ order.client.phone }} / {{order.client.email}} </div>
+                <div style="font-weight:500" class="text-subtitle2">Contacto:</div>
+                <div class="text-subtitle2 ml-2 text-bold"> {{ order.client.phone }} / {{order.client.email}} </div>
               </div>
             </div>
             <div class="mt-5 mb-4 row">

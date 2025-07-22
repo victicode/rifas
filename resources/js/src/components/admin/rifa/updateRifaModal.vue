@@ -87,7 +87,9 @@ import numberUtils from '@/utils/numberUtils.js';
       } else {
         rifa.value['configuration'] = []
         Object.entries(value).forEach(([key2, value2]) => {
-          if(['auto_select', 'quantity_tickets', 'price', 'minimus_buy'].includes(key2)) rifa.value['configuration'][key2] =numberUtils.numberFormat(value2);
+          if(['auto_select', 'quantity_tickets', 'price', 'minimus_buy', 'price_usd', 'minimus_buy_usd'].includes(key2)) {
+            rifa.value['configuration'][key2] = key2=='price_usd' ? value2+'' : numberUtils.numberFormat(value2);
+          }
         })
       }
     }); 
@@ -109,7 +111,7 @@ import numberUtils from '@/utils/numberUtils.js';
 </script>
 <template>
    <q-dialog v-model="dialog" class="updateRifaDialog" persistent backdrop-filter="blur(8px)">
-      <q-card class="dialog_document" style="border-radius:1rem">
+      <q-card class="dialog_document rifa" style="border-radius:1rem">
         <div class="close__button">
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
@@ -190,7 +192,7 @@ import numberUtils from '@/utils/numberUtils.js';
                 <template v-if="step==2">
                   <div class="px-2">
                     <div class="row my-3 ">
-                      <div class="col-md-6 col-12 md:pr-2 mb-1 md:mb-0">
+                      <div class="col-12 md:pr-2 mb-1 md:mb-0">
                         <q-input
                           outlined
                           v-model="rifa.configuration.quantity_tickets"
@@ -201,7 +203,7 @@ import numberUtils from '@/utils/numberUtils.js';
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                         />
                       </div>
-                      <div class="col-md-6 col-12  md:pl-2 mt-1 md:mt-0">
+                      <div class="col-md-6 col-12  md:pr-2 mt-1 md:mt-0">
                         <q-input
                           outlined
                           v-model="rifa.configuration.price"
@@ -212,15 +214,34 @@ import numberUtils from '@/utils/numberUtils.js';
                           :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
                         />
                       </div>
-                    </div>
-                    <div class="row my-3">
-                      <div class="col-md-6 col-12 q-mb-xs q-mb-md-none">
+                      <div class="col-md-6 col-12  md:pl-2 mt-1 md:mt-0">
+                        <q-input
+                          outlined
+                          v-model="rifa.configuration.price_usd"
+                          mask="###.###.###,##"
+                          reverse-fill-mask
+                          label="Valor del ticket en $"
+                          class=" updateRifaForm__input"
+                          :rules="[ val => val && val.length > 0 || 'Campo obligatorio']"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12 md:pr-2 q-mb-xs q-mb-md-none md:mt-4 ">
                         <q-input
                           outlined
                           v-model="rifa.configuration.minimus_buy"
                           type="number"
                           label="Compra minima"
                           class=" updateRifaForm__input"
+                          :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12 q-mb-xs q-mb-md-none md:pl-2 mt-2 md:mt-4  ">
+                        <q-input
+                          outlined
+                          v-model="rifa.configuration.minimus_buy_usd"
+                          type="number"
+                          label="Compra minima en $"
+                          class=" createRifaForm__input"
                           :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
                         />
                       </div>
@@ -247,6 +268,7 @@ import numberUtils from '@/utils/numberUtils.js';
     </q-dialog>
 </template>
 <style lang="scss">
+
 .img__container{
   position: relative;
    transition: all 0.5 ease;

@@ -7,8 +7,10 @@ import DataTablesLib from 'datatables.net';
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
 import viewOrderModal from '@/components/admin/order/viewOrderModal.vue';
-import createOrderModal from '@/components/admin/order/createOrderModal.vue'
 import viewTicketModal from '@/components/admin/order/viewTicketModal.vue'
+import createOrderModal from '@/components/admin/order/createOrderModal.vue'
+import deleteOrderModal from '@/components/admin/order/deleteOrderModal.vue';
+
 
 DataTable.use(DataTablesLib);
 
@@ -132,6 +134,14 @@ const optionsTable = {
           </button>
           `
         }
+        view += `
+          <button data-order="${full.id}" class="deleteTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
+            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+             <i data-order="${full.id}"  class="q-icon notranslate material-icons" aria-hidden="true" role="img">delete</i>
+            </span>
+          </button>
+          `
         return view
       }
     },
@@ -187,6 +197,12 @@ const activeOptionsTable = () => {
     item.addEventListener('click', event => {
       selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
       showModal.value = 'ticket'
+    })	
+  })
+  document.querySelectorAll('.deleteTicket').forEach( item => {
+    item.addEventListener('click', event => {
+      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      showModal.value = 'delete'
     })	
   })
 }
@@ -297,17 +313,19 @@ onMounted(() => {
           />
         </div>
         <div class="loader_table flex flex-center" v-if="loading">
-            <q-spinner-tail
-              color="white"
-              size="4rem"
-            />
-          </div>
+          <q-spinner-tail
+            color="white"
+            size="4rem"
+          />
+        </div>
     </section>
     <createOrderModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @orderSuccessfull="showModal=''; getOrders()" />
     <template v-if="Object.values(selectedOrder).length > 0">
       <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getOrders() "/>
       <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="1" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
+      <deleteOrderModal :dialog="(showModal == 'delete')"  :order="selectedOrder"  @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
       <viewTicketModal :dialog="(showModal == 'ticket')"  :order="selectedOrder"  @closeModal="closeModal()"  />
+
     </template>
   </div>
 </template>

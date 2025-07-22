@@ -10,8 +10,17 @@ class PayMethod extends Model
 {
     //
     protected $table = "pay_methods";
-    protected $fillable = ["name", "coin_id", "abr", "factor", "status"];
-   
+    protected $fillable = ["name", "coin_id", "min_buy", "status"];
+    public $appends     = ["status_label"];
+    
+    public function getstatusLabelAttribute()
+    {   
+        $status = [
+            "Inactivo",
+            "Activo",
+        ];
+        return $status[$this->status];
+    }
     public function dataPay(): HasMany
     {
         return $this->hasMany(DataPay::class, 'method_id')->where('status', 1);

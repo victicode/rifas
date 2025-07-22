@@ -48,6 +48,8 @@ class OrderController extends Controller
                 "status"    => $request->isAdmin ? 2 : 1,
                 "rifa_id"   => $request->rifa_id,
                 "method_id" => $request->method_id,
+                // "data_pay_id" => $request->isAdmin ? 18 : $request->data_id,
+
                 "client_id" => $client->id,
             ]);
             
@@ -77,6 +79,11 @@ class OrderController extends Controller
         if(!$order) return $this->returnFail(400, "Orden no encotrada");
         
         return $this->returnSuccess(200, $order);
+    }
+    public function deleteOrder($id){
+        Order::find($id)->delete();
+
+        return $this->returnSuccess(200, 'ok');
     }
     public function getOrderByIdHtml($id){
         $order = Order::with(["methodPay.coin", "tickets", "rifa.configuration"])->find($id);
@@ -108,7 +115,7 @@ class OrderController extends Controller
     }
     private function validateFieldsFromInput($inputs){
         $rules=[
-            "amount"        => ["required", "integer"],
+            "amount"        => ["required", "numeric"],
             "quantity"      => ["required", "integer"],
             "reference"     => ["required", "regex:/^[0-9]+$/i"],
             "vaucher"       =>  ["required", "file", "image"],
@@ -126,7 +133,7 @@ class OrderController extends Controller
         ];
         $messages = [
             "amount.required"       => "Monto de Orden es requerido",
-            "amount.integer"        => "La cantidad debe ser un entero",
+            "amount.numeric"      => "Monto no valido",
             "quantity.integer"      => "Monto debe ser un entero",
             "quantity.required"     => "Cantidad de ticket es requerido",
             

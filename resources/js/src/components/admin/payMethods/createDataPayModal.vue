@@ -23,13 +23,13 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
   const optionsMethodPay = ref([])
 
   const getPayMethods = () => {
-    payMethodStore.getMethodPays()
+    payMethodStore.getPayMethods()
     .then((response) => {
       console.log(response)
       optionsMethodPay.value = [
         {
-        name:'Selecciona un método de pago',
-        id:0
+          name:'Selecciona un método de pago',
+          id:0
         },
         ...response.data
       ]
@@ -49,9 +49,14 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
     step.value == 1 ? hideModal() : step.value--
   }
   const hideModal = () => {
-    // cleanForm()
+
     cleanForm()
     emit('closeModal')
+  }
+  const updateList = () => {
+    emit('updateList')
+
+    hideModal()
   }
 
   const showNotify = (type,text) => {
@@ -82,8 +87,8 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
       showNotify('positive', 'Datos de pagos creados con exito')
 
       setTimeout(() => {
+        updateList()
         loading.value = false
-        emit('updateList')
       },1000)
     })
     .catch((response) => {

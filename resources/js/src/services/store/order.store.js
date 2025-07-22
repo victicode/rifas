@@ -5,6 +5,10 @@ export const useOrderStore = defineStore('Order', {
   actions: {
     async createOrder(data) {
       return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
         ApiService.post('/api/public/order', data)
         .then(({data}) => {
           if(data.code !=200) throw data;
@@ -36,6 +40,10 @@ export const useOrderStore = defineStore('Order', {
     },
     async getPaginationOrders(data) {
       return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
         ApiService.get('/api/orders?page='+data.page+'&'+'search='+data.search+'&searchType='+data.searchType+'&')
         .then(({data}) => {
           if(data.code !=200) throw data;
@@ -50,7 +58,30 @@ export const useOrderStore = defineStore('Order', {
     },
     async updateStatus(data) {
       return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
         ApiService.post('/api/orders/changeStatus/'+data.id, data)
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
+    async deleteOrder(id) {
+      return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
+        ApiService.post('/api/orders/d/'+id)
         .then(({data}) => {
           if(data.code !=200) throw data;
           

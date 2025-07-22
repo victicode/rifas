@@ -1,6 +1,7 @@
 <script setup>
 import headerClient from '@/components/layouts/headerClient.vue';
 import sideBarClient from '@/components/layouts/sideBarClient.vue';
+import whatsappFloatButton from '@/components/client/whatsappFloatButton.vue';
 </script>
 <template>
   <section class="h-full ">
@@ -13,6 +14,7 @@ import sideBarClient from '@/components/layouts/sideBarClient.vue';
           <component :is="Component" />
         </transition>
       </router-view>
+      <whatsappFloatButton />
     </div>
   </section>
 </template>
@@ -24,6 +26,7 @@ import sideBarClient from '@/components/layouts/sideBarClient.vue';
 .body-height{
   height: 89vh;
   overflow: auto;
+  position: relative;
   &::-webkit-scrollbar {
     width: 0.5rem;
     border-radius: 2rem;
