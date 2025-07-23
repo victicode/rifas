@@ -112,7 +112,7 @@ class RifaController extends Controller
         return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
     }
     public function getTicketsInRifa($id){
-        $tickets = Ticket::with('order.client')->where('rifa_id', $id)->get();
+        $tickets = Ticket::with('order.client', 'rifa')->where('rifa_id', $id)->get();
         $rifa = Rifa::withCount('tickets')->find($id);
         return $this->returnSuccess(200, ['tickets' =>$tickets, 'rifa' => $rifa]);
 
@@ -174,5 +174,9 @@ class RifaController extends Controller
             ]);
         }
 
+    }
+    static function getStockAvailable($id) {
+        $rifa = Rifa::with(['ordersPending'])->withCount('tickets')->find($id);
+        return $rifa->available_tickets;
     }
 }

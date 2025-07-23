@@ -24,7 +24,12 @@ class Rifa extends Model
     }
     public function getSoldTicketsAttribute()
     {   
-        $t = ($this->tickets_count/$this->configuration->quantity_tickets)*100;
+        $ticketsInStandBy = 0;
+        foreach ($this->ordersPending as $key) {
+           $ticketsInStandBy += $key->quantity;
+        }
+        
+        $t = ( ($this->tickets_count + $ticketsInStandBy)/$this->configuration->quantity_tickets)*100;
         return round($t, 2);
     }
     public function getAvailableTicketsAttribute()

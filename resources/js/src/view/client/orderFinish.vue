@@ -69,20 +69,20 @@ onMounted(() => {
            </div>
 
           </q-btn>
-          <!-- <q-btn 
+          <q-btn 
             style="border-radius: 0.5rem;" 
             size="" color="primary"  class="md:mt-4 md:mb-4 mt-2 mb-4 md:mx-2 mx-0" 
-            @click="goTo('/tickets/finder?ci='+order.client.ci)"
+            @click="goTo('/finder/ticket/'+order.rifa_id)"
           >
            <div class="q-py-sm">
               Consulta tus tickets aqui
            </div>
 
-          </q-btn> -->
+          </q-btn>
         </div>
         <div>
           <div></div>
-          <div class="text-black text-h6">Simplemente selecciona la rifa en la que participaste ingresa tu número de cedula en el verificador de tickets y presiona el boton de buscar. Se mostrará toda la información de tu compra y tus tickets asignados </div>
+          <div class="text-black text-h6">Simplemente ingresa tu número de cedula en el verificador de tickets y presiona el boton de buscar. Se mostrará toda la información de tu compra y tus tickets asignados </div>
         </div>
       </div>
       

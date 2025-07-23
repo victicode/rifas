@@ -28,21 +28,21 @@ onMounted(() =>{
         <img :src="logo" alt=""  style="width:12rem" class="mx-auto">
       </div>
       <ul class="text-center">
-          <RouterLink activeClass="active_link" to="/home" >
+          <RouterLink activeClass="active_link"  @click="showMovil()"  to="/home" >
             <li class="text-white my-3 mx-5 nav_header--items" >
               <div class="px-2">
                 Inicio
               </div>
             </li>
           </RouterLink>
-          <RouterLink activeClass="active_link" to="/rifas" >
+          <RouterLink activeClass="active_link"  @click="showMovil()"  to="/winners" >
             <li class="text-white my-3 mx-5 nav_header--items" >
               <div class="px-2">
                 Ganadores
               </div>
             </li>
           </RouterLink>
-          <RouterLink activeClass="active_link" to="/support">
+          <RouterLink activeClass="active_link"  @click="showMovil()"  to="/support">
             <li class="text-white my-3 mx-5 nav_header--items" >
               <div class="px-2">
                 Soporte
@@ -96,7 +96,7 @@ onMounted(() =>{
 @media (max-width: 768px){
  .aside__menuClient{
   position: absolute;
-  z-index: 50;
+  z-index: 110;
  }
 }
 

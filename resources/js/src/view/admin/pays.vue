@@ -285,16 +285,16 @@ onMounted(() => {
     <section id="tablePays" class="p-0  md:mt-8 mt-4 relative">
         <DataTable class="display table_pay" :options="optionsTable" :data="orders" >
           <thead class="tablePayHead">
-              <tr>
-                <th>Fecha de pago</th>
-                <th>N° orden</th>
-                <th>Monto</th>
-                <th>Método de pago</th>
-                <th>N° referencia</th>
-                <th>Tickets</th>
-                <th>Estado</th>
-                <th>Acción<b style="opacity:0; text-align:center">nnnnnn</b></th>
-              </tr>
+            <tr>
+              <th>Fecha de pago</th>
+              <th>N° orden</th>
+              <th>Monto</th>
+              <th>Método de pago</th>
+              <th>N° referencia</th>
+              <th>Tickets</th>
+              <th>Estado</th>
+              <th>Acción<b style="opacity:0; text-align:center">nnnnnn</b></th>
+            </tr>
           </thead>
         </DataTable>
         <div class="pb-3 px-8 flex justify-end">

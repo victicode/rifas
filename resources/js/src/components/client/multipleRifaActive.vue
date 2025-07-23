@@ -40,7 +40,7 @@ const rifa = ref(props.rifa)
               Comprar Tickets
             </div>
           </q-btn> 
-          <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-full mt-2" text-color="white" style="border-radius:0.5rem" @click="goTo('finder', rifa.id)">
+          <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-full mt-2" text-color="white" style="border-radius:0.5rem" @click="goTo('finder/ticket', rifa.id)">
             <div class="py-1 text-subtitle2">
               Consultar mis tickets
             </div>

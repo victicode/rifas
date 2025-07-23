@@ -9,6 +9,8 @@ const rifaStore = useRifaStore()
 const route = useRoute()
 const ready = ref(false)
 const tickets = ref([])
+const arrayTickets = ref([])
+
 const rifa = ref([])
 const viewOnlySold = ref(true)
 const showTickets = ref(9999)
@@ -22,19 +24,19 @@ const ticketFormat = (ticket) => {
   return max.substring(0, (4 - ticketFormat.length))+ticketFormat
 
 }
+
+const allTickets = new Array(9999).fill(0).map((_, i) => (ticketFormat(i+1)));
+
 const checkNumber = (number) => {
- return tickets.value.findIndex(item => item.number == number) != -1
+ return tickets.value.findIndex(item => ticketFormat(item.number) == number) != -1
 }
 const changeShowTickets = () => {
   if(viewOnlySold.value){
-    let vendidos = []
-    tickets.value.forEach((item) => {
-      vendidos.push(item.number)
-    })
-    showTickets.value = vendidos
+
+    showTickets.value = arrayTickets.value 
     return
   }
-  showTickets.value = new Array(9999).fill(0).map((_, i) => (i+1));
+  showTickets.value = allTickets
 }
 const getAllTickets = (id) => {
   rifaStore.getTicketsByRifa(id)
@@ -42,23 +44,34 @@ const getAllTickets = (id) => {
     // console.log(response)
     rifa.value = response.data.rifa
     tickets.value = response.data.tickets
+
+    arrayTickets.value = getArrayTickets(response.data.tickets)
     setTimeout(() => {
       changeShowTickets()
       ready.value = true
     }, 2000);
   })
 }
-
+const getArrayTickets = (tickets) => {
+  let vendidos  = []
+  tickets.forEach((item) => {
+    vendidos.push(ticketFormat(item.number))
+  })
+  
+  return vendidos
+}
 const openModal = (modal, number) =>{
   selectedTicket.value = tickets.value.find(item => item.number == number)
   showModal.value = modal
 }
-const ticketFinder = () => {
+const ticketFinder = (e) => {
+
+  let toFilter = viewOnlySold.value ? arrayTickets.value : allTickets
   if(finder.value == '') {
     changeShowTickets()
     return 
   }
-  showTickets.value = showTickets.value.filter(elemento => (elemento+'').includes(finder.value));
+  showTickets.value = toFilter.filter(elemento => (elemento+'').includes(finder.value));
 }
 
 const closeModal = () => {
@@ -95,7 +108,7 @@ onMounted(() => {
         label="Buscar ticket" 
         class=" finderTicketForm__input"
         clearable=""
-        @update:model-value="ticketFinder()"
+        @update:model-value="ticketFinder"
       />
     </div>
     <template v-if="ready">
@@ -104,7 +117,7 @@ onMounted(() => {
           <div class="row items-center md:justify-start  w-100">
             <div v-for="item in showTickets" :key="item" class="  col-3 col-md-1 text-center  px-1 md:px-1 md:my-2 my-3 " >
               <div class="ticket__content py-2" :class="{'payded': checkNumber(item)}" @click="checkNumber(item) ? openModal('view', item) : ''">
-                {{ ticketFormat(item) }} 
+                {{ item }} 
               </div>
             </div>
           </div>

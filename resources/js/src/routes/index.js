@@ -26,9 +26,9 @@ const routes = [
       {
         path: '/support', 
         name: 'support',
-        component: () => import('@/view/client/homePage.vue'),
+        component: () => import('@/view/client/supportPage.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Te ayudamos!'
         }
       },
       {
@@ -37,6 +37,14 @@ const routes = [
         component: () => import('@/view/client/homePage.vue'),
         meta:{
           title: 'Bienvenido'
+        }
+      },
+      {
+        path: '/winners', 
+        name: 'winners',
+        component: () => import('@/view/client/winnersPage.vue'),
+        meta:{
+          title: 'Ganadores'
         }
       },
       {
@@ -53,6 +61,14 @@ const routes = [
         component: () => import('@/view/client/orderFinish.vue'),
         meta:{
           title: 'Bienvenido'
+        }
+      },
+      {
+        path: '/finder/ticket/:id', 
+        name: 'finder',
+        component: () => import('@/view/client/ticketFinder.vue'),
+        meta:{
+          title: 'Consulta tus tickets'
         }
       },
     ]

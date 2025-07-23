@@ -202,7 +202,7 @@ onMounted(() =>{
     flex-direction: column;
   }
   .rifa__item{
-    height: 33rem!important; 
+    height: 36rem!important; 
 
   }
   .text-empty{

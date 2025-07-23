@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from '@/services/store/auth.services';
 import { storeToRefs } from 'pinia'
-import dashboardRifasActive from '@/components/client/dashboardRifasActive.vue';
+import dashboardRifasActive from '@/components/admin/dashboard/dashboardRifasActive.vue';
 const { user } = storeToRefs(useAuthStore());
 </script>
 <template>

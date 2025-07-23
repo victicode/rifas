@@ -38,7 +38,7 @@ import { useOrderStore } from '@/services/store/order.store';
   const deleteOrder = () => {
 
     loadingShow(true)
-    console.log(order)
+ 
     orderStore.deleteOrder(order.value.id)
     .then((response) => {
         setTimeout(() => {

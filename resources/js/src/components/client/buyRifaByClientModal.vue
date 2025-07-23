@@ -87,9 +87,10 @@ import bankLabels from '@/utils/bankLabelUtils';
     emit('closeModal')
   }
 
-  const showNotify = (type,text) => {
+  const showNotify = (type,text, position="bottom") => {
     Notify.create({
       color:type,
+      position,
       message: text,
       timeout:2000
     })
@@ -133,7 +134,7 @@ import bankLabels from '@/utils/bankLabelUtils';
 
     orderStore.createOrder(formData)
     .then((response) => {
- 
+      console.log(response)
       if(response.code !== 200 ) throw response
       showNotify('positive', 'Tu orden de compra fue exitosa, serás redirigido en breve...')
      
@@ -144,7 +145,15 @@ import bankLabels from '@/utils/bankLabelUtils';
     .catch((response) => {
       console.log(response)
       loadingShow(false)
-      showNotify('negative', response)
+      if(response.code == 403){
+
+        showNotify('black', `Cantidad disponible: ${response.error.availableTickets}`, 'center')
+        showNotify('black', response.error.msg, 'center')
+
+        return
+      }
+        showNotify('negative', response)
+
     })
   }
   const copyDataPay = () => {
@@ -312,7 +321,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             label="Cantidad de tickets"
                             class=" createOrderForm__input quantity"
                            @update:model-value="formatTicket"
-                          :rules="[ val => !!val  || 'El campo es obligatorio', val => val >= 2 || 'El minimo son 2 tickets', val => val <= 10000 || 'El minimo son 2 tickets',]"
+                          :rules="[ val => !!val  || 'El campo es obligatorio', val => val >= 2 || 'El minimo son 2 tickets', val => val <= 10000 || 'El maximo son 9999 tickets',]"
                           />
                         </div>
                         <div class="col-md-12 col-12 mt-5 flex justify-between  px-12">

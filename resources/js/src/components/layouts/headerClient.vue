@@ -17,7 +17,7 @@ const showSidebar = () => {
       <div class="flex items-center  md:justify-start col-6 col-md-1 mb-0 md:mb-0 pl-4">
         <img :src="logo" alt=""  style="width:5.5rem" @click="router.push('/home')">
       </div>
-      <div class="flex md:hiddenx text-end col-6 ">
+      <div class="flex md:hiddenx justify-end col-6 ">
         <img :src="supergana" alt=""  style="width:3rem; height:3rem" class="mr-2">
         <img :src="conalot" alt=""  style="width:3rem; height:3rem" class="ml-2">
         <q-btn flat round  color="white" class="mx-2" text-color="white"  @click="showSidebar()" >
@@ -33,7 +33,7 @@ const showSidebar = () => {
               </div>
             </li>
           </RouterLink>
-          <RouterLink activeClass="active_link" to="/rifas" >
+          <RouterLink activeClass="active_link" to="/winners" >
             <li class="text-white mx-3 nav_header--items" >
               <div class="px-2">
                 Ganadores

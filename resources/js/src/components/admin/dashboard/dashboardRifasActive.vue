@@ -19,7 +19,7 @@ onMounted(() => {
 })
 </script>
 <template>
-<div class="col-4 md:px-1">
+<div class="col-md-4 col-12 md:px-1">
   <div class="card__dash ">
     <div class="text-white text-h6 py-2 text-bold text-center bg-black">
       Rifas Activas

@@ -5,10 +5,6 @@ export const useOrderStore = defineStore('Order', {
   actions: {
     async createOrder(data) {
       return await new Promise((resolve, reject) => {
-        if (!ApiService.getToken()) {
-          throw '';
-        }
-        ApiService.setHeader();
         ApiService.post('/api/public/order', data)
         .then(({data}) => {
           if(data.code !=200) throw data;
@@ -16,6 +12,9 @@ export const useOrderStore = defineStore('Order', {
           resolve(data);
         }).catch(( {response}) => {
           console.log(response)
+          if(response.data.code == 403){
+            reject(response.data);
+          }
           reject(response.data.error);
         });
         
@@ -94,5 +93,21 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
+    async findOrdersByCiClient(ci,rifa) {
+      return await new Promise((resolve, reject) => {
+        ApiService.get('/api/public/order/byCi/'+ci+'?rifa='+rifa+'&')
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+  
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
+    
   },
 })

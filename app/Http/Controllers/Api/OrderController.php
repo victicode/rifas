@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Order;
 use App\Models\Client;
 use Illuminate\Http\Request;
@@ -11,6 +11,8 @@ use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -23,6 +25,23 @@ class OrderController extends Controller
     public function createOrder(Request $request){
         $validated = $this->validateFieldsFromInput($request->all(), true);
         if (count($validated) > 0) return $this->returnFail(400, $validated[0]);
+        $getAvailableTickets = RifaController::getStockAvailable($request->rifa_id);
+
+        if($request->quantity > $getAvailableTickets) 
+        {
+         return $this->returnFail(403, ['availableTickets' => $getAvailableTickets, 'msg' =>'Cantidad solicitada supera los ticket disponible']);
+        }
+        DB::transaction(function() use($request){
+            $rifa = Rifa::query()
+            ->withCount('tickets')
+            ->where('id', $request->rifa_id)
+            ->lockForUpdate()
+            ->first();
+            if($rifa->available_tickets <= 0)
+            {
+                return $this->returnFail(403, ['availableTickets' => $rifa->available_tickets, 'msg' =>'Cantidad solicitada supera los ticket disponible']);
+            }
+        });
 
         $client = Client::updateOrCreate(
             ['ci' => $request->client_ci, ],
@@ -35,9 +54,8 @@ class OrderController extends Controller
         );
         $vaucher = $this->loadImageToStorage($request);
 
+        
         try {
-            //code...
-
             $order = Order::create([
                 "amount"    => $request->amount,
                 "quantity"  => $request->quantity,
@@ -79,6 +97,15 @@ class OrderController extends Controller
         if(!$order) return $this->returnFail(400, "Orden no encotrada");
         
         return $this->returnSuccess(200, $order);
+    }
+    public function findOrdersByCiClient(Request $request, $ci){
+        $orders = Order::with(['tickets.rifa.configuration', 'client'])->whereHas('client', function (Builder $query) use($ci) {
+            $query->where('ci',$ci);
+        })->where('rifa_id', $request->rifa)->where('status', '!=', 0)->get();
+        
+        if(!$orders) return $this->returnFail(400, "Información no encontrada");
+        
+        return $this->returnSuccess(200, $orders);
     }
     public function deleteOrder($id){
         Order::find($id)->delete();

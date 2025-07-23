@@ -18,6 +18,9 @@ Route::prefix('public')->group(function () {
     Route::prefix('order')->name('order.')->group(function () {
         Route::post('/', [OrderController::class, 'createOrder']);
         Route::get('/byId/{id}', [OrderController::class, 'getOrderById']);
+        Route::get('/byCi/{ci}', [OrderController::class, 'findOrdersByCiClient']);
+
+        
         Route::get('/byId/html/{id}', [OrderController::class, 'getOrderByIdHtml']);
 
     });

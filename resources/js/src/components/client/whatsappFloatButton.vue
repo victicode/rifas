@@ -7,10 +7,10 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp'
   <!-- <a
   href="https://web.whatsapp.com/send/?phone=584245391538&text=Hola%2C+tengo+una+duda+y+requiero+de+su+apoyo" -->
   <a
-  href="https://wa.link/d7m9po"
-  target="_blank" 
-  rel="noopener noreferrer"
-  class="buttonWhatsapp"
+    href="https://wa.link/d7m9po"
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="buttonWhatsapp"
   >
     <div style="" class="px-2 py-1 bg-primary text-white support_label">
       Soporte

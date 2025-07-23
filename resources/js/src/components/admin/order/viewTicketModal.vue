@@ -34,11 +34,11 @@ import numberUtils from '@/utils/numberUtils.js';
           <q-btn round color="primary" icon="close" @click="hideModal()" />
         </div>
         <q-card-section class="text-center q-pb-xs">
-          <div class="text-h5 text-center text-bold mb-2">
+          <div class="text-h5 text-center text-bold mb-2 text-black" >
            Tickets asignados
           </div>
           <div class="flex flex-center">
-            <div class="text-subtitle1 text-bold mr-1">
+            <div class="text-subtitle1 text-bold mr-1 text-black">
               Cantidad de tickets:
             </div>
             <q-chip 

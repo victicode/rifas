@@ -1,7 +1,7 @@
 <script setup>
 import { useRifaStore } from '@/services/store/rifas.store';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
 import buyRifaModal from '@/components/client/buyRifaByClientModal.vue'
@@ -11,11 +11,13 @@ moment.updateLocale('en', {
       "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ]
 });
+const router = useRouter()
 const rifaStore = useRifaStore();
 const rifa = ref({})
 const loading = ref(false)
 const route = useRoute()
 const showDrescription = ref( window.screen.width < 780 ? false : true)
+
 const getRifaById = () => {
   rifaStore.getRifaById(route.params.id)
   .then((response) =>{
@@ -86,7 +88,7 @@ onMounted(() => {
               <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
             </div>
           </q-linear-progress>
-            <q-btn  color="blur" size="0.72rem" unelevated class=" mt-4 button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" >
+            <q-btn  color="blur" size="0.72rem" unelevated class=" mt-4 button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="router.push('/finder/ticket/'+rifa.id)" >
               <div class="py-2 text-subtitle2">
                Consultar mis tickets
               </div>
