@@ -12,7 +12,7 @@ class Ticket extends Model
     use SoftDeletes;
     protected $fillable = ["number", "rifa_id", "order_id", "status"];
 
-     public function rifa(): BelongsTo
+    public function rifa(): BelongsTo
     {
         return $this->belongsTo(Rifa::class, "rifa_id");
     }

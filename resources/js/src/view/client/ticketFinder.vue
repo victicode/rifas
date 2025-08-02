@@ -96,17 +96,18 @@ const formatTicket = () => {
             <div class="row">
               <ticketsFinderItems v-for="ticket in tickets" :ticket="ticket" :client="orders[0].client" :key="ticket.id" />
             </div>
-            <div v-if="orderPendigs.length > 0" class="text-center text-subitlte1 text-bold text-black">
-              Tienes {{ orderPendigs.length }} orden(es) pendiente de aprobación. <br> Al momento de ser aprobada se te asignaran tus tickets y los podras visualizar aqui
-            </div>
+            
             <div class="text-center text-h5 my-8 text-black text-bold">
               Gracias por tu compra y mucha suerte🤩
             </div>
           </div>
           <div v-else>
-            <div class="text-center text-h5 mt-8 text-black text-bold">
+            <div class="text-center text-h5 mt-8 text-black text-bold" v-if="orderPendigs.length == 0" >
               No tienes tickets comprados
             </div>
+          </div>
+          <div v-if="orderPendigs.length > 0" class="text-center text-subitlte1 text-bold text-black mt-5">
+              Tienes {{ orderPendigs.length }} orden(es) pendiente de aprobación. <br> Al momento de ser aprobada se te asignaran tus tickets y los podras visualizar aqui
           </div>
         </div>
       </template>

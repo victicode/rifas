@@ -19,13 +19,13 @@ onMounted(() => {
 })
 </script>
 <template>
-<div class="col-md-4 col-12 md:px-1">
+<div class="col-md-5 col-12 md:px-1">
   <div class="card__dash ">
     <div class="text-white text-h6 py-2 text-bold text-center bg-black">
       Rifas Activas
     </div>
     <div class=" mt-2 pb-5 " v-if="rifas.length > 0" >
-      <table>
+      <table style="width: 100%;">
         <thead>
           <th class="text-black th_dash py-2 " style="width: 32%;">Nombre</th>
           <th class="text-black th_dash py-2 ">Se juega</th>
@@ -40,7 +40,8 @@ onMounted(() => {
               </div>
             </td>
             <td class="td_dash text-black text-center text-bold py-4 px-1"> {{moment(rifa.due_date).format('DD/MM/YYYY')}}</td>
-            <td class="td_dash text-black text-center text-bold py-4 px-1" style="width:16%">{{rifa.soldTickets * 10}}%</td>
+            <td class="td_dash text-black text-center text-bold py-4 px-1" style="width:16%">
+              {{(rifa.soldTickets * 10).toFixed(2)}}%</td>
             <td class="td_dash text-black text-center text-bold py-4 px-1">
               <div @click="router.push('/admin/pays')" class="redirectItem">
                 {{rifa.orders_pending.length}}

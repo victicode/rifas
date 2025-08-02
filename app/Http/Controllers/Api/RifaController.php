@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Rifa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
+use App\Models\Order;
 use App\Models\Reward;
 use App\Models\RifaConfiguration;
 use App\Models\Ticket;
@@ -15,12 +17,17 @@ use phpDocumentor\Reflection\Types\This;
 class RifaController extends Controller
 {
     //
-    public function getRifas(Request $request){
+    public function getRifas(){
         $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')->orderBy('created_at', 'desc')->paginate(10);
         
         return $this->returnSuccess(200, $rifas);
     }
-    public function getRifasActive(Request $request) {
+    public function getAllRifas(){
+         $rifas = Rifa::with(['rewards', 'tickets'])->withCount('tickets')->get();
+        
+        return $this->returnSuccess(200, $rifas);
+    }
+    public function getRifasActive() {
         $rifas = Rifa::with('configuration', 'rewards')->withCount('tickets')
         ->where('status', 1)->orderBy('created_at', 'asc')->get();
 
@@ -91,6 +98,14 @@ class RifaController extends Controller
         $this->loadImageToStorage($request, $id);
         return $this->returnSuccess(200, ['rifa' => $rifa ]);
     }
+    public function deleteRifa($id){
+
+        $rifa = Rifa::find($id);
+        if(!$rifa)  return $this->returnFail(400, 'Rifa no encontrada');
+
+        $rifa->delete();
+        return $this->returnSuccess(200, ['rifa' => $rifa ]);
+    }
     public function updateStatusRifa(Request $request, $id) {
         $rifa = Rifa::find($id);
         if(!$rifa)  return $this->returnFail(400, 'Rifa no encontrada');
@@ -116,6 +131,34 @@ class RifaController extends Controller
         $rifa = Rifa::withCount('tickets')->find($id);
         return $this->returnSuccess(200, ['tickets' =>$tickets, 'rifa' => $rifa]);
 
+    }
+    public function getRifaDataStadistics(){
+        $rifas = Rifa::where('status', 0)->count();
+        $numerosPremiados ="";
+        $premios = Reward::whereHas('rifa', function ($query) {
+            $query->where('status', 0);
+        })->count();
+
+        // return $this->returnSuccess(200, [
+        //     'premios' => $premios,
+        //     'numeros' => $numerosPremiados,
+        //     'rifas'   => $rifas,
+
+        // ]);
+
+        return $this->returnSuccess(200, [
+            'premios' => 60,
+            'numeros' => 21,
+            'rifas'   => 20,
+
+        ]);
+    }
+    public function getRifaWithReport($id) {
+        $rifa = Rifa::with('configuration')->withCount('tickets')->find($id);
+
+        $rifasFor = $this->addReports($rifa);
+        
+        return $this->returnSuccess(200, $rifasFor);
     }
     private function loadImageToStorage(Request $request, $id ){
         $banner = RifaConfiguration::where('rifa_id', $id)->first()->banner_img; 
@@ -175,8 +218,46 @@ class RifaController extends Controller
         }
 
     }
+    private function addReports($rifa){
+       
+
+        $most = [];
+        $orderGroup = Order::with(['tickets', 'client'])
+        ->where('rifa_id', $rifa->id)
+        ->where('status', 2)
+        ->orderBy('quantity', 'desc')
+        ->get()
+        ->groupBy(function($item,$key) {
+            return $item->client->ci;
+        });
+        
+        foreach($orderGroup as $orders) {
+            $quantity = 0;
+            foreach($orders as $order) {
+                $quantity = $quantity + $order->quantity;
+            }
+
+                array_push($most, [
+                'client'    => Client::find($orders[0]->client_id),
+                'quantity'  => $quantity,
+                'orders'    => count($orders),
+
+                ]
+            );
+        }
+        usort($most, function($a, $b) {
+            return $b['quantity'] <=> $a['quantity'];
+        });
+        $rifa->mostBuy = [ $most[0]??null, $most[1]??null, $most[2]??null, $most[3]??null, $most[4]??null ];
+    
+
+        return $rifa;
+    }
     static function getStockAvailable($id) {
         $rifa = Rifa::with(['ordersPending'])->withCount('tickets')->find($id);
         return $rifa->available_tickets;
     }
 }
+
+
+

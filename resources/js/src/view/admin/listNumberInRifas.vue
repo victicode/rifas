@@ -140,7 +140,7 @@ onMounted(() => {
       </div>
     </template>
     <template v-if="Object.values(selectedTicket).length > 0">
-      <viewTicketDetails :dialog="(showModal == 'view')" :ticket="selectedTicket" @closeModal="closeModal()"  />
+      <viewTicketDetails :dialog="(showModal == 'view')" :ticket="selectedTicket" @closeModal="showModal = ''"  />
   
     </template>
   </div>

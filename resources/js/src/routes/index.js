@@ -126,35 +126,49 @@ const routes = [
         path:'/admin/data_pays',
         component: () => import('@/view/admin/payData.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Datos de pago'
         }
       },
       {
         path:'/admin/pay_methods',
         component: () => import('@/view/admin/payMethods.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Métodos de pago'
         }
       },
       {
         path:'/admin/clients',
         component: () => import('@/view/admin/dashboard.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Clientes'
         }
       },
       {
         path:'/admin/configuration',
         component: () => import('@/view/admin/dashboard.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Configuración'
         }
       },
       {
-        path:'/admin/report',
-        component: () => import('@/view/admin/dashboard.vue'),
+        path:'/admin/reports',
+        component: () => import('@/view/admin/reports.vue'),
         meta:{
-          title: 'Bienvenido'
+          title: 'Reportes'
+        }
+      },
+      {
+        path:'/admin/winners',
+        component: () => import('@/view/admin/winners.vue'),
+        meta:{
+          title: 'Ganadores'
+        }
+      },
+      {
+        path:'/admin/reports/tickets-buy',
+        component: () => import('@/view/admin/reports/ticketsBuy.vue'),
+        meta:{
+          title: 'Top compras'
         }
       },
     ]

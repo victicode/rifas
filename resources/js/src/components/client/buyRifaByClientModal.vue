@@ -460,7 +460,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                           </div>
                           <div id="pasteClipb"></div>
                         </div>
-                        <div class="row mt-5 md:mt-6">
+                        <div class="row mt-5 md:pt-3 md:mt-6" style="border-top:6px dotted #252525">
                           <div class="col-12 mb-5 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"

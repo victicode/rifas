@@ -276,8 +276,6 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           :rules="[ val => val && val > 0 || 'El campo es obligatorio']"
                         />
                       </div>
-                      
-
                       <div class="col-12 q-mt-xs q-mt-md-none">
                         <q-checkbox  v-model="formInputs.auto_select" label="Selección aleatoria de tickets" color="teal" />
                       </div>
@@ -366,6 +364,14 @@ import { useRifaStore } from '@/services/store/rifas.store';
     background: #484848;
   }
 }
+.overflow__img{
+  opacity: 0;
+  position: absolute; 
+  top:0; bottom:0; left:0; right:0; 
+  background:rgba(34, 34, 34, 0.539);
+  border-radius: 1rem;
+  transition: all 0.5 ease;
+}
 
 .createRifaForm__input {
   & .q-field__control {
@@ -391,14 +397,6 @@ import { useRifaStore } from '@/services/store/rifas.store';
   & .q-field__append{
     transform: translateY(5%)
   }
-}
-.overflow__img{
-  opacity: 0;
-  position: absolute; 
-  top:0; bottom:0; left:0; right:0; 
-  background:rgba(34, 34, 34, 0.539);
-  border-radius: 1rem;
-  transition: all 0.5 ease;
 }
 
 </style>

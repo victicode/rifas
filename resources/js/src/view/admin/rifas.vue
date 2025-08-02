@@ -7,6 +7,7 @@ import createRifaModal from '@/components/admin/rifa/createRifaModal.vue';
 import rewardsModal from '@/components/admin/rifa/rewardsModal.vue'
 import updateRifaModal from '@/components/admin/rifa/updateRifaModal.vue';
 import updateRifaStatusModal from '@/components/admin/rifa/updateRifaStatusModal.vue';
+import deleteRifaModal from '@/components/admin/rifa/deleteRifaModal.vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const ready = ref(false)
@@ -66,7 +67,7 @@ onMounted(() =>{
       <div class="mt-12 md:mt-4 ">
           <template v-if="rifas.length > 0">
             <div class="row items-center md:justify-start  rifas__container w-100">
-              <div v-for="rifa in rifas" :key="rifa.id" class="md:px-2 col-12 col-md-3">
+              <div v-for="rifa in rifas" :key="rifa.id" class="md:px-10 col-12 col-md-4">
                 <div  class=" rifa__item my-5 md:my-2 q-pb-md " style="" >
                   <div class=" rifa__item--imgContainer">
                     <img :src="rifa.configuration.banner_img" class="rifa__item--img" />
@@ -74,6 +75,13 @@ onMounted(() =>{
                       <q-chip color="white" text-color="primary"  class="">
                         <div class="text-caption text-bold">
                           Se juega el {{moment(rifa.due_date).format('DD/MM/YYYY')}}
+                        </div>
+                      </q-chip>
+                    </div>
+                    <div style="position: absolute; bottom: 0.1rem; right: 1px;">
+                      <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
+                        <div class="px-2 md:px-4">
+                          {{rifa.status_label}}
                         </div>
                       </q-chip>
                     </div>
@@ -88,20 +96,38 @@ onMounted(() =>{
                       <div class="my-1 text-subtitle2 text-stone-500 "> • Compra minima: <b>{{ rifa.configuration.minimus_buy }} tickets</b></div>
                       <div class="my-1 text-subtitle2 text-stone-500 "> • Creada el: <b>{{ moment(rifa.created_at).format('DD/MM/YYYY') }}</b></div>
 
-                      <div class="flex q-my-sm justify-between items-center"> 
-                        <q-chip :color="rifa.status == 1 ? 'positive' : 'negative'" text-color="white"  class="">
-                          <div class="px-2 md:px-1">
-                            {{rifa.status_label}}
-                          </div>
-                        </q-chip>
-                        <div class="flex justify-end">
-                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white"  @click="router.push('/admin/rifas/'+rifa.id +'/tickets')" >
-                            <q-icon name="local_activity" />
+                      <div class=" mt-2"> 
+                        <div class="flex">
+                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white" icon="local_activity"  @click="router.push('/admin/rifas/'+rifa.id +'/tickets')" >
+                            <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
+                              Revisar todos los tickets
+                            </q-tooltip>
+                          </q-btn>
+                          <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="leaderboard"  @click="router.push('/admin/winners')" >
+                            <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
+                              Ganadores
+                            </q-tooltip>
+                          </q-btn>
+                          <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" >
+                            <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
+                              Premios
+                            </q-tooltip>
                           </q-btn> 
-                          <q-btn round color="primary" size="0.72rem" class="mr-1 button__actionRifa" text-color="white" icon="emoji_events" @click="openModal('rewards', rifa.id)" /> 
-                          <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="settings"  @click="openModal('update', rifa.id)"/>
-                          <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="cached" @click="openModal('status', rifa.id)" /> 
-                          <q-btn round color="negative" size="0.72rem" class="ml-1 button__actionRifa" text-color="white" icon="delete" />
+                          <q-btn round color="primary" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="settings"  @click="openModal('update', rifa.id)">
+                            <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
+                              Configuración
+                            </q-tooltip>
+                          </q-btn>
+                          <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionRifa" text-color="white" icon="cached" @click="openModal('status', rifa.id)" >
+                            <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
+                              Actualizar estado
+                            </q-tooltip>
+                          </q-btn> 
+                          <q-btn round color="negative" size="0.72rem" class="ml-1 button__actionRifa" text-color="white" icon="delete" @click="openModal('delete', rifa.id)" >
+                            <q-tooltip class="bg-negative text-white text-body2" :offset="[10, 10]">
+                              Borrar rifa
+                            </q-tooltip>
+                          </q-btn>
                         </div>
                       </div>
                     </div>
@@ -160,6 +186,7 @@ onMounted(() =>{
       <rewardsModal :dialog="(showModal == 'rewards')"    :rifa="selectedRifa"  @closeModal="closeModal()" @updateReward="updateReward" />
       <updateRifaModal :dialog="(showModal == 'update')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
       <updateRifaStatusModal :dialog="(showModal == 'status')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
+      <deleteRifaModal :dialog="(showModal == 'delete')"  :rifa="selectedRifa"  @closeModal="closeModal()" @updateList="getRifas()" />
     </template>
   </div>
 </template>

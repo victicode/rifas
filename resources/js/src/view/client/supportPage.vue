@@ -2,7 +2,7 @@
 import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
 </script>
 <template>
-  <div class="px-4">
+  <div class="px-4" style="height:70vh">
     <div class="text-center text-h4 mt-8 text-black text-bold">
       Nos aseguramos de que tengas la mejor atención 🤩
     </div>

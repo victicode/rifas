@@ -108,8 +108,11 @@ class OrderController extends Controller
         return $this->returnSuccess(200, $orders);
     }
     public function deleteOrder($id){
-        Order::find($id)->delete();
-
+        $order = Order::find($id);
+        $order->delete();
+        if($order->status == 2){
+            $this->deleteTicket($order->id);
+        }
         return $this->returnSuccess(200, 'ok');
     }
     public function getOrderByIdHtml($id){
@@ -129,6 +132,10 @@ class OrderController extends Controller
             
         }
         return $this->returnSuccess(200, [$order->load('tickets')]);
+    }
+    private function deleteTicket($id){
+        Ticket::where('order_id', $id)->delete();
+
     }
     private function loadImageToStorage(Request $request){
         $vaucher = ""; 

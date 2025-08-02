@@ -2,6 +2,8 @@
 import headerClient from '@/components/layouts/headerClient.vue';
 import sideBarClient from '@/components/layouts/sideBarClient.vue';
 import whatsappFloatButton from '@/components/client/whatsappFloatButton.vue';
+import footerClient from '@/components/layouts/footerClient.vue';
+
 </script>
 <template>
   <section class="h-full ">
@@ -15,7 +17,9 @@ import whatsappFloatButton from '@/components/client/whatsappFloatButton.vue';
         </transition>
       </router-view>
       <whatsappFloatButton />
+      <footerClient/>
     </div>
+    
   </section>
 </template>
 <style lang="scss">
