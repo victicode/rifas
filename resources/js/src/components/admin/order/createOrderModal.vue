@@ -129,6 +129,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
       showNotify('positive', 'Orden creada con exito')
       setTimeout(() => {
         loading.value = false
+        hideModal()
         emit('orderSuccessfull')
       },1000)
     })

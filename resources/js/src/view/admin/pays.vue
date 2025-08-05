@@ -319,7 +319,7 @@ onMounted(() => {
           />
         </div>
     </section>
-    <createOrderModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @orderSuccessfull="showModal=''; getOrders()" />
+    <createOrderModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @orderSuccessfull="getOrders()" />
     <template v-if="Object.values(selectedOrder).length > 0">
       <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getOrders() "/>
       <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="1" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
