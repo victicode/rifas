@@ -12,10 +12,15 @@ import socialLinks from '@/components/client/socialLinks.vue';
 const rifaStore = useRifaStore()
 const rifasActive = ref([])
 const screenDectectd = window.screen.width < 780 ? 1 : 5
+const ready = ref(false)
 const getActiveRifas = () =>{
+  ready.value = false
   rifaStore.getRifasActive()
   .then((response) => {
     rifasActive.value = response.data
+    setTimeout(() => {
+      ready.value = true
+    }, 500);
   })
 }
 const slide = ref(1)
@@ -57,17 +62,28 @@ onMounted(() => {
           </q-carousel-slide>
         </q-carousel>
       </div>
-      <div v-if="rifasActive.length > 0" class="row mt-0 px-4 md:justify-center justify-start">
-        <multipleRifaActive v-for="rifa in rifasActive" :rifa="rifa" :key="rifa.id" class="my-4 md:my-0 md:mt-4 col-12 col-md-3 md:px-3 " />
-      </div>
-      <div v-else  class="py-10">
-        <div class="text-h5 text-black text-bold text-center">
-          No hay rifas activas 😪😪
+      <template v-if="ready">
+        <div v-if="rifasActive.length > 0" class="row mt-0 px-4 md:justify-center justify-start">
+          <multipleRifaActive v-for="rifa in rifasActive" :rifa="rifa" :key="rifa.id" class="my-4 md:my-0 md:mt-4 col-12 col-md-3 md:px-3 " />
         </div>
-        <div class="text-h6 text-black text-bold text-center">
-          Puedes volver en breve que tendremos mas sorpresas para ti🤯
+        <div v-else  class="py-10">
+          <div class="text-h5 text-black text-bold text-center">
+            No hay rifas activas 😪😪
+          </div>
+          <div class="text-h6 text-black text-bold text-center">
+            Puedes volver en breve que tendremos mas sorpresas para ti🤯
+          </div>
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <div class="flex column items-center justify-center h-full q-py-sm">
+          <q-spinner-tail
+            color="black"
+            size="4rem"
+          />
+        </div>
+      </template>
+
       <div class="mt-4 text-center text-white text-h5 text-bold bg-black">
         <q-carousel
           animated

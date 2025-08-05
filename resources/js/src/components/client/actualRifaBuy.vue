@@ -14,10 +14,11 @@ const goTo = (type, id) => {
   router.push(url)
 };
 const rifa = ref(props.rifa)
+
 </script>
 <template>
   <div class="w-full bg-black">
-    <div class="pt-8 pb-8">
+    <div class="pt-8 pb-8" v-if="Object.values(rifa).length > 0">
       <div class=" text-white px-5 py-2 my-1 text-center actualRifa__subtitle" >
           Participa  y se nuestro proximo ganador!
       </div>
@@ -28,7 +29,7 @@ const rifa = ref(props.rifa)
           </div>
           <div class="px-4 md:w-4/12 mx-auto mt-5" style="">
             <div class="q-mt-sm">
-              <q-linear-progress stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="grey-8" track-color="grey-8" style="border-radius: 2rem;" >
+              <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="grey-8" track-color="grey-8" style="border-radius: 2rem;" >
                 <div class="absolute-full flex flex-center ">
                   <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                 </div>
@@ -45,10 +46,11 @@ const rifa = ref(props.rifa)
           </div>
         </div>
       </div>
-      <div>
+      <div class="">
         <countdownVue :targetDate="new Date(rifa.due_date)" />
       </div>
     </div>
+
   </div>
 </template>
 <style lang="scss" >

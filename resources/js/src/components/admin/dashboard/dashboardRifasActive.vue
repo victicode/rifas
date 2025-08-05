@@ -52,6 +52,11 @@ onMounted(() => {
   
       </table>
     </div>
+    <div v-else>
+      <div class="text-center text-black text-h6 py-16 text-bold">
+        No hay rifas activas
+      </div>
+    </div>
   </div>
 </div>
 </template>

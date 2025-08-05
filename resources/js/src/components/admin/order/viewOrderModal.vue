@@ -168,12 +168,15 @@ import { useOrderStore } from '@/services/store/order.store';
                 </tbody>
               </table>
               <div class=" pt-4" style="border-top: 1px solid darkgray;">
+                <div class="text-center text-black text-h6 text-bold my-2">
+                  Datos del pago
+                </div>
                 <div class="row">
-                  <div v-for="(item,index) in order.facturation" :key="index" :class="'col-6 mb-1 flex ' + (index%2 == 0 ? 'justify-start ':'justify-end text-end')" >
-                    <div class="text-subtitle2 text-bold  text-stone-500 mr-1">
+                  <div v-for="(item,index) in order.facturation" :key="index" :class="'col-6 mb-1 flex column ' + (index%2 == 0 ? 'justify-start items-start':'items-end justify-end text-end')" >
+                    <div class="text-subtitle1 text-bold  text-stone-500 mr-1">
                       {{item.title}}:
                     </div>
-                    <div class="text-subtitle2 text-black text-bold">
+                    <div class="text-subtitle1 text-black text-bold">
                       {{item.value}}
                     </div>
                   </div>

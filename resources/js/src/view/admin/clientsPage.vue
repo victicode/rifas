@@ -1,15 +1,15 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { useOrderStore } from '@/services/store/order.store';
+import { useClientStore } from '@/services/store/client.store';
 import DataTable from 'datatables.net-vue3'
 import DataTablesLib from 'datatables.net';
 import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
-import viewOrderModal from '@/components/admin/order/viewOrderModal.vue';
-import viewTicketModal from '@/components/admin/order/viewTicketModal.vue'
-import createOrderModal from '@/components/admin/order/createOrderModal.vue'
-import deleteOrderModal from '@/components/admin/order/deleteOrderModal.vue';
+// import viewClientModal from '@/components/admin/client/viewClientModal.vue';
+// import viewTicketModal from '@/components/admin/client/viewTicketModal.vue'
+// import createClientModal from '@/components/admin/client/createClientModal.vue'
+// import deleteClientModal from '@/components/admin/client/deleteClientModal.vue';
 
 
 DataTable.use(DataTablesLib);
@@ -20,11 +20,11 @@ const route = useRoute()
 const search = ref('')
 const numberFormat = numberUtils.numberFormat
 const searchType = ref(1)
-const orders = ref([])
-const orderStore = useOrderStore()
+const clients = ref([])
+const clientStore = useClientStore()
 const loading = ref(true) 
 const showModal = ref('')
-const selectedOrder = ref({})
+const selectedClient = ref({})
 const closeModal = () => {
   showModal.value = ''
 }
@@ -36,7 +36,7 @@ const optionsTable = {
       targets: 0,
       visible: true,
       render: function (data, type, full, meta) {
-        return moment(full.created_at).format('DD/MM/YY h:mm:ss a')
+        return full.name
       }
     },
     { 
@@ -45,7 +45,7 @@ const optionsTable = {
       visible: true,
       render: function (data, type, full, meta) {
 
-        return '#'+full.number
+        return numberFormat(full.ci)
       }
     },
     {
@@ -54,7 +54,7 @@ const optionsTable = {
       sorteable:false,
       render: function (data, type, full, meta) {
        
-        return full.method_pay.coin.symbol+' '+ numberFormat(full.amount)+',00'
+        return full.email
       }
     },
     {
@@ -63,99 +63,39 @@ const optionsTable = {
       sorteable:false,
       render: function (data, type, full, meta) {
        
-        return full.method_pay.name
-      }
-    },
-     { 
-      className:'text-center',
-      targets: 4,
-      visible: true,
-      render: function (data, type, full, meta) {
-        return '#'+full.reference
-      }
-    },
-    {	  
-      className:'text-center',										
-      targets: 5,
-      render: function (data, type, full, meta) {
-        return numberFormat(full.quantity)+' Uni.'
-      }
-    },
-    {
-      // status
-      className:'text-center',
-      targets: 6,
-      orderable: false,
-      render: function (data, type, full, meta) {
-        return `
-          <div class="q-chip row inline no-wrap items-center ${full.status_color} text-white q-chip--colored">
-            <div class="q-chip__content col row no-wrap items-center q-anchor--skip">
-              <div class="px-2 md:px-1">${full.status_label}</div>
-            </div>
-          </div>
-        `
+        return full.phone
       }
     },
     {
       // Actions
       className:'text-center',
-      targets: 7,
+      targets: 4,
       orderable: false,
       render: function (data, type, full, meta) {
         let view = ` `
-        
-        // view += `
-        // `
-        if(full.status == 1){
-          view+=`<button data-order="${full.id}" class="updateOrder q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
-            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
-            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-              <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">arrow_circle_right</i>
-            </span>
-          </button>`
-        }
-        if(full.status == 2 || full.status == 0 ){
-          view += `
-          <button data-order="${full.id}" class="viewOrder q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
-            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
-            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-              <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">visibility</i>
-            </span>
-          </button>
-          `
-        }
-        if(full.status == 2 ){
-          view += `
-          <button data-order="${full.id}" class="viewTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
-            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
-            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-              <i data-order="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">receipt</i>
-            </span>
-          </button>
-          `
-        }
         view += `
-          <button data-order="${full.id}" class="deleteTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
-            <span data-order="${full.id}" class="q-focus-helper" tabindex="-1"></span>
-            <span data-order="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-             <i data-order="${full.id}"  class="q-icon notranslate material-icons" aria-hidden="true" role="img">delete</i>
+          <button data-client="${full.id}" class="viewClient q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+            <span data-client="${full.id}" class="q-focus-helper" tabindex="-1"></span>
+            <span data-client="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+              <i data-client="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">visibility</i>
+            </span>
+          </button>
+          <button data-client="${full.id}" class="viewTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+            <span data-client="${full.id}" class="q-focus-helper" tabindex="-1"></span>
+            <span data-client="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+              <i data-client="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">bar_chart</i>
+            </span>
+          </button>
+          <button data-client="${full.id}" class="deleteTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+            <span data-client="${full.id}" class="q-focus-helper" tabindex="-1"></span>
+            <span data-client="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+             <i data-client="${full.id}"  class="q-icon notranslate material-icons" aria-hidden="true" role="img">delete</i>
             </span>
           </button>
           `
         return view
       }
     },
-    {
-      // status
-      className:'text-center',
-      targets: 8,
-      orderable: false,
-      visible:false,
-      render: function (data, type, full, meta) {
-        return full.id
-      }
-    },
-    
   ],
   language: {
     sLengthMenu: '_MENU_',
@@ -181,54 +121,42 @@ const optionsTable = {
 }
 
 const activeOptionsTable = () => {
-  document.querySelectorAll('.viewOrder').forEach( item => {
+  document.querySelectorAll('.viewClient').forEach( item => {
     item.addEventListener('click', event => {
-      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
       showModal.value = 'view'
     })	
   })
-  document.querySelectorAll('.updateOrder').forEach( item => {
+  document.querySelectorAll('.updateClient').forEach( item => {
     item.addEventListener('click', event => {
-      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
       showModal.value = 'update'
     })	
   })
   document.querySelectorAll('.viewTicket').forEach( item => {
     item.addEventListener('click', event => {
-      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
       showModal.value = 'ticket'
     })	
   })
   document.querySelectorAll('.deleteTicket').forEach( item => {
     item.addEventListener('click', event => {
-      selectedOrder.value = orders.value.find((item) => item.id == event.target.dataset.order)
+      selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
       showModal.value = 'delete'
     })	
   })
 }
-const searchInput = (func, wait) => {
-  let timeout;
-  return function() {
-    const context = this;
-    const args = arguments;
-    
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func.apply(context, args);
-    }, wait);
-  };
-}
-const getOrders = () => {
+const getClients = () => {
   const data = {
     search: search.value,
-    findBy: searchType.value,
+    searchType: searchType.value,
     page:actualPage.value
   }
-  orderStore.getPaginationOrders(data)
+  clientStore.getPaginationClients(data)
   .then((response) => {
     lastPage.value = response.data.last_page
     loading.value = false
-    orders.value = response.data.data
+    clients.value = response.data.data
     setTimeout(() => {
       
       activeOptionsTable()
@@ -237,7 +165,7 @@ const getOrders = () => {
 }
 
 onMounted(() => {
-  getOrders()
+  getClients()
 })
 </script>
 <template>
@@ -248,7 +176,7 @@ onMounted(() => {
           <q-icon name="local_activity" color="white" size="2rem"/>
         </div>
         <h4 class="text-black font-bold ml-2" >
-          {{route.meta.titlePage}}
+          Clientes
         </h4>
       </div>
       <div class="md:mt-0 mt-2">
@@ -262,10 +190,9 @@ onMounted(() => {
           <q-input
             v-model="search"
             label="Busqueda"
-            placeholder="N° de orden / Cédula de identidad / Referencia de pago / Monto pagado"
-            class=" searchOrderForm__input"
-            @update:model-value="searchInput(getOrders(), 1000)"
-
+            placeholder="Cédula de identidad / Nombre completo / Correo electrónico"
+            class=" searchClientForm__input"
+            @update:model-value="getClients()"
           >
             <template v-slot:append>
               <q-icon name="search" color="primary" />
@@ -277,17 +204,14 @@ onMounted(() => {
             Buscar por:
           </div>
            <div class="row">
+             <div class="col-md-2 col-6">
+               <q-radio v-model="searchType" :val="1" class="text-black" label="CI de cliente" />
+             </div>
               <div class="col-md-2 col-6">
-                <q-radio v-model="searchType" :val="1" class="text-black" label="N° de orden" />
+                <q-radio v-model="searchType" :val="2" class="text-black" label="Nombre" />
               </div>
               <div class="col-md-2 col-6">
-                <q-radio v-model="searchType" :val="2" class="text-black" label="CI de cliente" />
-              </div>
-              <div class="col-md-2 col-6">
-                <q-radio v-model="searchType" :val="3" class="text-black" label="Referencia de pago" />
-              </div>
-              <div class="col-md-2 col-6">
-                <q-radio v-model="searchType" :val="4" class="text-black" label="Monto pagado" />
+                <q-radio v-model="searchType" :val="3" class="text-black" label="Correo electrónico" />
               </div>
             </div>
         </div>
@@ -297,16 +221,14 @@ onMounted(() => {
       </div>
     </section>
     <section id="tablePays" class="p-0  md:mt-8 mt-4 relative">
-        <DataTable class="display table_pay" :options="optionsTable" :data="orders" >
+        <DataTable class="display table_pay" :options="optionsTable" :data="clients" >
           <thead class="tablePayHead">
             <tr>
-              <th>Fecha de pago</th>
-              <th>N° orden</th>
-              <th>Monto <b style="opacity:0; text-align:center">nnn</b></th>
-              <th>Método de pago</th>
-              <th>N° referencia</th>
-              <th>Tickets</th>
-              <th>Estado</th>
+              <th>Nombre</th>
+              <th>C.I. <b style="opacity:0; text-align:center">nnn</b></th>
+              <th>Correo</th>
+              <th>Contacto<b style="opacity:0; text-align:center">nnn</b></th>
+
               <th>Acción<b style="opacity:0; text-align:center">nnnnn</b></th>
             </tr>
           </thead>
@@ -322,7 +244,7 @@ onMounted(() => {
             :max="lastPage"
             :max-pages="6"
             boundary-numbers
-            @update:model-value="getOrders()"
+            @update:model-value="getClients()"
             gutter="0.5rem"
           />
         </div>
@@ -333,14 +255,10 @@ onMounted(() => {
           />
         </div>
     </section>
-    <createOrderModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @orderSuccessfull="getOrders()" />
-    <template v-if="Object.values(selectedOrder).length > 0">
-      <viewOrderModal :dialog="(showModal == 'view')"  :order="selectedOrder" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getOrders() "/>
-      <viewOrderModal :dialog="(showModal == 'update')"  :order="selectedOrder" :type="1" @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
-      <deleteOrderModal :dialog="(showModal == 'delete')"  :order="selectedOrder"  @closeModal="closeModal()"  @updateList="showModal='';  getOrders()" />
-      <viewTicketModal :dialog="(showModal == 'ticket')"  :order="selectedOrder"  @closeModal="closeModal()"  />
-
-    </template>
+    <!-- <createClientModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @clientSuccessfull="getClients()" />
+    <template v-if="Object.values(selectedClient).length > 0">
+      <viewClientModal :dialog="(showModal == 'view')"  :client="selectedClient" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getClients() "/>
+    </template> -->
   </div>
 </template>
 
@@ -376,7 +294,7 @@ onMounted(() => {
     text-align: center!important;
   }
 }
-.searchOrderForm__input {
+.searchClientForm__input {
 
   &.quantity input{
     font-size: 1.5rem;

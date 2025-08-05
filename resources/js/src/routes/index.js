@@ -138,14 +138,14 @@ const routes = [
       },
       {
         path:'/admin/clients',
-        component: () => import('@/view/admin/dashboard.vue'),
+        component: () => import('@/view/admin/clientsPage.vue'),
         meta:{
           title: 'Clientes'
         }
       },
       {
         path:'/admin/configuration',
-        component: () => import('@/view/admin/dashboard.vue'),
+        component: () => import('@/view/admin/systemPage.vue'),
         meta:{
           title: 'Configuración'
         }

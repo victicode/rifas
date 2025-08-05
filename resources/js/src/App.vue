@@ -53,6 +53,8 @@
   opacity: 0;
   position: absolute!important;
   top: 0;
+  width: 80%;
+
   // transform: scale(0);
 }
 .content__modalSection{

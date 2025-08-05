@@ -132,7 +132,7 @@ onMounted(() =>{
                       </div>
                     </div>
                     <div class="q-mt-sm">
-                      <q-linear-progress stripe rounded size="1.3rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
+                      <q-linear-progress class="py-3" stripe rounded size="1.3rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
                         <div class="absolute-full flex flex-center ">
                           <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                         </div>
@@ -170,7 +170,6 @@ onMounted(() =>{
           </template>
 
       </div>
-      
     </template>
     <template v-else>
       <div class="flex column items-center justify-center h-full q-py-sm">

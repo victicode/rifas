@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import ApiService from '@/services/axios'
-import storage from '@/services/storage'
-export const useOrderStore = defineStore('Order', {
+
+export const useClientStore = defineStore('Client', {
   actions: {
-    async createOrder(data) {
+    async createClient(data) {
       return await new Promise((resolve, reject) => {
-        ApiService.post('/api/public/order', data)
+        ApiService.post('/api/public/client', data)
         .then(({data}) => {
           if(data.code !=200) throw data;
           
@@ -22,9 +22,9 @@ export const useOrderStore = defineStore('Order', {
 
     },
     
-    async getOrderById(id) {
+    async getClientById(id) {
       return await new Promise((resolve, reject) => {
-        ApiService.get('/api/public/order/byId/'+id)
+        ApiService.get('/api/public/client/byId/'+id)
         .then(({data}) => {
           if(data.code !=200) throw data;
   
@@ -37,13 +37,13 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
-    async getPaginationOrders(data) {
+    async getPaginationClients(data) {
       return await new Promise((resolve, reject) => {
         if (!ApiService.getToken()) {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.get('/api/orders?page='+data.page+'&'+'search='+data.search+'&searchType='+data.findBy+'&')
+        ApiService.get('/api/clients?page='+data.page+'&'+'search='+data.search+'&searchType='+data.searchType+'&')
         .then(({data}) => {
           if(data.code !=200) throw data;
           
@@ -61,7 +61,7 @@ export const useOrderStore = defineStore('Order', {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.post('/api/orders/changeStatus/'+data.id, data)
+        ApiService.post('/api/clients/changeStatus/'+data.id, data)
         .then(({data}) => {
           if(data.code !=200) throw data;
           
@@ -74,13 +74,13 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
-    async deleteOrder(id) {
+    async deleteClient(id) {
       return await new Promise((resolve, reject) => {
         if (!ApiService.getToken()) {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.post('/api/orders/d/'+id)
+        ApiService.post('/api/clients/d/'+id)
         .then(({data}) => {
           if(data.code !=200) throw data;
           
@@ -93,9 +93,9 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
-    async findOrdersByCiClient(ci,rifa) {
+    async findClientsByCiClient(ci,rifa) {
       return await new Promise((resolve, reject) => {
-        ApiService.get('/api/public/order/byCi/'+ci+'?rifa='+rifa+'&')
+        ApiService.get('/api/public/client/byCi/'+ci+'?rifa='+rifa+'&')
         .then(({data}) => {
           if(data.code !=200) throw data;
   

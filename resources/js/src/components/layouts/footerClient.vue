@@ -18,9 +18,9 @@ const router = useRouter()
           © Derechos reservados 2025
         </div>
       </div>
-      <div class="md:pr-16 md:mr-12 mt-2 md:mt-0">
+      <!-- <div class="md:pr-16 md:mr-12 mt-2 md:mt-0">
         <q-btn unelevated color="yellow-9" label="Comprar ahora"  @click="router.push('/home')"/>
-      </div>
+      </div> -->
     </div>
   </footer>
 </template>

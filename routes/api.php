@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\PayMethodController;
 use App\Http\Controllers\Api\RifaController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\WinnerController;
+use App\Http\Controllers\Api\PayMethodController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -20,11 +21,12 @@ Route::prefix('public')->group(function () {
     Route::prefix('order')->name('order.')->group(function () {
         Route::post('/', [OrderController::class, 'createOrder']);
         Route::get('/byId/{id}', [OrderController::class, 'getOrderById']);
-        Route::get('/byCi/{ci}', [OrderController::class, 'findOrdersByCiClient']);
-
-        
+        Route::get('/byCi/{ci}', [OrderController::class, 'findOrdersByCiClient']);        
         Route::get('/byId/html/{id}', [OrderController::class, 'getOrderByIdHtml']);
+    });
 
+    Route::prefix('winners')->name('winner.')->group(function () {
+        Route::get('/', [WinnerController::class, 'getWinnersPagination']);
     });
     
     Route::prefix('method_pays')->name('methods')->group(function () {
@@ -55,6 +57,11 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/', [OrderController::class, 'getOrderPagination']);
         Route::post('/d/{id}', [OrderController::class, 'deleteOrder']);
         Route::post('/changeStatus/{id}', [OrderController::class, 'changeStatus']);
+    });
+    Route::prefix('clients')->name('client.')->group(function () {
+        Route::get('/', [ClientController::class, 'getClientPagination']);
+        Route::post('/d/{id}', [ClientController::class, 'deleteClient']);
+        Route::post('/changeStatus/{id}', [ClientController::class, 'changeStatus']);
     });
     Route::prefix('methods_pay')->name('methods')->group(function () {
         Route::get('/', [PayMethodController::class, 'getMethodsData']);

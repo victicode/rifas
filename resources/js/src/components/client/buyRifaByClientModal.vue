@@ -72,7 +72,7 @@ import bankLabels from '@/utils/bankLabelUtils';
     step.value == 1 ? hideModal() : step.value--
   }
   const nextStep = () => {
-    if(step.value == 3) {
+    if(step.value == 4) {
       createOrder()
       return
     }
@@ -267,9 +267,9 @@ import bankLabels from '@/utils/bankLabelUtils';
           <div>
             <q-card-section class="">
               <div class="text-h6 text-center text-black">
-                {{ step == 1 ? 'Selecciona tu compra' : step == 2 ? 'Ingresa tus datos' : 'Realiza tu pago' }}
+                {{ step == 1 ? 'Selecciona tu compra' : step == 2 ? 'Ingresa tus datos' : step == 3 ? 'Realiza tu pago'  : 'Confirma tu pago'  }}
               </div>
-              
+
             </q-card-section>
             <section class="content__modalSectionRifaBuy md:mt-5 mt-0">
               
@@ -355,6 +355,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             mask="###.###.###"
                             maxlength="10"
                             reverse-fill-mask
+                            inputmode="numeric"
                             class=" createOrderForm__input"
                             :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                           />
@@ -365,6 +366,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             label="Teléfono"
                             maxlength="12"
                             mask="####-#######"
+                            inputmode="numeric"
                             reverse-fill-mask
                             class=" createOrderForm__input"
                             :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
@@ -460,17 +462,61 @@ import bankLabels from '@/utils/bankLabelUtils';
                           </div>
                           <div id="pasteClipb"></div>
                         </div>
-                        <div class="row mt-5 md:pt-3 md:mt-6" style="border-top:6px dotted #252525">
-                          <div class="col-12 mb-5 md:mb-6">
+
+                      </div>
+                    </div>
+                  </template>
+                </transition>
+                <transition name="fade">
+                  <template v-if="step==4">
+                    <div class="px-2">      
+                      <div class="mt-4">
+                        <div style="border:2px solid black; border-radius:0.8rem" class="py-1 px-3">
+                          <div class="flex   items-center text-subtitle2  text-stone-900">
+                            <div class="w-5/6">
+                              Confirma que los datos de tu compra sean los correctos
+                            </div>
+                            <div class="w-1/6 flex items-center justify-end">
+                              <q-icon name="info" size="2rem" color="primary" class="pb-1"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-5 ">
+                          <div class=" col-12 pb-1 flex justify-between my-2 "  >
+                            <div class="text-subtitle2 text-black">
+                              Tickets
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              x {{ numberFormat( formInputs.quantity) }}
+                            </div>
+                          </div>
+                          <div class=" col-12 pb-1 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
+                            <div class="text-subtitle2 text-black">
+                              Monto cancelado
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              {{ 
+                                formInputs.method_pay.coin_id == 1
+                                ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                                : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-8 pt-8 md:pt-3 md:mt-6" style="border-top:6px dotted #252525">
+                          <div class="col-12 mb-10 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"
+                              outlined=""
+                              inputmode="numeric"
+                              :maxlength="8"
                               label="Ingresa el número de referencia"
-                              class=" createOrderForm__input"
+                              class=" createOrderFormRef__input"
                               hint="*Asegurate de copiar correctamente la referencia"
                               :rules="[ val => val && val.length > 0 || 'El campo es obligatorio', val => (/^\d+$/.test(val) == true )  || 'Formato no valido']"
                             />
                           </div>
-                          <div class="col-12 mb-5">
+                          <div class="col-12 mb-0">
                             <label for="vaucher">
                               <div ref="dropzone" id="dropzoneFile" class="dropzone" :class="{'load': !(formInputs.payPhoto == null)}">
                                 <div class="dz-message" v-if="formInputs.payPhoto == null">
@@ -495,7 +541,7 @@ import bankLabels from '@/utils/bankLabelUtils';
             <div class="flex justify-evenly md:mt-5 mt-1">
               <input type="file"  id="vaucher" ref="vaucher" accept="image/*"  style="display: none;" @change="onFileChange" >
               <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' "  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="backButton()" />
-              <q-btn :label="step !== 3 ? 'Siguiente' : 'Comprar' "   color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
+              <q-btn :label="step !== 4 ? 'Siguiente' : 'Comprar' "   color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
             </div>
           </section>
         </q-form>
@@ -543,7 +589,7 @@ import bankLabels from '@/utils/bankLabelUtils';
   border-bottom: 5px solid ;
 }
 .activeInfo{
-  height: 34rem;
+  height: 28rem;
 }
 .q-item__label{
 
@@ -553,6 +599,38 @@ import bankLabels from '@/utils/bankLabelUtils';
   & .q-item__label{
 
     color: goldenrod!important;
+  }
+}
+.createOrderFormRef__input {
+
+  & input{
+    padding-bottom: 0px!important;
+  }
+  & .q-field__label{
+    transform: translateY(11%);
+    
+  }
+  &.q-field--outlined .q-field__control{
+    border-radius: 0.5rem;
+  }
+  &.q-field--focused .q-field__label, &.q-field--float .q-field__label{
+    z-index: 100;
+    background: white!important;
+    font-weight: 600;
+    width: fit-content;
+
+
+    padding: 0px 10px;
+    font-size: 0.8rem;
+    transform: translateY(-150%) translateX(-0.5rem) !important;
+  }
+  
+  & .q-field__native{
+    padding-top: 5px!important;
+    font-weight: 600;
+  }
+  & .q-field__append{
+    transform: translateY(5%)
   }
 }
 .createOrderForm__input {

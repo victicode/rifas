@@ -10,13 +10,15 @@ use Illuminate\Http\Request;
 class WinnerController extends Controller
 {
     public function getWinnersPagination(Request $request){
-        $winners = Winner::with(['reward', 'rifa', 'ticket.order'])->orderBy('created_at', 'desc')->paginate(10);
+        $winners = Winner::with(['reward', 'rifa', 'ticket.order.client'])->orderBy('created_at', 'desc')->paginate(10);
         
         return $this->returnSuccess(200, $winners);
     }
     public function storeWinner(Request $request){
 
         $ticket = Ticket::where("rifa_id", $request->rifa)->where('number', $request->ticket)->first();
+
+        if(!$ticket) return $this->returnFail(404, 'Numero no comprado');
         $photo = "";
         $winner = Winner::create([
             'reward_id' => $request->reward,

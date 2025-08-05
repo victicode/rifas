@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('amount');
-            $table->integer('quatity');
+            $table->integer('quantity');
             $table->string('reference')->nullable();
             $table->longText('vaucher');
             $table->date('pay_date');

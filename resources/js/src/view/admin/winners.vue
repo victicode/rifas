@@ -100,7 +100,7 @@ onMounted(() =>{
                         </q-btn> 
                         <q-btn round color="negative" size="0.72rem" class="ml-1 button__actionwinner" text-color="white" icon="delete" @click="openModal('delete', winner.id)" >
                           <q-tooltip class="bg-negative text-white text-body2" :offset="[10, 10]">
-                            Borrar winner
+                            Borrar Ganador
                           </q-tooltip>
                         </q-btn>
                       </div>

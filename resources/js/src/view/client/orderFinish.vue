@@ -4,7 +4,7 @@ import logo from '@/assets/images/logo/logo2.jpeg'
 import { useRoute, useRouter } from 'vue-router';
 import { useOrderStore } from '@/services/store/order.store' 
 import { Notify } from 'quasar'
-
+import confeti from '@/components/layouts/confeti.vue';
 const orderStore = useOrderStore()
 const loading = ref(false);
 const route = useRoute()
@@ -47,7 +47,6 @@ onMounted(() => {
   <!-- <div class="h-full md:px-12" :style="`background:url('${logo}')`" style="position: relative; background-position: -3rem 0rem;" > -->
     <div class="overflowBody"/>
     <template v-if="loading">
-
       <div class="text-black pt-5 pb-10 md:px-12 px-5 text-center relative card_presentation" style="z-index:2"> 
         <div class="flex justify-center w-full md:my-5 my-2">
           <q-icon name="check_circle_outline" size="8rem" color="positive"/>
@@ -64,9 +63,9 @@ onMounted(() => {
             size="" color="blur"  class="md:mt-4 md:mb-4 mb-2 mt-4 md:mx-2 md:my-2 mx-0" 
             @click="goTo('/rifa/'+order.rifa_id)"
           >
-           <div class="q-py-sm">
+          <div class="q-py-sm">
               Realizar otra compra
-           </div>
+          </div>
 
           </q-btn>
           <q-btn 
@@ -74,9 +73,9 @@ onMounted(() => {
             size="" color="primary"  class="md:mt-4 md:mb-4 mt-2 mb-4 md:mx-2 mx-0" 
             @click="goTo('/finder/ticket/'+order.rifa_id)"
           >
-           <div class="q-py-sm">
+          <div class="q-py-sm">
               Consulta tus tickets aqui
-           </div>
+          </div>
 
           </q-btn>
         </div>
@@ -85,7 +84,6 @@ onMounted(() => {
           <div class="text-black text-h6">Simplemente ingresa tu número de cedula en el verificador de tickets y presiona el boton de buscar. Se mostrará toda la información de tu compra y tus tickets asignados </div>
         </div>
       </div>
-      
     </template>
     <template v-else>
       <div class="flex column items-center justify-center h-full q-py-sm relative" style="z-index:2">
@@ -95,6 +93,10 @@ onMounted(() => {
         />
       </div>
     </template>
+    <confeti  :duration="5000" 
+      :particleCount="200"
+      :wind="true" 
+    /> 
   </div>
 </template>
 <style lang="scss">

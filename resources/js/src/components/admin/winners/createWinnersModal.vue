@@ -213,22 +213,11 @@ import { useWinnerStore } from '@/services/store/winner.store';
                       </div>
                     </div>
                     <div class="col-12 flex justify-center"  v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0"> 
-                      <div class="py-2">
-                        <label for="winner_photo" class="label_img">
-                          <div v-if="!previewImg" style="" class="flex justify-center items-center slotWinner__img">
-                              <q-icon name="add" color="white" size="5rem"/>
-                          </div>
-                          <div class="img__container" v-else>
-                            <img  :src="previewImg" class="slotWinner__img" alt="">
-                            <div class="flex justify-center items-center overflowWinner__img" style="">
-                              <q-icon name="add" color="white" size="5rem"/>
-                            </div>
-                          </div>
-                        </label>
-                        <div class="text-subtitle1">
-                          Agrega foto de la entrega
+                      <label for="winner_photo"  >
+                        <div class="py-2" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': previewImg}">
+                         {{ !previewImg ? 'Agregar foto de la entrega' :'Foto agregada con exito ✅' }} 
                         </div>
-                      </div>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -237,7 +226,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
           </div>
           <section>
             <div class="flex justify-evenly mt-5">
-              <input type="file"  id="winner_photo" ref="winner_photo" accept="image/*"  style="display: none;" @change="onFileChange" >
+              <input type="file"  id="winner_photo" accept="image/*"  style="display: none;" @change="onFileChange" >
               <q-btn label="Volver"  color="black"  class="q-mx-sm " style="width: 35%; border-radius: 0.8rem; padding: 0.7rem 0px;" @click="hideModal()" />
               <q-btn label="Completar" color="blur" type="submit" style="width: 50%; border-radius: 0.8rem; padding: 0.7rem 0px;" :loading="loading"/>
             </div>

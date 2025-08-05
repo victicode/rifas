@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PayMethod;
 use App\Models\Rifa;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
@@ -18,9 +19,20 @@ class OrderController extends Controller
 {
     //
     public function getOrderPagination(Request $request){
-        $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration", "tickets"])->withCount("tickets")->orderBy("created_at", "desc")->paginate(15);
+
         
-        return $this->returnSuccess(200, $rifas);
+        $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration", "tickets"])->withCount("tickets")->orderBy("created_at", "desc");
+        
+        if($request->searchType == 1){
+            $rifas = $rifas->where('number', 'like', '%'.$request->search.'%');
+        }
+        if($request->searchType == 3){
+            $rifas = $rifas->where('reference', 'like', '%'.$request->search.'%');
+        }
+        if($request->searchType == 4){
+            $rifas = $rifas->where('amount', 'like', '%'.$request->search.'%');
+        }
+        return $this->returnSuccess(200, $rifas->paginate(15));
     }
     public function createOrder(Request $request){
         $validated = $this->validateFieldsFromInput($request->all(), true);
@@ -53,8 +65,9 @@ class OrderController extends Controller
             ]
         );
         $vaucher = $this->loadImageToStorage($request);
+        $methodPay = PayMethod::with('dataPay')->find($request->method_id);
+        if(!$methodPay) return $this->returnFail(403, 'Methodo de pago no disponible');
 
-        
         try {
             $order = Order::create([
                 "amount"    => $request->amount,
@@ -66,7 +79,7 @@ class OrderController extends Controller
                 "status"    => $request->isAdmin ? 2 : 1,
                 "rifa_id"   => $request->rifa_id,
                 "method_id" => $request->method_id,
-                // "data_pay_id" => $request->isAdmin ? 18 : $request->data_id,
+                "data_pay_id" => $methodPay->dataPay[0]->id,
 
                 "client_id" => $client->id,
             ]);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ticket_id');
             $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
             $table->unsignedBigInteger('reward_id');
-            $table->foreign('reward_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('reward_id')->references('id')->on('rewards')->onDelete('cascade');
             $table->longText('winner_photo')->nullable();
             $table->timestamps();
             $table->softDeletes();

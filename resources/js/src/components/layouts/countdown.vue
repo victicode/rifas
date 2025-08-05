@@ -162,7 +162,7 @@ export default {
 
 @media (max-width: 600px) {
   .countdown-display {
-    gap: 0.4rem;
+    gap: 0.2rem;
   }
   
   .time-unit {
