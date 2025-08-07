@@ -9,7 +9,7 @@ class Winner extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ["rifa_id", "reward_id", "ticket_id", "winner_photo"];
+    protected $fillable = ["rifa_id", "reward_id", "ticket_id", "winner_photo", "link_ig", "link_tt"];
     
     public function rifa(): BelongsTo
     {

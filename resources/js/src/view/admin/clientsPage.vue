@@ -4,14 +4,11 @@ import { onMounted, ref } from 'vue';
 import { useClientStore } from '@/services/store/client.store';
 import DataTable from 'datatables.net-vue3'
 import DataTablesLib from 'datatables.net';
-import moment from 'moment';
 import numberUtils from '@/utils/numberUtils.js';
-// import viewClientModal from '@/components/admin/client/viewClientModal.vue';
-// import viewTicketModal from '@/components/admin/client/viewTicketModal.vue'
-// import createClientModal from '@/components/admin/client/createClientModal.vue'
-// import deleteClientModal from '@/components/admin/client/deleteClientModal.vue';
 
-
+import viewClientModal from '@/components/admin/client/viewClientModal.vue';
+import deleteClientModal from '@/components/admin/client/deleteClientModal.vue';
+import stadisticsClientModal from '@/components/admin/client/stadisticsClientModal.vue';
 DataTable.use(DataTablesLib);
 
 const lastPage = ref(1);
@@ -80,13 +77,13 @@ const optionsTable = {
               <i data-client="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">visibility</i>
             </span>
           </button>
-          <button data-client="${full.id}" class="viewTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+          <button data-client="${full.id}" class="reportClient q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
             <span data-client="${full.id}" class="q-focus-helper" tabindex="-1"></span>
             <span data-client="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
               <i data-client="${full.id}" class="q-icon notranslate material-icons" aria-hidden="true" role="img">bar_chart</i>
             </span>
           </button>
-          <button data-client="${full.id}" class="deleteTicket q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
+          <button data-client="${full.id}" class="deleteClient q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-black q-btn--actionable q-focusable q-hoverable mx-0" tabindex="0" type="button">
             <span data-client="${full.id}" class="q-focus-helper" tabindex="-1"></span>
             <span data-client="${full.id}" class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
              <i data-client="${full.id}"  class="q-icon notranslate material-icons" aria-hidden="true" role="img">delete</i>
@@ -133,13 +130,13 @@ const activeOptionsTable = () => {
       showModal.value = 'update'
     })	
   })
-  document.querySelectorAll('.viewTicket').forEach( item => {
+  document.querySelectorAll('.reportClient').forEach( item => {
     item.addEventListener('click', event => {
       selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
-      showModal.value = 'ticket'
+      showModal.value = 'report'
     })	
   })
-  document.querySelectorAll('.deleteTicket').forEach( item => {
+  document.querySelectorAll('.deleteClient').forEach( item => {
     item.addEventListener('click', event => {
       selectedClient.value = clients.value.find((item) => item.id == event.target.dataset.client)
       showModal.value = 'delete'
@@ -178,10 +175,6 @@ onMounted(() => {
         <h4 class="text-black font-bold ml-2" >
           Clientes
         </h4>
-      </div>
-      <div class="md:mt-0 mt-2">
-        <q-btn unelevated style="border-radius:0.4rem" icon="add" color="black" 
-        class="q-py-sm md:mx-2 " label="Orden manual" no-caps @click="showModal = 'create'" />
       </div>
     </div>
     <section id="filterAndSearch" class="w-full  px-4 py-2 md:py-3 mt-4">
@@ -224,12 +217,11 @@ onMounted(() => {
         <DataTable class="display table_pay" :options="optionsTable" :data="clients" >
           <thead class="tablePayHead">
             <tr>
-              <th>Nombre</th>
+              <th>Nombre <b style="opacity:0; text-align:center">nnnnnnnnnn</b></th>
               <th>C.I. <b style="opacity:0; text-align:center">nnn</b></th>
               <th>Correo</th>
-              <th>Contacto<b style="opacity:0; text-align:center">nnn</b></th>
-
-              <th>Acción<b style="opacity:0; text-align:center">nnnnn</b></th>
+              <th>Contacto<b style="opacity:0; text-align:center">nnnn</b></th>
+              <th>Acción<b style="opacity:0; text-align:center">nnnnnnnnnnn</b></th>
             </tr>
           </thead>
         </DataTable>
@@ -255,10 +247,12 @@ onMounted(() => {
           />
         </div>
     </section>
-    <!-- <createClientModal :dialog="(showModal == 'create')"  @closeModal="closeModal()"  @clientSuccessfull="getClients()" />
+
     <template v-if="Object.values(selectedClient).length > 0">
-      <viewClientModal :dialog="(showModal == 'view')"  :client="selectedClient" :type="1"  @closeModal="closeModal()"   @updateList="showModal=''; getClients() "/>
-    </template> -->
+      <viewClientModal :dialog="(showModal == 'view')"  :client="selectedClient"   @closeModal="closeModal()" />
+      <deleteClientModal :dialog="(showModal == 'delete')"  :client="selectedClient"   @closeModal="closeModal() " @updateList="getClients()" />
+      <stadisticsClientModal :dialog="(showModal == 'report')"  :client="selectedClient"   @closeModal="closeModal() "  />
+    </template>
   </div>
 </template>
 

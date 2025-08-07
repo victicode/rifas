@@ -8,10 +8,9 @@ use App\Http\Controllers\Controller;
 
 class ClientController extends Controller
 {
- public function getClientPagination(Request $request){
-
+    public function getClientPagination(Request $request){
         
-        $rifas = Client::with(["orders"]);
+        $rifas = Client::with(["orders.rifa", "orders.ticket"]);
         
         if($request->searchType == 1){
             $rifas = $rifas->where('ci', 'like', '%'.$request->search.'%');

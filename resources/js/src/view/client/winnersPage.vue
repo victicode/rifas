@@ -53,13 +53,13 @@ onMounted(() =>{
           <div class="col-md-3 flex flex-center my-2" v-for="winner in winners" :key="winner.id"> 
     
             <div class="winner-card premio-1 pt-10 ">
-                <div class="medal ">1°</div>
+                <div class="medal ">{{winner.pole}}°</div>
                 <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
                 <div class="numero-ganador">#0428</div>
-                <div class="descripcion">¡Felicidades! Has ganado: <br>{{ winner.reward.title }}.</div>
+                <div class="descripcion">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
                 <div class="ganador-info">
                   <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
-                  <div class="fecha">Sorteado el 05/08/2023</div>
+                  <div class="fecha">Sorteado el {{moment(winner.rifa.due_date +' '+ winner.reward.reward_time).format('DD/MM/YYYY h A')}}</div>
                 </div>
             </div>
           </div>

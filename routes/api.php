@@ -77,6 +77,9 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/', [WinnerController::class, 'getWinnersPagination']);
         Route::post('/', [WinnerController::class, 'storeWinner']);
         Route::get('/methods', [WinnerController::class, 'getPayMethods']);
+        Route::post('/u/{id}', [WinnerController::class, 'updateWinner']);
+        Route::post('/d/{id}', [WinnerController::class, 'deleteWinner']);
+
 
 
     });

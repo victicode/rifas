@@ -1,12 +1,11 @@
 <script setup>
 import { useWinnerStore } from '@/services/store/winner.store';
 import { onMounted, ref } from 'vue';
-import numberUtils from '@/utils/numberUtils.js'
-import moment from 'moment';
-import createWinnersModal from '@/components/admin/winners/createWinnersModal.vue';
-import updatewinnerModal from '@/components/admin/rifa/updateRifaModal.vue';
+import createWinnerModal from '@/components/admin/winners/createWinnerModal.vue';
+import updateWinnerModal from '@/components/admin/winners/updateWinnerModal.vue';
+import deleteWinnerModal from '@/components/admin/winners/deleteWinnerModal.vue';
 
-import deletewinnerModal from '@/components/admin/rifa/deleteRifaModal.vue';
+
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -65,8 +64,8 @@ onMounted(() =>{
           <template v-if="winners.length > 0">
             <div class="row items-center md:justify-start  winners__container w-100">
               <div v-for="winner in winners" :key="winner.id" class="md:px-3 col-12 col-md-3">
-                <div  class=" winner__item my-5 md:my-2 q-pb-md " style="" >
-                  <div class=" winner__item--imgContainer bg-red-600">
+                <div  class=" winner__item my-5 md:my-2  " style="" >
+                  <div class=" winner__item--imgContainer ">
                     <img :src="winner.winner_photo" alt="" style="width:100%; object-fit:cover; position:absolute; z-index:0">
                     <div class="flex column flex-center h-full  " style="position:relative; z-index:3">
                       <div class="bg-black text-white text-center mb-2 py-1s  px-5 text-subtitle1" 
@@ -78,11 +77,11 @@ onMounted(() =>{
                       </div>
                     </div>
                   </div>
-                  <div class="px-4 pt-3 flex column justify-between" style="height: -webkit-fill-available; flex-wrap: nowrap;">
+                  <div class=" pt-3 flex column justify-between" style="height: -webkit-fill-available; flex-wrap: nowrap; box-shadow: 0px -4px 30px 0px #7474744d;">
                     <div class="winner__item--title w-full ellipsis text-stone-500 text-center">{{winner.rifa.title}}</div>
-                    <div class="pt-1">
+                    <div class="pt-1 px-4">
                       <div class="mb-1  text-stone-800 " > 
-                        <div class="text-center text-subtitle1">
+                        <div class=" text-subtitle1">
                            <b>Premio: </b>
                         </div>
                         <div class="text-subtitle2 mt-1">
@@ -91,11 +90,11 @@ onMounted(() =>{
                         </div>
                       </div>
                     </div>
-                    <div class=" pt-2" style="border-top: 1px solid black my-4"> 
+                    <div class=" py-2 px-4" style="border-top: 1px solid black my-4"> 
                       <div class="flex">
-                        <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionwinner" text-color="white" icon="cached" @click="openModal('status', winner.id)" >
+                        <q-btn round :color="'blue-10'" size="0.72rem" class="mx-1 button__actionwinner" text-color="white" icon="edit" @click="openModal('edit', winner.id)" >
                           <q-tooltip class="bg-black text-white text-body2" :offset="[10, 10]">
-                            Actualizar estado
+                            Editar
                           </q-tooltip>
                         </q-btn> 
                         <q-btn round color="negative" size="0.72rem" class="ml-1 button__actionwinner" text-color="white" icon="delete" @click="openModal('delete', winner.id)" >
@@ -146,12 +145,12 @@ onMounted(() =>{
         />
       </div>
     </template>
-    <createWinnersModal :dialog="(showModal == 'create')" @closeModal="closeModal()"  @updateList="getWinner()"/>
+    <createWinnerModal :dialog="(showModal == 'create')" @closeModal="closeModal()"  @updateList="getWinner()"/>
     
     <template v-if="Object.values(selectedWinner).length > 0">
      
-      <updatewinnerModal :dialog="(showModal == 'update')"  :winner="selectedWinner"  @closeModal="closeModal()" @updateList="getWinner()" />
-      <deletewinnerModal :dialog="(showModal == 'delete')"  :winner="selectedWinner"  @closeModal="closeModal()" @updateList="getWinner()" />
+      <updateWinnerModal :dialog="(showModal == 'edit')"  :winner="selectedWinner"  @closeModal="closeModal()" @updateList="getWinner()" />
+      <deleteWinnerModal :dialog="(showModal == 'delete')"  :winner="selectedWinner"  @closeModal="closeModal()" @updateList="getWinner()" />
     </template>
   </div>
 </template>

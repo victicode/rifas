@@ -20,9 +20,8 @@ import { useWinnerStore } from '@/services/store/winner.store';
 
   const rifasOption = ref([])
   const rewardsOption = ref([])
-  const previewImg = ref(null)
 
-
+  const step = ref(0) 
   const formInputs = ref({
     rifa: {
       title:'Selecciona la rifa',
@@ -34,19 +33,24 @@ import { useWinnerStore } from '@/services/store/winner.store';
     },
     winnerNumber: null,
     photoWinner: null,
+    linkIg: '',
+    linkTt: '',
   })
 
   const onFileChange = () => {
     const file = document.getElementById('winner_photo').files[0]
     formInputs.value.photoWinner = file
-    
-    return previewImg.value= URL.createObjectURL(file)
+    return 
   }
 
   const loadingShow = (state) => {
     loading.value = state;
   }
   const hideModal = () => {
+    if(step.value == 1 ) {
+      step.value--
+      return
+    }
     cleanForm()
     emit('closeModal')
   }
@@ -71,6 +75,8 @@ import { useWinnerStore } from '@/services/store/winner.store';
       },
       winnerNumber: null,
       photoWinner: null,
+      linkIg: '',
+      linkTt: '',
 
     }
   }
@@ -85,16 +91,42 @@ import { useWinnerStore } from '@/services/store/winner.store';
   }
 
   const updateList = () => {
-    hideModal()
+    step.value = 0
+    cleanForm()
+    emit('closeModal')
     emit('updateList')
   }
+  const validateForm = () => {
+    if(formInputs.value.winnerNumber == null ){
+      showNotify('negative', 'Debes ingresar el número ganador')
+      return false
+    }
+    if(formInputs.value.winnerNumber.join('').length < 4){
+      showNotify('negative', 'Número no valido')
+      return false
+    }
+    // if(formInputs.value.photoWinner == null ){
+    //   showNotify('negative', 'Debes subir la foto de la entrega')
+    //   return false
+    // }
+    
+    return true
+  }
   const createWinner = () => {
+    if(!validateForm()) return 
+    if(step.value == 0) {
+      
+      step.value++
+      return
+    }  
     loadingShow(true)
     const formData = new FormData()
     formData.append('rifa', (formInputs.value.rifa.id));
     formData.append('reward', formInputs.value.reward.id)
     formData.append('ticket', formInputs.value.winnerNumber.join(''))
     formData.append('photo', formInputs.value.photoWinner)
+    formData.append('link_ig', formInputs.value.linkIg)
+    formData.append('link_tt', formInputs.value.linkTt)
 
 
     winnerStore.createWinner(formData)
@@ -128,6 +160,8 @@ import { useWinnerStore } from '@/services/store/winner.store';
 
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
+    getRifas()
+
   });
     
   onMounted(() => {
@@ -154,72 +188,101 @@ import { useWinnerStore } from '@/services/store/winner.store';
             <section class="content__modalSectionRifa md:mt-5 mt-0">
               <q-card-section class="q-pt-none q-px-sm ">
                 <div class="px-2 ">
-                  <div class="row mt-1 ">
-                    
-                    <div class="col-12  md:pl-2 mb-3 md:mt-0">
-                      <q-select
-                        v-model="formInputs.rifa"
-                        label="Selecciona la rifa"
-                        option-value="id"
-                        option-label="title"
-                        behavior="menu"
-                        color="primary"
-                        class="createOrderForm__input"
-                        @update:model-value="setRewardsOption"
-                        :options="rifasOption"
-                        :rules="[ (val, rules) => val.id != 0 || 'Debes seleccionar una rifa' ]"
-                      />
-                    </div>
-                    <div class="col-12  md:pl-2 mb-3 md:mt-0" v-if=" formInputs.rifa.id > 0">
-                      <q-select
-                        v-model="formInputs.reward"
-                        label="Selecciona el premio"
-                        option-value="id"
-                        option-label="title"
-                        behavior="menu"
-                        color="primary"
-                        class="createOrderForm__input"
-                        :options="rewardsOption"
-                        :rules="[ (val, rules) => val.id != 0 || 'Debes seleccionar una rifa' ]"
-                      >
-                        <template v-slot:option="scope">
-                          <q-item v-bind="scope.itemProps">
-                            <q-item-section>
-                              <q-item-label>{{ scope.opt.title }}</q-item-label>
-                              <q-item-label caption v-if="scope.opt.id!=0" class="py-2 ">
-                                <div class="text-gray-500">
-                                  Hora: {{ moment( (moment().format("YYYY-MM-DD") +' '+ scope.opt.reward_time)).format("hh:mm:ss a") }}
-                                </div>
-                              </q-item-label>
-                            </q-item-section>
-                          </q-item>
-                        </template>
-                      </q-select>
-                    </div>
-                    <div class="col-12  md:pl-2 mb-3 md:mt-0 " v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0">
-                      <div class="pb-5 text-center text-subtitle1">
-                        Ingresa el número del ticket ganador
-                      </div>
-                      <div class="flex flex-center w-full ">
-                        <div style="border:1px solid black; border-radius: 1rem" class=" p-4">
-                          <n-input-otp
-                            v-model:value="formInputs.winnerNumber"
-                            length="4"
-                            placeholder="0"
-                            size="large"
-                            gap="1rem"
+                  <transition name="fade">
+                    <template v-if="step==0">
+                      <div class="row mt-1 ">
+                        
+                        <div class="col-12  md:pl-2 mb-3 md:mt-0">
+                          <q-select
+                            v-model="formInputs.rifa"
+                            label="Selecciona la rifa"
+                            option-value="id"
+                            option-label="title"
+                            behavior="menu"
+                            color="primary"
+                            class="createWinnerForm__input"
+                            @update:model-value="setRewardsOption"
+                            :options="rifasOption"
+                            :rules="[ (val, rules) => val.id != 0 || 'Debes seleccionar una rifa' ]"
                           />
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-12 flex justify-center"  v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0"> 
-                      <label for="winner_photo"  >
-                        <div class="py-2" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': previewImg}">
-                         {{ !previewImg ? 'Agregar foto de la entrega' :'Foto agregada con exito ✅' }} 
+                        <div class="col-12  md:pl-2 mb-3 md:mt-0" v-if=" formInputs.rifa.id > 0">
+                          <q-select
+                            v-model="formInputs.reward"
+                            label="Selecciona el premio"
+                            option-value="id"
+                            option-label="title"
+                            behavior="menu"
+                            color="primary"
+                            class="createWinnerForm__input"
+                            :options="rewardsOption"
+                            :rules="[ (val, rules) => val.id != 0 || 'Debes seleccionar una rifa' ]"
+                          >
+                            <template v-slot:option="scope">
+                              <q-item v-bind="scope.itemProps" v-if="scope.opt.winner == null">
+                                <q-item-section>
+                                  <q-item-label>{{ scope.opt.title }}</q-item-label>
+                                  <q-item-label caption v-if="scope.opt.id!=0" class="py-2 ">
+                                    <div class="text-gray-500">
+                                      Hora: {{ moment( (moment().format("YYYY-MM-DD") +' '+ scope.opt.reward_time)).format("hh:mm:ss a") }}
+                                    </div>
+                                  </q-item-label>
+                                </q-item-section>
+                              </q-item>
+                            </template>
+                          </q-select>
                         </div>
-                      </label>
-                    </div>
-                  </div>
+                        <div class="col-12  md:pl-2 mb-3 md:mt-0 " v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0">
+                          <div class="pb-5 text-center text-subtitle1">
+                            Ingresa el número del ticket ganador
+                          </div>
+                          <div class="flex flex-center w-full ">
+                            <div style="border:1px solid black; border-radius: 1rem" class=" p-4">
+                              <n-input-otp
+                                v-model:value="formInputs.winnerNumber"
+                                length="4"
+                                placeholder="0"
+                                size="large"
+                                gap="1rem"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 flex justify-center"  v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0"> 
+                          <label for="winner_photo"  >
+                            <div class="py-2" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': formInputs.photoWinner}">
+                            {{ !formInputs.photoWinner ? 'Agregar foto de la entrega' :'Foto agregada con exito ✅' }} 
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                    </template>
+                  </transition>
+                  <transition name="fade">
+                    <template v-if="step==1">
+                      <div class="row mt-1 ">
+                        
+                        <div class="col-12  md:pl-2 mb-3 md:mt-2">
+                          <q-input
+                            v-model="formInputs.linkIg"
+                            label="Link de publicación de Instagram"
+                            class=" createWinnerForm__input"
+                          />
+                        </div>
+                        <div class="col-12  md:pl-2 mb-3 md:mt-2" v-if=" formInputs.rifa.id > 0">
+                           
+                          <q-input
+                            v-model="formInputs.linkTt"
+                            label="Link de publicación de Telegram"
+                            class=" createWinnerForm__input"
+                          />
+                        </div>
+
+                      </div>
+
+                    </template>
+                  </transition>
                 </div>
               </q-card-section>
             </section>
@@ -303,7 +366,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
     color: goldenrod!important;
   }
 }
-.createOrderForm__input {
+.createWinnerForm__input {
   &.q-field--standard.q-field--readonly .q-field__control:before {
     
     border-bottom-style:solid!important
@@ -353,6 +416,41 @@ import { useWinnerStore } from '@/services/store/winner.store';
   height: 14rem; width: 11rem; background: #111; border-radius: 1rem;
   &:hover{
     background: #484848;
+  }
+}
+.createWinnerForm__input {
+  &.q-field--standard.q-field--readonly .q-field__control:before {
+    
+    border-bottom-style:solid!important
+
+  }
+  &.quantity input{
+    font-size: 1.5rem;
+    text-align: center;
+    
+  }
+  & input{
+    padding-bottom: 0px!important;
+  }
+  & .q-field__label{
+    transform: translateY(11%)
+  }
+  &.q-field--focused .q-field__label, &.q-field--float .q-field__label{
+    z-index: 100;
+    background: white!important;
+    font-weight: 600;
+    width: 100%;
+    padding: 0px 10px;
+    font-size: 0.8rem;
+    transform: translateY(-110%) translateX(-0.5rem) !important;
+  }
+  
+  & .q-field__native{
+    padding-top: 15px!important;
+    font-weight: 600;
+  }
+  & .q-field__append{
+    transform: translateY(5%)
   }
 }
 .overflowWinner__img{

@@ -63,13 +63,13 @@ export const useWinnerStore = defineStore('Winners', {
       })
 
     },
-    async updatePayMethod(data) {
+    async updateWinner(data) {
       return await new Promise((resolve, reject) => {
         if (!ApiService.getToken()) {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.post('/api/methods_pay/methods/u/'+data.id, data.data)
+        ApiService.post('/api/winners/u/'+data.id, data.data)
         .then(({data}) => {
           if(data.code !=200) throw data;
           
@@ -82,13 +82,14 @@ export const useWinnerStore = defineStore('Winners', {
       })
 
     },
-    async deleteMethodData(id) {
+
+    async deleteWinner(rifa) {
       return await new Promise((resolve, reject) => {
         if (!ApiService.getToken()) {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.post('/api/methods_pay/data/d/'+id)
+        ApiService.post('/api/winners/d/'+rifa)
         .then(({data}) => {
           if(data.code !=200) throw data;
           

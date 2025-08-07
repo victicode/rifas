@@ -23,7 +23,7 @@ class RifaController extends Controller
         return $this->returnSuccess(200, $rifas);
     }
     public function getAllRifas(){
-         $rifas = Rifa::with(['rewards', 'tickets'])->withCount('tickets')->get();
+         $rifas = Rifa::with(['rewards.winner', 'tickets'])->withCount('tickets')->get();
         
         return $this->returnSuccess(200, $rifas);
     }
@@ -214,6 +214,7 @@ class RifaController extends Controller
                 'title'     => $rewards[$i]['title'],
                 'reward_time'      => $rewards[$i]['reward_time'],
                 'rifa_id'   => $id,
+                'pole' => $i+1,
             ]);
         }
 
