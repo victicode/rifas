@@ -250,7 +250,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
                         </div>
                         <div class="col-12 flex justify-center"  v-if=" formInputs.rifa.id > 0 && formInputs.reward.id > 0"> 
                           <label for="winner_photo"  >
-                            <div class="py-2" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': formInputs.photoWinner}">
+                            <div class="py-2 text-black" style=" text-decoration: underline; cursor:pointer;" :class="{'text-positive': formInputs.photoWinner}">
                             {{ !formInputs.photoWinner ? 'Agregar foto de la entrega' :'Foto agregada con exito ✅' }} 
                             </div>
                           </label>

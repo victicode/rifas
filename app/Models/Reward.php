@@ -17,7 +17,7 @@ class Reward extends Model
     }
     public function winner(): HasOne
     {
-        return $this->hasOne(winner::class, "reward_id");
+        return $this->hasOne(Winner::class, "reward_id");
     }
 
 
