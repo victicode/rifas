@@ -15,8 +15,8 @@ const showMovil = () => {
 
 onMounted(() =>{
   emitter.on('showSidebarClient', showMovil) 
-
 })
+
 </script>
 <template>
   <aside class="h-full md:w-1/6 w-5/6 aside__menuClient q-px-md blockx md:hiddenx" :class="showXs ? 'blockW' : 'hiddenW'">
