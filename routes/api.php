@@ -79,11 +79,10 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/methods', [WinnerController::class, 'getPayMethods']);
         Route::post('/u/{id}', [WinnerController::class, 'updateWinner']);
         Route::post('/d/{id}', [WinnerController::class, 'deleteWinner']);
-
-
-
     });
-    
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/sellByDay', [OrderController::class, 'reportOfSells']);
+    });
 
     Route::prefix('configuration')->name('configuration.')->group(function () {
 

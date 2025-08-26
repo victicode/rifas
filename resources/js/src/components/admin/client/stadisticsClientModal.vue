@@ -1,9 +1,9 @@
 <script setup>
-import { Notify } from 'quasar'
+
 import { ref, watch} from 'vue';
 import { useClientStore } from '@/services/store/client.store';
-import whatsapp from '@/assets/images/logo/WhatsApp2.webp'
 import utils from '@/utils/numberUtils.js';
+import moment from 'moment';
 
   const props = defineProps({
     dialog: Boolean,
@@ -17,32 +17,12 @@ import utils from '@/utils/numberUtils.js';
   const clientStore = useClientStore()
   const numberFormat = utils.numberFormat
 
-  const loadingShow = (state) => {
-    loading.value = state;
-  }
   
   const hideModal = () => {
     emit('closeModal')
   }
-  const updateList = () => {
-    emit('updateList')
-    hideModal()
-  }
 
-  const showNotify = (type,text) => {
-    Notify.create({
-      color:type,
-      message: text,
-      timeout:2000
-    })
-  }
 
-  const formatPhone = () => {
-    let string = client.value.phone
-    let modifiedSentence = string.replace('-', '')
-
-    return '58'+modifiedSentence.substring(1)
-  }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
   });
@@ -50,7 +30,12 @@ import utils from '@/utils/numberUtils.js';
   watch(() => props.client, (newValue) => {
     client.value = newValue
   });
+const formatPhone = () => {
+  let string = client.value.phone
+  let modifiedSentence = string.replace('-', '')
 
+  return '58'+modifiedSentence.substring(1)
+}
 
 </script>
 <template>
@@ -63,46 +48,63 @@ import utils from '@/utils/numberUtils.js';
           <div>
             <q-card-section class="">
               <div class="text-h6 text-center text-black">
-                Datos de cliente
+                Estadistica de cliente
               </div>
             </q-card-section>
+            <section class="row">
+               <div class="col-6 text-subtitle2 text-bold px-4 py-2" >
+                  Cliente: <br>
+                  {{ client.name }}
+                </div>
+                <div class="col-6 text-subtitle2 text-bold text-end px-4 py-2">
+                  Contacto: <br>
+                  {{client.phone}}
+                </div>
+            </section>
             <section class="content__modalSectionRifa md:mt-5 mt-5 px-2">
-              <div class="row" style="border: 1px solid lightgray; border-radius: 0.5rem;">
+              <div class="row items-center" style="border: 1px solid lightgray; border-radius: 0.5rem;">
                 <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="border-bottom: 1px solid lightgray; border-right: 1px solid lightgray;">
-                   Nombre:
+                  Total de rifas  jugadas
                 </div>
                 <div class="col-6 text-subtitle2 text-bold text-end px-4 py-6" style="border-bottom: 1px solid lightgray; ">
-                   {{client.name}}
+                   {{client.rifasParticipate}} {{ client.rifasParticipate > 1 ? 'rifas' : 'rifa' }}
                 </div>
                 <div class="col-6 text-subtitle2 text-bold  px-4 py-6" style="border-bottom: 1px solid lightgray; border-right: 1px solid lightgray;">
-                  CI:
+                  Total de pagos:
                 </div>
                 <div class="col-6 text-subtitle2 text-bold text-end  px-4 py-6" style="border-bottom: 1px solid lightgray; ">
-                 {{ numberFormat(client.ci) }}
+                 {{ client.orders.length }} pagos
                 </div>
                 <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="border-bottom: 1px solid lightgray; border-right: 1px solid lightgray;">
-                  Correo:
+                  Total de tickets :
                 </div>
                 <div class="col-6 text-subtitle2 text-bold text-end px-4 py-6" style="border-bottom: 1px solid lightgray; ">
-                  {{ client.email }}
+                  {{ client.totalTicketsBuy }} tickets
+                </div>
+                <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="border-bottom: 1px solid lightgray; border-right: 1px solid lightgray;">
+                  Total de ticket ganador:
+                </div>
+                <div class="col-6 text-subtitle2 text-bold text-end px-4 py-6" style="border-bottom: 1px solid lightgray; ">
+                   {{ client.totalWin.length }} {{ client.totalWin.length > 1 ? 'veces' : 'vez' }}
+                </div>
+                <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="border-bottom: 1px solid lightgray; border-right: 1px solid lightgray;">
+                  Mayor compra
+                </div>
+                <div class="col-6 text-subtitle2 text-bold text-end px-4 py-6" style="border-bottom: 1px solid lightgray; ">
+                   {{ client.mostQuantity }} tickets
                 </div>
                 <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="border-right: 1px solid lightgray;">
-                  Contacto:
+                  Última rifa participada
                 </div>
-                <div class="col-6 text-subtitle2 text-bold px-4 py-6" style="">
-                  <a 
-                    class="flex items-center justify-end" 
-                    target="_blank" 
-                    :href="'https://api.whatsapp.com/send?phone='+formatPhone()+'&text=Felicidades%2C%20eres%20el%20ganador!!!!'" >
-                    <div class="text-decoration-underline" style="text-decoration:underline">
-                      {{client.phone}}
-                    </div>
-
-                    <div class="contactWhatsapp ml-2 mb-1">
-                      <img :src="whatsapp" style="width:65%;" class="" alt="">
-                    </div>
-                  </a>
+                <div class="col-6 text-subtitle2 text-bold text-end px-4 " style="">
+                   {{ client.orders[client.orders.length-1] ? client.orders[client.orders.length-1].rifa.title : '---' }} <br>
+                   {{
+                    client.orders[client.orders.length-1] 
+                    ? moment(client.orders[client.orders.length-1].created_at).format('DD/MM/YYYY') 
+                    : '----'
+                  }}
                 </div>
+                
 
               </div>
             </section>

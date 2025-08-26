@@ -17,11 +17,9 @@ class WinnerController extends Controller
     public function storeWinner(Request $request){
 
         $ticket = Ticket::where("rifa_id", $request->rifa)->where('number', $request->ticket)->first();
-
-        $existWinner = Winner::where("rifa_id", $request->rifa)->where("ticket_id", $ticket->id)->first();
-
-        if($existWinner) return $this->returnFail(404, 'El número ya resulto ganador en esta rifa');
         if(!$ticket) return $this->returnFail(404, 'Número no comprado');
+        $existWinner = Winner::where("rifa_id", $request->rifa)->where("ticket_id", $ticket->id)->first();
+        if($existWinner) return $this->returnFail(404, 'El número ya resulto ganador en esta rifa');
         $photo = "";
         $winner = Winner::create([
             'reward_id' => $request->reward,

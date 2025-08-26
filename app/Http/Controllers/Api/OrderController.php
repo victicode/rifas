@@ -12,7 +12,7 @@ use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Exception;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -145,6 +145,18 @@ class OrderController extends Controller
             
         }
         return $this->returnSuccess(200, [$order->load('tickets')]);
+    }
+    public function reportOfSells(Request $request){
+        $startDate = Carbon::parse($request->since ?? date("Y-m-d").' 00:00:00'  )->startOfDay();
+        $endDate = Carbon::parse($request->until ?? date("Y-m-d").' 23:59:59' )->endOfDay();
+
+
+        $orders = Order::where('status', 2)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->with(["methodPay.coin", "client", "rifa.configuration", "tickets"])->withCount("tickets")
+        ->paginate(50);
+
+       return $this->returnSuccess(200, $orders);
     }
     private function deleteTicket($id){
         Ticket::where('order_id', $id)->delete();

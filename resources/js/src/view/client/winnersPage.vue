@@ -31,6 +31,12 @@ const getWinner = () => {
     }, 1000);
   })
 }
+const ticketFormat = (ticket) => {
+  let max = '0000'
+  let ticketFormat = ticket+''
+  return max.substring(0, (4 - ticketFormat.length))+ticketFormat
+
+}
 const closeModal = () => {
   showModal.value = ''
 }
@@ -39,7 +45,7 @@ onMounted(() =>{
 })
 </script>
 <template>
-  <div class="py-10">
+  <div class="py-10" style="height: -webkit-fill-available;">
     <div class="text-center text-h5 mt-0 text-black text-bold">
       Nuestros ganadores 🤩
     </div>
@@ -50,12 +56,12 @@ onMounted(() =>{
       <template v-if="winners.length > 0">
         <div class="row">
           <!-- Primer premio -->
-          <div class="col-md-3 flex flex-center my-2" v-for="winner in winners" :key="winner.id"> 
+          <div class="col-md-3 col-12 flex flex-center my-2" v-for="winner in winners" :key="winner.id"> 
     
             <div class="winner-card premio-1 pt-10 ">
-                <div class="medal ">{{winner.pole}}°</div>
+                <div class="medal ">{{winner.reward.pole}}°</div>
                 <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
-                <div class="numero-ganador">#0428</div>
+                <div class="numero-ganador">{{ticketFormat(winner.ticket.number) }}</div>
                 <div class="descripcion">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
                 <div class="ganador-info">
                   <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
@@ -65,12 +71,20 @@ onMounted(() =>{
           </div>
         </div>
       </template>
-    </div>
-    <div v-else style="height: 50vh;">
-      <div class="text-center text-black text-h6 py-16 text-bold">
-        Se nuestro primer ganador, juega ahora!
+      <div v-else>
+        <div class="text-center text-black text-h6 py-16 text-bold">
+          Se nuestro primer ganador, juega ahora!
+        </div>
       </div>
     </div>
+    <template v-else>
+      <div class="flex flex-center mt-24">
+        <q-spinner-tail
+          color="primary"
+          size="5em"
+        />
+      </div>
+    </template>
     <confeti  :duration="5000" 
       :particleCount="200"
       :wind="true" 

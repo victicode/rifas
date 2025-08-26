@@ -108,6 +108,23 @@ export const useOrderStore = defineStore('Order', {
       })
 
     },
+    async reportSellsByDay(request){
+      return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
+        ApiService.get('/api/reports/sellByDay?page='+request.page+'&'+'since='+request.since+'&until='+request.until+'&')
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+          
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+      })
+    }
     
   },
 })

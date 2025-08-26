@@ -171,6 +171,13 @@ const routes = [
           title: 'Top compras'
         }
       },
+      {
+        path:'/admin/reports/buy-by-day',
+        component: () => import('@/view/admin/reports/sellsByDay.vue'),
+        meta:{
+          title: 'Compras en el dia'
+        }
+      },
     ]
   },
 ]

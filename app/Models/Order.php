@@ -52,4 +52,8 @@ class Order extends Model
     {
         return $this->hasMany(Ticket::class, 'order_id');
     }
+    public function ticketsWinner(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'order_id')->has('winner');
+    }
 }

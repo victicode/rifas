@@ -29,8 +29,8 @@ const goTo = (url) => {
           </div>
         </div>
         <div class="col-md-2 col-6 mb-6 md:mt-0">
-          <div @click="goTo('')">
-            <div class="buttons_report notD q-pa-sm flex items-center justify-center">
+          <div @click="goTo('/admin/reports/buy-by-day')">
+            <div class="buttons_report q-pa-sm flex items-center justify-center">
               <q-icon name="paid" color="white" size="2rem"/>
             </div>
             <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Ventas del día</div>

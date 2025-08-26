@@ -132,7 +132,7 @@ onMounted(() =>{
 @media (max-width: 768px){
  .aside__menu{
   position: absolute;
-  z-index: 2;
+  z-index: 10;
  }
 }
 

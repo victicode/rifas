@@ -86,8 +86,8 @@ import { useClientStore } from '@/services/store/client.store';
                     ¿Seguro que deseas borrar a?
                   </div>
                   <div class="text-center mt-6">
-                    <q-chip color="black" text-color="white"  >
-                      <div class="px-2 md:px-1">
+                    <q-chip color="black" text-color="white" size="xl" class=""  >
+                      <div class="px-2 md:px-1 text-h5 ">
                         {{ client.name }}
                       </div>
                     </q-chip>

@@ -51,7 +51,7 @@ import footerClient from '@/components/layouts/footerClient.vue';
   height: 13vh;
 }
 .body-height{
-  height: 86vh;
+  height: 87vh;
 }
 }
 </style>
