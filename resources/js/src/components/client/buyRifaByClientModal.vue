@@ -481,29 +481,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             </div>
                           </div>
                         </div>
-                        <div class="row mt-5 ">
-                          <div class=" col-12 pb-1 flex justify-between my-2 "  >
-                            <div class="text-subtitle2 text-black">
-                              Tickets
-                            </div>
-                            <div class="text-subtitle2 text-black">
-                              x {{ numberFormat( formInputs.quantity) }}
-                            </div>
-                          </div>
-                          <div class=" col-12 pb-1 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
-                            <div class="text-subtitle2 text-black">
-                              Monto cancelado
-                            </div>
-                            <div class="text-subtitle2 text-black">
-                              {{ 
-                                formInputs.method_pay.coin_id == 1
-                                ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
-                                : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
-                              }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mt-8 pt-8 md:pt-3 md:mt-6" style="border-top:6px dotted #252525">
+                        <div class="row mt-8 pb-6 md:pt-3 md:mt-6" style="border-bottom:6px dotted #252525">
                           <div class="col-12 mb-10 md:mb-6">
                             <q-input
                               v-model="formInputs.payReference"
@@ -529,6 +507,29 @@ import bankLabels from '@/utils/bankLabelUtils';
                             </label>
                           </div>
                         </div>
+                        <div class="row mt-7 ">
+                          <div class=" col-12 pb-1 flex justify-between my-2 "  >
+                            <div class="text-subtitle2 text-black">
+                              Tickets
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              x {{ numberFormat( formInputs.quantity) }}
+                            </div>
+                          </div>
+                          <div class=" col-12 pb-1 flex justify-between my-2 " style="border-bottom: 1px solid darkgray;" >
+                            <div class="text-subtitle2 text-black">
+                              Monto cancelado
+                            </div>
+                            <div class="text-subtitle2 text-black">
+                              {{ 
+                                formInputs.method_pay.coin_id == 1
+                                ? `Bs. ${numberFormat((rifa.configuration.price * formInputs.quantity))},00 ` 
+                                : `$  ${((rifa.configuration.price_usd * formInputs.quantity).toFixed(2)+'').replace('.', ',')}`
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        
                       </div>
                     </div>
                   </template>

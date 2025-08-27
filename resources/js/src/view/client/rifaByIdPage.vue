@@ -44,7 +44,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="md:px-8 px-5 pb-5" style="height: 73.8dvh;">
+  <div class="md:px-8 px-5 pb-5" style="">
     <div v-if="loading">
       <template v-if="Object.values(rifa).length > 0 " >
         <div class="row nd:pt-6 pt-3">

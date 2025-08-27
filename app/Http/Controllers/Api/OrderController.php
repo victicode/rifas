@@ -11,16 +11,17 @@ use App\Models\Rifa;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Events\OrderStatusUpdated;
+use App\Models\Notification;
+use Exception;
 
 class OrderController extends Controller
 {
     //
     public function getOrderPagination(Request $request){
 
-        
         $rifas = Order::with(["methodPay.coin", "client", "rifa.configuration", "tickets"])->withCount("tickets")->orderBy("created_at", "desc");
         
         if($request->searchType == 1){
@@ -43,6 +44,8 @@ class OrderController extends Controller
         {
          return $this->returnFail(403, ['availableTickets' => $getAvailableTickets, 'msg' =>'Cantidad solicitada supera los ticket disponible']);
         }
+
+
         DB::transaction(function() use($request){
             $rifa = Rifa::query()
             ->withCount('tickets')
@@ -98,8 +101,11 @@ class OrderController extends Controller
             $this->sendMail($order->id, "orderComplete");
         }else{
             $this->sendMail($order->id, "client");
+            
+            $this->sendNotification($this->formatNotification($order));
         }
 
+        
         return $this->returnSuccess(200, ["order" => $order]);
 
 
@@ -296,4 +302,28 @@ class OrderController extends Controller
         return $avaibleTickets;
 
     }
+    private function formatNotification($order){
+        $title = 'Orden #'.$order->number.' pendiente de verificación';
+        $content = 'La orden #'.$order->number.'fue pagada, revisa el pago para liberar los ticket';
+        $order = $order->id;
+
+        return [
+            'title'     => $title,
+            'content'   => $content,
+            'order'     => $order
+        ];
+    }
+    private function sendNotification($data){
+        Notification::create([
+            'title'         => $data['title'],
+            'content'       => $data['content'],
+            'type'          => 1,
+            'order_id'      => $data['order'],
+        ]);
+
+
+       event(new OrderStatusUpdated());
+
+    }
+    
 }

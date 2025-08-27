@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RifaController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\WinnerController;
 use App\Http\Controllers\Api\PayMethodController;
 
@@ -79,6 +80,12 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/methods', [WinnerController::class, 'getPayMethods']);
         Route::post('/u/{id}', [WinnerController::class, 'updateWinner']);
         Route::post('/d/{id}', [WinnerController::class, 'deleteWinner']);
+    });
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [NotificationController::class, 'getNotification']);
+        // Route::post('/', [WinnerController::class, 'storeWinner']);
+
     });
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/sellByDay', [OrderController::class, 'reportOfSells']);

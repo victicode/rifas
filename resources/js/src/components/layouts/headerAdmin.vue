@@ -3,13 +3,11 @@ import { useAuthStore } from '@/services/store/auth.services';
 import moment from 'moment';
 import { ref,onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { useEcho } from "@laravel/echo-vue";
-
+import notificationModule from '@/components/layouts/notificationModule.vue';
 const router = useRouter()
 const clock = ref(moment().format('DD/MM/YYYY, h:mm:ss a'))
 const emitter = inject('emitter')
 const loading = ref(false)
-
 
 const showSidebar = () => {
   emitter.emit('showSidebar')
@@ -27,19 +25,9 @@ const logout = () => {
 }
 
 onMounted(() => {
-
-
   setInterval(() => {
     clock.value = moment().format('DD/MM/YYYY, h:mm:ss a')
   }, 1000);
-
-  useEcho(
-    'orderStatusUpdated',
-    'OrderStatusUpdated',
-    (e) => {
-      console.log(e.order);
-    },
-);
 })
 
 </script>
@@ -56,7 +44,7 @@ onMounted(() => {
             {{ clock }}
           </div>
           <q-btn flat round color="white" class="mx-1" text-color="white" icon="settings" />
-          <q-btn flat round color="white" class="mx-1" text-color="white" icon="notifications" />
+          <notificationModule />
           <q-btn outline style="color: white;" :loading="loading" class="mx-1" label="Cerrar Sesion"  @click="logout()"/>
         </div>
       </div> 
