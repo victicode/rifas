@@ -21,9 +21,9 @@ const goTo = (url) => {
     <div class="mt-12 md:mt-4 ">
       <div class="row items-center md:justify-start  methods__container w-100 md:mt-10">
         <div class="col-md-2 col-6 mb-6 md:mt-0">
-          <div @click="goTo('/admin/reports/tickets-buy')">
+          <div @click="goTo('')">
             <div class="buttons_report q-pa-sm flex items-center justify-center">
-              <q-icon name="account_circle" color="white" size="2rem"/>
+              <q-icon name="build_circle" color="white" size="2rem"/>
             </div>
             <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Configuracion de usuario</div>
           </div>
@@ -38,10 +38,10 @@ const goTo = (url) => {
         </div>
         <div class="col-md-2 col-6 mb-6 md:mt-0">
           <div @click="goTo('')">
-            <div class="buttons_report notD q-pa-sm flex items-center justify-center">
-              <q-icon name="stacked_bar_chart" color="white" size="2rem"/>
+            <div class="buttons_report q-pa-sm flex items-center justify-center">
+              <q-icon name="account_circle" color="white" size="2rem"/>
             </div>
-            <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Estadisticas de Rifa</div>
+            <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Crear Usuarios</div>
           </div>
         </div>
       </div>

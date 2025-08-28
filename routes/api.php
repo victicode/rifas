@@ -84,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::get('/', [NotificationController::class, 'getNotification']);
+        Route::get('/view-all', [NotificationController::class, 'viewAllnotification']);
         // Route::post('/', [WinnerController::class, 'storeWinner']);
 
     });

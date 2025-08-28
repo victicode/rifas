@@ -1,11 +1,10 @@
 <script setup>
-import moment from 'moment';
-import { ref,onMounted, inject } from 'vue';
+
+import { ref, onMounted} from 'vue';
 import { useNotificationStore } from '@/services/store/notification.store';
 import notificationSound from '@/assets/audio/alert4.mp3'
 import notificationModal from '@/components/layouts/notificationModal.vue';
-const clock = ref(moment().format('DD/MM/YYYY, h:mm:ss a'))
-const emitter = inject('emitter')
+
 const page = ref(1)
 const notifications = ref([]) 
 const countNotView = ref(0)
@@ -18,24 +17,32 @@ const getNotifications = () => {
   
   useNotificationStore().getNotification(query)
   .then(({data}) => {
-    console.log(data)
+    // console.log(data)
     notifications.value = data.notifications.data
     countNotView.value = data.countNotView
   })
 }
+const viewAll = () => {
+
+  
+  countNotView.value = 0
+  useNotificationStore().viewAllnotification()
+  .then(({data}) => {
+    getNotifications()
+  })
+}
+const closeModal = () => {
+  viewAll()
+  dialog.value=false
+}
 const dialog = ref(false)
 onMounted(() => {
   getNotifications()
-  setInterval(() => {
-    clock.value = moment().format('DD/MM/YYYY, h:mm:ss a')
-  }, 1000);
-
   window.Echo
   .channel('orderStatusUpdated')
   .listen('OrderStatusUpdated', async () => {
     getNotifications()
     sound.play()
-    // console.log('dsdddsds')
   })
 })
 
@@ -48,9 +55,9 @@ onMounted(() => {
       <q-btn flat round color="white" class="mx-1" text-color="white" icon="notifications" @click="dialog=true"  />
       <div class="notificationBadge flex flex-center" v-if="countNotView > 0">{{ countNotView }}</div>
     </div>
-    <template v-if="notifications.length > 0">
-      <notificationModal :dialog="dialog" :notifications="notifications"  @closeModal="dialog=false" />
-    </template>
+
+    <notificationModal :dialog="dialog" :notifications="notifications"  @closeModal=" closeModal()" />
+
   </div>
 </template>
 <style lang="scss">

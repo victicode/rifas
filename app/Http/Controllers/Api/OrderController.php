@@ -304,7 +304,7 @@ class OrderController extends Controller
     }
     private function formatNotification($order){
         $title = 'Orden #'.$order->number.' pendiente de verificación';
-        $content = 'La orden #'.$order->number.'fue pagada, revisa el pago para liberar los ticket';
+        $content = 'La orden #'.$order->number.' fue pagada, revisa el pago para liberar los tickets';
         $order = $order->id;
 
         return [

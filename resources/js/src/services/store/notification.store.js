@@ -25,13 +25,13 @@ export const useNotificationStore = defineStore('Notification', {
       });
 
     },
-    async viewAllnotification(data) {
+    async viewAllnotification() {
       return await new Promise((resolve, reject) => {
         if (!ApiService.getToken()) {
           throw '';
         }
         ApiService.setHeader();
-        ApiService.post('/api/winners/u/'+data.id, data.data)
+        ApiService.get('/api/notifications/view-all')
         .then(({data}) => {
           if(data.code !=200) throw data;
           

@@ -25,9 +25,11 @@ const queryDate = ref({
   page:1
 })
 const orders = ref([])
-
+const notSearch = ref(false)
 const getReportTicketBuyByDay= () => {
-  loading.value = true
+  loading.value = 
+  ready.value = false
+
   const dataFormatted = {
     since: moment(queryDate.value.since).format('YYYY-MM-DD'),
     until: moment(queryDate.value.until).format('YYYY-MM-DD'),
@@ -36,11 +38,16 @@ const getReportTicketBuyByDay= () => {
   orderStore.reportSellsByDay(dataFormatted)
   .then(({data}) => {
     loading.value = false
+    ready.value = true
+    notSearch.value = true
+
     orders.value = data.data
     lastPage.value = data.last_page
   })
   .catch(() => {
     loading.value = false
+    ready.value = true
+
   })
   
 }
@@ -98,19 +105,40 @@ const optionsFn = (date) =>{
               </template>
             </q-input>
           </div>
-          <div class="col-12 col-md-2 md:pl-4 pt-4">
+          <div class="col-12 col-md-1 md:px-2 md:py-0 py-2">
             <q-btn type="submit" unelevated class="searchButton" color="primary" :loading="loading">
               <div class="w-full py-1">
                 Buscar
               </div>
             </q-btn>
           </div>
+          <div class="col-12 col-md-1 md:pb-0 pb-2" v-if="orders.length > 0">
+            <!-- <q-btn type="submit" unelevated class="searchButton" color="red-8" :loading="loading">
+              <div class="w-full py-1">
+                Exportar
+              </div>
+            </q-btn> -->
+          </div>
         </div>
       </q-form>
       <template v-if="ready">
-        <div v-if="orders.length > 0">
-          <div>
-            
+        <div v-if="notSearch">
+          <div v-if="orders.length > 0"  class="md:mt-5" style="overflow: hidden; border-left:1px solid black; border-right:1px solid black; border-top:1px solid black; border-radius: 0.5rem;">
+            <div class="row  tab_report">
+              <div class="py-4 px-2 col-3 text-bold text-center text_tabReport bg-black text-white">Fecha</div>
+              <div class="py-4 px-1 col-3 text-bold text-center text_tabReport bg-black text-white">N° Orden</div>
+              <div class="py-4 px-1 col-3 text-bold text-center text_tabReport bg-black text-white">Metodo</div>
+              <div class="py-4 px-2 col-3 text-bold text-end text_tabReport bg-black text-white">Monto</div>
+            </div>
+            <div class="row  tab_report" v-for="order in orders" :key="order.id">
+              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">{{ moment(order.created_at).format('DD/MM/YYYY') }}</div>
+              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">#{{ order.number }}</div>
+              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">{{ order.method_pay.name }}</div>
+              <div class="py-4 px-1 col-3 text-bold text-black text-end text_tabReport">Bs. {{ numberFormat(order.amount) }}</div>
+            </div>
+          </div>
+          <div class="mt-16 text-center text-h6 text-bold text-black" v-else > 
+            No encontramos resultado 🥺<br> prueba con otro rango de fechas 📆
           </div>
         </div>
         <div class="mt-16 text-center text-h5 text-bold text-black" v-else > 
@@ -129,6 +157,10 @@ const optionsFn = (date) =>{
   </div>
 </template>
 <style lang="scss">
+.tab_report{
+  border-bottom: 1px solid rgb(12, 12, 12);
+  // overflow: hidden;
+}
 .searchButton{
   width: 100%;
   border-radius: 0.5rem;
