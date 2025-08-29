@@ -13,7 +13,7 @@ const showSidebar = () => {
 </script>
 <template>
   <header class="h-full header__client">
-    <div class=" h-full md:px-6 md:py-0 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
+    <div class=" h-full md:px-6 md:py-0 py-1 mkBG row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
       <div class="flex items-center  md:justify-start col-6 col-md-1 mb-0 md:mb-0 pl-4">
         <img :src="logo" alt=""  style="width:5.5rem" @click="router.push('/home')">
       </div>
@@ -61,6 +61,12 @@ const showSidebar = () => {
   </header>
 </template>
 <style lang="scss">
+.mkBG{
+  background-color: #300707;
+  // background-color:  #8f0002ff;
+
+ 
+}
 .header__client{
   box-shadow: 0px 2px 5px 0px darkgray;
 }

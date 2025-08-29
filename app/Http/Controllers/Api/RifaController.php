@@ -139,19 +139,19 @@ class RifaController extends Controller
             $query->where('status', 0);
         })->count();
 
-        // return $this->returnSuccess(200, [
-        //     'premios' => $premios,
-        //     'numeros' => $numerosPremiados,
-        //     'rifas'   => $rifas,
-
-        // ]);
-
         return $this->returnSuccess(200, [
-            'premios' => 60,
-            'numeros' => 21,
-            'rifas'   => 20,
+            'premios' => $premios,
+            'numeros' => $numerosPremiados,
+            'rifas'   => $rifas,
 
         ]);
+
+        // return $this->returnSuccess(200, [
+        //     'premios' => 60,
+        //     'numeros' => 21,
+        //     'rifas'   => 20,
+
+        // ]);
     }
     public function getRifaWithReport($id) {
         $rifa = Rifa::with('configuration')->withCount('tickets')->find($id);

@@ -39,7 +39,7 @@ onMounted(() => {
     <!-- <div class="overflowBody"/> -->
 
     <div style="position: relative; z-index: 2;">
-      <div class="mb-2 mt-0 text-center text-white text-h5 text-bold bg-black">
+      <div class="mb-2 mt-0 text-center text-white text-h5 text-bold bg-secondary">
         <q-carousel
           animated
           v-model="slide"
@@ -48,7 +48,8 @@ onMounted(() => {
           :transition-duration="2000"
           transition-prev="slide-right"
           transition-next="slide-left"
-          style="height: fit-content; background-color: black;"
+          style="height: fit-content;"
+          class="bg-secondary"
         >
           <q-carousel-slide :name="1" class="q-py-xs">
             <div class="flex items-center justify-center item__slide" style="    " >
@@ -57,7 +58,7 @@ onMounted(() => {
           </q-carousel-slide>
           <q-carousel-slide class="q-py-xs" :name="2" >
             <div class="flex items-center justify-center item__slide" >
-              <div class="mx-5" v-for="j in screenDectectd" :key="j" >!!GUSTOO!!</div>
+              <div class="mx-5" v-for="j in screenDectectd" :key="j" >Nuestras Rifas actuales</div>
             </div>
           </q-carousel-slide>
         </q-carousel>
@@ -66,7 +67,7 @@ onMounted(() => {
         <div v-if="rifasActive.length > 0" class="row mt-0 px-4 md:justify-center justify-start">
           <multipleRifaActive v-for="rifa in rifasActive" :rifa="rifa" :key="rifa.id" class="my-4 md:my-0 md:mt-4 col-12 col-md-3 md:px-3 " />
         </div>
-        <div v-else  class="py-10">
+        <div v-else  class="py-24 my-24">
           <div class="text-h5 text-black text-bold text-center">
             No hay rifas activas 😪😪
           </div>
@@ -84,7 +85,7 @@ onMounted(() => {
         </div>
       </template>
 
-      <div class="mt-4 text-center text-white text-h5 text-bold bg-black">
+      <div class="mt-4 text-center text-white text-h5 text-bold bg-secondary">
         <q-carousel
           animated
           v-model="slidex"
@@ -93,7 +94,8 @@ onMounted(() => {
           :transition-duration="2000"
           transition-prev="slide-left"
           transition-next="slide-right"
-          style="height: fit-content; background-color: black;"
+          style="height: fit-content;"
+          class="bg-secondary"
         >
           <q-carousel-slide :name="2" class="q-py-xs">
             <div class="flex items-center justify-center item__slide" style="    " >
@@ -102,7 +104,7 @@ onMounted(() => {
           </q-carousel-slide>
           <q-carousel-slide class="q-py-xs" :name="1" >
             <div class="flex items-center justify-center item__slide" >
-              <div class="mx-5" v-for="j in screenDectectd" :key="j" >!!GUSTOO!!</div>
+              <div class="mx-5" v-for="j in screenDectectd" :key="j" >Nuestras Rifas actuales</div>
             </div>
           </q-carousel-slide>
         </q-carousel>

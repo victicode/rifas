@@ -63,7 +63,7 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
           >
             <q-card class="py-2 " style="border-top:1px solid black; box-shadow:0px -1px 7px 1px #4747473d" >
               <q-card-section class="text-gray-700 text-subtitle1  " >
-                Si tienes problemas o tuviste algún inconveniente para comprar tus tickets, escribe a nuestro equipo de soporte en el botón que esta abajo y con <b>¡¡¡gusto!!!</b> te atenderemos
+                Si tienes problemas o algún inconveniente para comprar tus tickets, escribe a nuestro equipo de soporte en el botón que esta abajo y ahi te atenderemos
 
                 <div>
                   <a
