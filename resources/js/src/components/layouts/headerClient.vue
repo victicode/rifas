@@ -83,7 +83,7 @@ const showSidebar = () => {
   font-family: "Rubik Glitch", system-ui!important;
   font-weight: 400!important;
   font-style: normal!important;
-  font-size: 2rem;
+  font-size: 1.9rem;
 }
 
 .mkBG{

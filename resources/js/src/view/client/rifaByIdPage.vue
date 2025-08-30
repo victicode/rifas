@@ -68,7 +68,7 @@ onMounted(() => {
               <div class="flex mt-5 md:mt-2 items-end w-full justify-between">
                 <div class="date__show md:px-5 px-2 py-3 text-bold">
                   <q-icon name="event" size="1.6rem" class="mr-2" />
-                  {{ formatDate()}}
+                  {{ formatDate(rifa.due_date)}}
                   
                 </div>
                 <div class="text-stone-800 text-subtitle2 blockx md:hidden text-end" style="font-size:0.9rem" >

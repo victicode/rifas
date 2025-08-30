@@ -263,7 +263,7 @@ class OrderController extends Controller
 
         try{
             Mail::send($template, ["order"=>$order], function ($message) use ($order, $subject, $client)  {  
-                $message->from("notificacion@ganaconlahijalinda.com", "Gana Con La Hija Linda");
+                $message->from("notificacion@ganaconlahijalinda.com", "RifasApp");
                 $message->to($client)->subject($subject);
  
             });
