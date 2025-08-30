@@ -6,7 +6,10 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
 <template>
   <div class="w-full bg-black">
     <div class="pt-8 pb-8">
-      <img :src="logo" alt="" style="width:10rem;margin:auto">
+      <!-- <img :src="logo" alt="" style="width:10rem;margin:auto"> -->
+       <div class="text-white text-bold text-center rubik-glitch mils gradient-text gold-gradient" style="">
+           Gana con Frank
+        </div>
       <div class="bg-white text-black px-5 py-2 my-4 mx-auto  faqTitleChip" >
           Preguntas frecuentes
       </div>
@@ -100,7 +103,13 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
     padding: 1rem 2px;
   }
 }
+.mils{
+  font-size: 4rem!important;
+}
 @media (max-width: 780px) {
+  .mils{
+    font-size: 2.5rem!important;
+  }
   .header_faq{
     & .q-item__label{
       font-size: 1rem;

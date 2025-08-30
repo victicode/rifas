@@ -172,7 +172,7 @@ class OrderController extends Controller
         $vaucher = ""; 
 
         if ($request->file("vaucher")) {
-            $vaucher = "/public/images/vaucher/".rand(1000000, 9999999)."_". trim(str_replace(" ", "_", $request->reference )) .".". $request->File("vaucher")->extension();
+            $vaucher = "/images/vaucher/".rand(1000000, 9999999)."_". trim(str_replace(" ", "_", $request->reference )) .".". $request->File("vaucher")->extension();
             $request->file("vaucher")->move(public_path() . "/images/vaucher/", $vaucher);
         }  
         
