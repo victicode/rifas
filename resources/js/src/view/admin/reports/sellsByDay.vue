@@ -6,6 +6,7 @@ import util from '@/utils/numberUtils'
 import moment from 'moment';
 const orderStore = useOrderStore()
 const numberFormat = util.numberFormat
+const totalSell = ref(0)
 const myLocale = {
   /* starting with Sunday */
   days: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
@@ -43,6 +44,7 @@ const getReportTicketBuyByDay= () => {
 
     orders.value = data.data
     lastPage.value = data.last_page
+    sumaTotal()
   })
   .catch(() => {
     loading.value = false
@@ -51,7 +53,11 @@ const getReportTicketBuyByDay= () => {
   })
   
 }
-
+const sumaTotal = () => {
+  orders.value.forEach((order) => {
+    totalSell.value = order.amount + totalSell.value
+  })
+}
 const optionsFn = (date) =>{
   return   date < moment(Date.now()+86400000).format('YYYY/MM/DD')
 }
@@ -122,8 +128,8 @@ const optionsFn = (date) =>{
         </div>
       </q-form>
       <template v-if="ready">
-        <div v-if="notSearch">
-          <div v-if="orders.length > 0"  class="md:mt-5" style="overflow: hidden; border-left:1px solid black; border-right:1px solid black; border-top:1px solid black; border-radius: 0.5rem;">
+        <div v-if="notSearch" class="pb-5">
+          <div v-if="orders.length > 0"  class="md:mt-5 " style="overflow: hidden; border-left:1px solid black; border-right:1px solid black; border-top:1px solid black; border-radius: 0.5rem;">
             <div class="row  tab_report">
               <div class="py-4 px-2 col-3 text-bold text-center text_tabReport bg-black text-white">Fecha</div>
               <div class="py-4 px-1 col-3 text-bold text-center text_tabReport bg-black text-white">N° Orden</div>
@@ -131,10 +137,17 @@ const optionsFn = (date) =>{
               <div class="py-4 px-2 col-3 text-bold text-end text_tabReport bg-black text-white">Monto</div>
             </div>
             <div class="row  tab_report" v-for="order in orders" :key="order.id">
-              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">{{ moment(order.created_at).format('DD/MM/YYYY') }}</div>
-              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">#{{ order.number }}</div>
-              <div class="py-4 px-1 col-3 text-bold text-black text-center text_tabReport">{{ order.method_pay.name }}</div>
-              <div class="py-4 px-1 col-3 text-bold text-black text-end text_tabReport">Bs. {{ numberFormat(order.amount) }}</div>
+              <div class="py-4 px-1 md:px-2 col-3 text-bold text-black text-center text_tabReport">{{ moment(order.created_at).format('DD/MM/YYYY') }}</div>
+              <div class="py-4 px-1 md:px-2 col-3 text-bold text-black text-center text_tabReport">#{{ order.number }}</div>
+              <div class="py-4 px-1 md:px-2 col-3 text-bold text-black text-center text_tabReport">{{ order.method_pay.name }}</div>
+              <div class="py-4 px-1 md:px-2 col-3 text-bold text-black text-end text_tabReport">Bs. {{ numberFormat(order.amount) }}</div>
+            </div>
+            <div class="row  tab_report items-center justify-end" >
+              <div class="text-bold text-black text-end text_tabReport">
+                Total Vendido:
+              </div>
+              <div class="py-4 pl-4 md:pr-2 pr-1 text-bold text-black text-end text_tabReport">Bs. {{ numberFormat(totalSell) }}</div>
+              
             </div>
           </div>
           <div class="mt-16 text-center text-h6 text-bold text-black" v-else > 

@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import numberUtils from '@/utils/numberUtils.js';
 import { useRouter } from 'vue-router';
+import { refDebounced } from '@vueuse/core';
 
 const props = defineProps({
   rifa: Object,
@@ -13,26 +14,43 @@ const goTo = (type, id) => {
   router.push(url)
 };
 const rifa = ref(props.rifa)
+
+const setRand = () => {
+  rifa.value.ranNum = Math.random()
+  rifa.value.color = rifa.value.color == 'pink-6' ? 'blue-13' : 'pink-6'
+}
+// onMounted(() => {
+//   setRand()
+//   setInterval(() => {
+//     setRand()
+//   }, 3000);
+// })
+
 </script>
 <template>
   <div>
     <div class="row bg-white pb-1 rifa_containerbuy">
-      <div class="col-12 px-0 relative" style="height:68%" >
+      <div class="col-12 px-0 relative" style="height:72%" >
         <img :src="rifa.configuration.banner_img" alt="" style="" class="img__rifa">
         <div class="badge__buy py-1 px-4" style=" " >
           Compra ahora!
         </div>
       </div>
-      <div class="col-12 px-4" style="height:32%">
+      <div class="col-12 px-4 actionInfoSection" >
         <div class="px-4 pt-1 pb-2 flex column justify-between" style=" flex-wrap: nowrap;">
           <div class="rifa__item--title w-full ellipsis text-h5 text-black text-center">{{rifa.title}}</div>
         </div>
         <div class="q-mt-sm">
-          <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
-            <div class="absolute-full flex flex-center ">
-              <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
-            </div>
-          </q-linear-progress>
+          <!-- <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" > -->
+          <!-- <q-linear-progress class="py-4"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" > -->
+
+            <!-- <div class="absolute-full flex flex-center "> -->
+              <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" /> -->
+
+              <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'¿¿??'" /> -->
+
+            <!-- </div> -->
+          <!-- </q-linear-progress> -->
         </div>
         <div class="flex justify-end my-3">
           <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-full" text-color="white" style="border-radius:0.5rem"  @click="goTo('rifa', rifa.id)">
@@ -51,6 +69,12 @@ const rifa = ref(props.rifa)
   </div>
 </template>
 <style lang="scss">
+.actionInfoSection{
+  height: 28%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
 .rifa_containerbuy{
   height: 37rem;
   box-shadow: 0px 1px 5px 0px #2b2b2b;

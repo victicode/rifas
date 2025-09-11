@@ -63,7 +63,7 @@ onMounted(() => {
         </q-carousel>
       </div>
       <template v-if="ready">
-        <div v-if="rifasActive.length > 0" class="row mt-0 px-4 md:justify-center justify-start">
+        <div v-if="rifasActive.length > 0" class="row mt-0 px-4 justify-center">
           <multipleRifaActive v-for="rifa in rifasActive" :rifa="rifa" :key="rifa.id" class="my-4 md:my-0 md:mt-4 col-12 col-md-3 md:px-3 " />
         </div>
         <div v-else  class="py-10">

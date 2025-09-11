@@ -27,6 +27,13 @@ class OrderController extends Controller
         if($request->searchType == 1){
             $rifas = $rifas->where('number', 'like', '%'.$request->search.'%');
         }
+
+        if($request->searchType == 2){
+            $rifas = $rifas->whereHas('client', function (Builder $query) use($request) {
+                $query->where('ci', 'like', '%'.$request->search.'%');
+            });
+
+        }
         if($request->searchType == 3){
             $rifas = $rifas->where('reference', 'like', '%'.$request->search.'%');
         }

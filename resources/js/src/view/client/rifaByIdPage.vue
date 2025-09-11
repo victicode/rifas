@@ -39,8 +39,17 @@ const formatDate = (date) => {
   return moment(date).format('DD') +' de '+ moment(date).format('MMMM') + ' de ' + moment(date).format('YYYY')  
 }
 
+
+const setRand = () => {
+  rifa.value.ranNum = Math.random()
+  rifa.value.color = rifa.value.color == 'pink-6' ? 'blue-13' : 'pink-6'
+}
 onMounted(() => {
   getRifaById()
+  // setRand()
+  // setInterval(() => {
+  //   setRand()
+  // }, 3000);
 })
 </script>
 <template>
@@ -68,7 +77,7 @@ onMounted(() => {
               <div class="flex mt-5 md:mt-2 items-end w-full justify-between">
                 <div class="date__show md:px-5 px-2 py-3 text-bold">
                   <q-icon name="event" size="1.6rem" class="mr-2" />
-                  {{ formatDate()}}
+                  {{ formatDate(rifa.due_date)}}
                   
                 </div>
                 <div class="text-stone-800 text-subtitle2 blockx md:hidden text-end" style="font-size:0.9rem" >
@@ -79,11 +88,16 @@ onMounted(() => {
               
             </div>
             <div class="blockx md:hidden my-3">
-              <q-linear-progress class="py-4 mb-3" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >
-                <div class="absolute-full flex flex-center ">
-                  <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
-                </div>
-              </q-linear-progress>
+              <!-- <q-linear-progress class="py-4 mb-3" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" > -->
+              <!-- <q-linear-progress class="py-4 mb-3"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" > -->
+
+                <!-- <div class="absolute-full flex flex-center "> -->
+                  <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" /> -->
+
+                  <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'¿¿??'" /> -->
+
+                <!-- </div> -->
+              <!-- </q-linear-progress> -->
               <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()">
                 <div class="py-2 text-subtitle2">
                   Comprar Ahora
@@ -136,11 +150,11 @@ onMounted(() => {
                     Comprar Ahora
                   </div>
                 </q-btn>
-                <q-linear-progress stripe rounded size="1.5rem" class="py-4 mt-3" :value="(rifa.soldTickets/100)" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+                <!-- <q-linear-progress stripe rounded size="1.5rem" class="py-4 mt-3" :value="(rifa.soldTickets/100)" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
                   <div class="absolute-full flex flex-center ">
                     <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                   </div>
-                </q-linear-progress>
+                </q-linear-progress> -->
               </div>
             </div>
           </div>
