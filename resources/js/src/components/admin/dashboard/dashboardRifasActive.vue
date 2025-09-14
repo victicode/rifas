@@ -41,7 +41,7 @@ onMounted(() => {
             </td>
             <td class="td_dash text-black text-center text-bold py-4 px-1"> {{moment(rifa.due_date).format('DD/MM/YYYY')}}</td>
             <td class="td_dash text-black text-center text-bold py-4 px-1" style="width:16%">
-              {{(rifa.soldTickets * 10).toFixed(2)}}%</td>
+              {{(rifa.soldTickets).toFixed(2)}}%</td>
             <td class="td_dash text-black text-center text-bold py-4 px-1">
               <div @click="router.push('/admin/pays')" class="redirectItem">
                 {{rifa.orders_pending.length}}

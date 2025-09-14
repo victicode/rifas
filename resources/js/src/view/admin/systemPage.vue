@@ -37,7 +37,7 @@ const goTo = (url) => {
           </div>
         </div>
         <div class="col-md-2 col-6 mb-6 md:mt-0">
-          <div @click="goTo('')">
+          <div @click="goTo('/admin/system/users')">
             <div class="buttons_report q-pa-sm flex items-center justify-center">
               <q-icon name="account_circle" color="white" size="2rem"/>
             </div>

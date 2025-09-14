@@ -35,7 +35,8 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
            header-class="text-black bg-white  text-center header_faq">
             <q-card class="py-2 " style="border-top:1px solid black; box-shadow:0px -1px 7px 1px #4747473d" >
               <q-card-section class="text-gray-700 text-subtitle1  " >
-                Nuestras rifas se rigen unica y exclusivamente por los resultado emitidos por el sorteo del Super Gana de la loteria del Tachira, en los horarios de 1:00 P.M - 4:00 P.M - 10:00 P.M<br>
+                Nuestras rifas se rigen unica y exclusivamente por los resultado emitidos por el sorteo del Supe
+                r Gana de la loteria del Tachira, en los horarios de 1:00 P.M - 7:00 P.M - 10:00 P.M<br>
                 Los resultados los puede visualizar en su pagina web <a href="https://supergana.com.ve/resultados.php" style="text-decoration: underline;">supergana.com.ve</a>
               </q-card-section>
             </q-card>
@@ -49,7 +50,8 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
             header-class="text-black bg-white  text-center header_faq">
             <q-card class="py-2 " style="border-top:1px solid black; box-shadow:0px -1px 7px 1px #4747473d" >
               <q-card-section class="text-gray-700 text-subtitle1  " >
-                Si resultaste ser el afortunado ganador de nuestro premio mayor nos pondremos en contacto contigo para realizar la entrega de forma prensencial.
+                Si resultaste ser el afortunado ganador de nuestro premio mayor nos pondremos en 
+                contacto contigo para realizar la entrega de forma prensencial.
               </q-card-section>
             </q-card>
           </q-expansion-item>
@@ -63,11 +65,13 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
           >
             <q-card class="py-2 " style="border-top:1px solid black; box-shadow:0px -1px 7px 1px #4747473d" >
               <q-card-section class="text-gray-700 text-subtitle1  " >
-                Si tienes problemas o tuviste algún inconveniente para comprar tus tickets, escribe a nuestro equipo de soporte en el botón que esta abajo y con <b>¡¡¡gusto!!!</b> te atenderemos
+                Si tienes problemas o tuviste algún inconveniente para 
+                comprar tus tickets, escribe a nuestro equipo de soporte en el
+                 botón que esta abajo y con <b>¡¡¡gusto!!!</b> te atenderemos
 
                 <div>
                   <a
-                    href="https://wa.link/d7m9po"
+                    href="https://wa.link/lbn858"
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="flex justify-center mt-2"

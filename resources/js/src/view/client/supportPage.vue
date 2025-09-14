@@ -13,7 +13,7 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp';
     </div>
     <div class="text-center">
       <a
-        href="https://wa.link/d7m9po"
+        href="https://wa.link/lbn858"
         target="_blank" 
         rel="noopener noreferrer"
 

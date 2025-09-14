@@ -56,7 +56,7 @@ import 'moment/locale/es'
           class=" pb-5 client__cont"
           style="height: 100%; "
         >
-          <div style="height: 92%;" class="">
+          <div style="height: 92%;     overflow: auto;" class="">
             <q-card-section class="">
               <div class="text-h6 text-center text-black pt-2 text-bold">
                 Notificaciones

@@ -178,6 +178,16 @@ const routes = [
           title: 'Compras en el dia'
         }
       },
+      {
+        path:'/admin/system/users',
+        component: () => import('@/view/admin/system/createUserPage.vue'),
+        meta:{
+          title: 'Usuarios'
+        }
+      },
+
+
+      
     ]
   },
 ]

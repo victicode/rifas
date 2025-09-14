@@ -2,6 +2,8 @@
 import { useWinnerStore } from '@/services/store/winner.store';
 import { onMounted, ref } from 'vue';
 import numberUtils from '@/utils/numberUtils.js'
+import instagram from '@/assets/icons/instagram3.svg';
+import tiktok from '@/assets/icons/tiktok3.svg';
 import moment from 'moment';
 import { useRouter } from 'vue-router';
 import confeti from '@/components/layouts/confeti.vue';
@@ -23,7 +25,7 @@ const getWinner = () => {
   winnerStore.getWinnersPublic(query)
   .then((response) =>{
     lastPage.value = response.data.last_page
-    winners.value = response.data.data;
+    // winners.value = response.data.data;
 
     setTimeout(() => {
       ready.value = true
@@ -45,7 +47,7 @@ onMounted(() =>{
 })
 </script>
 <template>
-  <div class="py-10" style="height: -webkit-fill-available;">
+  <div class="py-10" >
     <div class="text-center text-h5 mt-0 text-black text-bold">
       Nuestros ganadores 🤩
     </div>
@@ -59,21 +61,27 @@ onMounted(() =>{
           <div class="col-md-3 col-12 flex flex-center my-2" v-for="winner in winners" :key="winner.id"> 
     
             <div class="winner-card premio-1 pt-10 ">
-                <div class="medal ">{{winner.reward.pole}}°</div>
-                <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
-                <div class="numero-ganador">{{ticketFormat(winner.ticket.number) }}</div>
-                <div class="descripcion">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
-                <div class="ganador-info">
-                  <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
-                  <div class="fecha">Sorteado el {{moment(winner.rifa.due_date +' '+ winner.reward.reward_time).format('DD/MM/YYYY h A')}}</div>
-                </div>
+              <div class="medal ">{{winner.reward.pole}}°</div>
+              <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
+              <div class="numero-ganador">{{ticketFormat(winner.ticket.number) }}</div>
+              <div class="descripcion " style="height: 60px;">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
+              <div class="ganador-info">
+                <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
+                <div class="fecha">Sorteado el {{moment(winner.rifa.due_date +' '+ winner.reward.reward_time).format('DD/MM/YYYY h A')}}</div>
+              </div>
+              <div class="flex flex-center mt-4  md:mt-3">
+                <a href="https://www.instagram.com/rifaderave?igsh=MTg2bGpwcTRzOHdjbA==" target="_blank" rel="noopener noreferrer">
+                  <img :src="instagram" alt="" class="iconSocialWinner  mx-4">
+                </a>
+                <img :src="tiktok" alt="" class="iconSocialWinner  mx-4">
+              </div>
             </div>
           </div>
         </div>
       </template>
       <div v-else>
-        <div class="text-center text-black text-h6 py-16 text-bold">
-          Se nuestro primer ganador, juega ahora!
+        <div class="text-center text-black text-h6 py-24 my-20 text-bold mx-5">
+          Se nuestro primer ganador, <br>juega ahora!
         </div>
       </div>
     </div>
@@ -92,8 +100,30 @@ onMounted(() =>{
     />
   </div>
 </template>
+<style lang="scss" >
 
+.iconSocialWinner{
+  height: 2rem;
+  filter: contrast(0) brightness(2);
+  transition: all 0.5s ease;
+  &:hover{
+    filter: contrast(0) brightness(1);
+  }
+}
+
+@media (max-width: 780px) {
+  .iconSocialWinner{
+    height: 2rem;
+    filter: contrast(0) brightness(2);
+  }
+  .socialTitle{
+    font-size: 1.11rem;
+  }
+}
+</style>
 <style>
+
+
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
     
     :root {
@@ -108,6 +138,7 @@ onMounted(() =>{
         border-radius: 20px;
         width: 300px;
         padding: 30px;
+        height: 31rem;
         text-align: center;
         position: relative;
         overflow: hidden;

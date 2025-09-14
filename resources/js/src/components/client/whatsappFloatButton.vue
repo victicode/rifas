@@ -7,7 +7,7 @@ import whatsapp from '@/assets/images/logo/WhatsApp2.webp'
   <!-- <a
   href="https://web.whatsapp.com/send/?phone=584245391538&text=Hola%2C+tengo+una+duda+y+requiero+de+su+apoyo" -->
   <a
-    href="https://wa.link/d7m9po"
+    href="https://wa.link/lbn858"
     target="_blank" 
     rel="noopener noreferrer"
     class="buttonWhatsapp"

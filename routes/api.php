@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\WinnerController;
 use App\Http\Controllers\Api\PayMethodController;
+use App\Http\Controllers\Api\UserController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -96,8 +97,13 @@ Route::middleware('auth:sanctum')->group(function ()
 
     });
 
-    Route::prefix('clients')->name('clientes.')->group(function () {
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'getUsersPagination']);
+        Route::post('/', [UserController::class, 'storeUser']);
+        Route::post('/u/{id}', [UserController::class, 'updateUser']);
+        Route::post('/d/{id}', [UserController::class, 'deleteUser']);
 
+        Route::post('/changeStatus/{id}', [UserController::class, 'changeStatus']);
     });
 
 });

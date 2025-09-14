@@ -24,16 +24,16 @@ const rifa = ref(props.rifa)
       </div>
       <div class="text-white text-center mt-2 text-subtitle1 mx-5" >
         <div class="  pb-1 " >
-          <div class="px-0 relative md:w-2/12 w-11/12 mx-auto bounceImge" style=" overflow:hidden; border-radius:2rem" >
-            <img :src="rifa.configuration.banner_img" alt="" style="" class="img__rifa">
+          <div class="px-0 relative md:w-3/12 w-11/12 mx-auto bounceImge" style=" overflow:hidden; border-radius:2rem" >
+            <img :src="rifa.configuration.banner_img" alt=""  class="img__rifa">
           </div>
-          <div class="px-4 md:w-4/12 mx-auto mt-5" style="">
+          <div class="px-4 md:w-4/12 mx-auto mt-5">
             <div class="q-mt-sm">
-              <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="grey-8" track-color="grey-8" style="border-radius: 2rem;" >
+              <!-- <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="grey-8" track-color="grey-8" style="border-radius: 2rem;" >
                 <div class="absolute-full flex flex-center ">
                   <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
                 </div>
-              </q-linear-progress>
+              </q-linear-progress> -->
             </div>
             <div class="flex justify-end my-4 md:px-11">
               <q-btn  color="white" size="0.72rem" unelevated class=" button__BuyRifa w-full" text-color="black" style="border-radius:0.5rem"  @click="goTo('rifa', rifa.id)">

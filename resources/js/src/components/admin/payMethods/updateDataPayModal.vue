@@ -148,15 +148,6 @@ import { useMethodPayStore } from '@/services/store/methodPay.store';
   const formatDataPay = () => {
     Object.entries(props.dataPay).forEach(([key, value]) => {
         dataPay.value[key] = value;
-      
-      // if(key !=='configuration'){
-      //   dataPay.value[key] = value;
-      // } else {
-      //   rifa.value['configuration'] = []
-      //   Object.entries(value).forEach(([key2, value2]) => {
-      //     if(['auto_select', 'quantity_tickets', 'price', 'minimus_buy'].includes(key2)) rifa.value['configuration'][key2] = numberUtils.numberFormat(value2);
-      //   })
-      // }
     }); 
     dataPay.value['statusInput'] = {
       title: dataPay.value.status_label,

@@ -27,6 +27,13 @@ class OrderController extends Controller
         if($request->searchType == 1){
             $rifas = $rifas->where('number', 'like', '%'.$request->search.'%');
         }
+
+        if($request->searchType == 2){
+            $rifas = $rifas->whereHas('client', function (Builder $query) use($request) {
+                $query->where('ci', 'like', '%'.$request->search.'%');
+            });
+
+        }
         if($request->searchType == 3){
             $rifas = $rifas->where('reference', 'like', '%'.$request->search.'%');
         }
@@ -38,6 +45,7 @@ class OrderController extends Controller
     public function createOrder(Request $request){
         $validated = $this->validateFieldsFromInput($request->all(), true);
         if (count($validated) > 0) return $this->returnFail(400, $validated[0]);
+        
         $getAvailableTickets = RifaController::getStockAvailable($request->rifa_id);
 
         if($request->quantity > $getAvailableTickets) 

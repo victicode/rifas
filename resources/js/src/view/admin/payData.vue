@@ -64,7 +64,7 @@ onMounted(() =>{
       <div class="mt-12 md:mt-4 ">
           <template v-if="dataPays.length > 0">
             <div class="row items-center md:justify-start  methods__container w-100">
-              <div v-for="(dataPay, key) in dataPays" :key="key" class="  col-12 col-md-3 px-1 md:px-2 md:my-2 my-3" >
+              <div v-for="(dataPay, key) in dataPays" :key="key" class="  col-12 col-md-4 px-1 md:px-2 md:my-2 my-3" >
                 <div style="border-radius:1rem; overflow:hidden; border: 2px solid black; height:15rem; overflow:hidden;  " class=" w-full bg-white flex column justify-between" >
                   <div class="p-3 bg-black text-white method-item__header text-center">
                     {{ dataPay.method_type.name }}

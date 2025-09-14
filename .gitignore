@@ -6,6 +6,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/resources/js/src/assets/videos
 .env
 .env.backup
 .env.production

@@ -47,7 +47,7 @@ const formatTicket = () => {
 
 </script>
 <template>
-  <div class="px-5 md:px-10 pb-20" style="height: -webkit-fill-available;" >
+  <div class="px-5 md:px-10 pb-20 md:py-24 md:mb-14"  >
     <div>
 
       <div>

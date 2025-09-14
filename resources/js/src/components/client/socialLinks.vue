@@ -12,7 +12,9 @@ import tiktok from '@/assets/icons/tiktok3.svg';
         Recuerda seguirnos en nuestras redes sociales para que no te pierdas de nada.
       </div>
       <div class="flex flex-center">
-        <img :src="instagram" alt="" class="iconSocial md:mx-8 mx-2">
+        <a href="https://www.instagram.com/rifaderave?igsh=MTg2bGpwcTRzOHdjbA==" target="_blank" rel="noopener noreferrer">
+          <img :src="instagram" alt="" class="iconSocial md:mx-8 mx-2">
+        </a>
         <img :src="tiktok" alt="" class="iconSocial md:mx-8 mx-2">
 
         

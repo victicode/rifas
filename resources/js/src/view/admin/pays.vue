@@ -321,7 +321,7 @@ onMounted(() => {
             active-text-color="white"
             :max="lastPage"
             :max-pages="6"
-            boundary-numbers
+            :boundary-numbers="false"
             @update:model-value="getOrders()"
             gutter="0.5rem"
           />
