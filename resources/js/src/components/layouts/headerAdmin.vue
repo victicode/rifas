@@ -1,14 +1,17 @@
 <script setup>
 import { useAuthStore } from '@/services/store/auth.services';
-import moment from 'moment';
 import { ref,onMounted, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia'
+import moment from 'moment';
 import notificationModule from '@/components/layouts/notificationModule.vue';
+
 const router = useRouter()
 const clock = ref(moment().format('DD/MM/YYYY, h:mm:ss a'))
 const emitter = inject('emitter')
 const loading = ref(false)
 
+const { user } = storeToRefs(useAuthStore());
 const showSidebar = () => {
   emitter.emit('showSidebar')
 }
@@ -43,7 +46,7 @@ onMounted(() => {
           <div class="text-white text-subtitle1  hiddenx md:block" style="font-weight: 500;">
             {{ clock }}
           </div>
-          <q-btn flat round color="white" class="mx-1" text-color="white" icon="settings" />
+          <q-btn flat round color="white" class="mx-1" text-color="white" icon="settings" @click="router.push('/admin/system/config-user/'+user.id)"/>
           <notificationModule />
           <q-btn outline style="color: white;" :loading="loading" class="mx-1" label="Cerrar Sesion"  @click="logout()"/>
         </div>

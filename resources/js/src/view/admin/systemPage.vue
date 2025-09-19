@@ -1,6 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/services/store/auth.services';
+import { storeToRefs } from 'pinia'
 
+const { user } = storeToRefs(useAuthStore());
 const router = useRouter()
 const goTo = (url) => {
   router.push(url)
@@ -19,21 +22,13 @@ const goTo = (url) => {
       </div>
     </div>
     <div class="mt-12 md:mt-4 ">
-      <div class="row items-center md:justify-start  methods__container w-100 md:mt-10">
+      <div class="row items-top md:justify-start w-100 md:mt-10">
         <div class="col-md-2 col-6 mb-6 md:mt-0">
-          <div @click="goTo('')">
+          <div @click="goTo('/admin/system/config-user/'+user.id)">
             <div class="buttons_report q-pa-sm flex items-center justify-center">
               <q-icon name="build_circle" color="white" size="2rem"/>
             </div>
-            <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Configuracion de usuario</div>
-          </div>
-        </div>
-        <div class="col-md-2 col-6 mb-6 md:mt-0">
-          <div @click="goTo('')">
-            <div class="buttons_report  q-pa-sm flex items-center justify-center">
-              <q-icon name="currency_exchange" color="white" size="2rem"/>
-            </div>
-            <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Tasa del día</div>
+            <div class="text-center text-subtitle1 text-black mt-1 text-bold cursor-pointer">Configuración de usuario</div>
           </div>
         </div>
         <div class="col-md-2 col-6 mb-6 md:mt-0">

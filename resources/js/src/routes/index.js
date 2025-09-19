@@ -179,15 +179,34 @@ const routes = [
         }
       },
       {
+        path:'/admin/reports/stadistics',
+        component: () => import('@/view/admin/reports/stadisticsRifa.vue'),
+        meta:{
+          title: 'Estadisticas de Rifa'
+        }
+      },
+      {
         path:'/admin/system/users',
         component: () => import('@/view/admin/system/createUserPage.vue'),
         meta:{
           title: 'Usuarios'
         }
       },
+      {
+        path:'/admin/system/exchange-rate',
+        component: () => import('@/view/admin/system/exchangeRatePage.vue'),
+        meta:{
+          title: 'Tasa de cambio'
+        }
+      },
 
-
-      
+      {
+        path:'/admin/system/config-user/:id',
+        component: () => import('@/view/admin/system/configUserPage.vue'),
+        meta:{
+          title: 'Perfil de usuario'
+        }
+      },
     ]
   },
 ]

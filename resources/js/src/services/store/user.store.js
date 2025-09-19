@@ -97,6 +97,25 @@ export const useUserStore = defineStore('User', {
       })
 
     },
+    async findUserById(id) {
+      return await new Promise((resolve, reject) => {
+        if (!ApiService.getToken()) {
+          throw '';
+        }
+        ApiService.setHeader();
+        ApiService.get('/api/users/byId/'+id)
+        .then(({data}) => {
+          if(data.code !=200) throw data;
+  
+          resolve(data);
+        }).catch(( {response}) => {
+          console.log(response)
+          reject(response.data.error);
+        });
+        
+      })
+
+    },
     async findUsersByCiUser(ci,rifa) {
       return await new Promise((resolve, reject) => {
         ApiService.get('/api/public/user/byCi/'+ci+'?rifa='+rifa+'&')

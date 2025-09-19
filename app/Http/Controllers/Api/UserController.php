@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function getUsersPagination(Request $request){
         
-        $users = User::query();
+        $users = User::query()->where('id', '!=', 1);
         
         if($request->searchType == 1){
             $users = $users->where('name', 'like', '%'.$request->search.'%');
@@ -26,6 +26,12 @@ class UserController extends Controller
 
         
         return $this->returnSuccess(200, $users);
+    }
+    public function getUserById($id){
+        $user = User::find($id);
+
+
+        return $this->returnSuccess(200, $user);
     }
     public function storeUser(Request $request){
         $validated = $this->validateFieldsFromInput($request->all(), true);

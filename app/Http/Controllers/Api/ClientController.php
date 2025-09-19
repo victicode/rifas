@@ -16,10 +16,10 @@ class ClientController extends Controller
         if($request->searchType == 1){
             $clients = $clients->where('ci', 'like', '%'.$request->search.'%');
         }
-        if($request->searchType == 3){
+        if($request->searchType == 2){
             $clients = $clients->where('name', 'like', '%'.$request->search.'%');
         }
-        if($request->searchType == 4){
+        if($request->searchType == 3){
             $clients = $clients->where('email', 'like', '%'.$request->search.'%');
         }
         $clients = $clients->paginate(15);

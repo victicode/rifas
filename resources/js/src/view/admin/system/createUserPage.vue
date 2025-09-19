@@ -9,6 +9,7 @@ import numberUtils from '@/utils/numberUtils.js';
 import createUserModal from '@/components/admin/user/createUserModal.vue'
 import deleteUserModal from '@/components/admin/user/deleteUserModal.vue';
 import updateUserModal from '@/components/admin/user/updateUserModal.vue';
+import viewUserModal from '@/components/admin/user/viewUserModal.vue';
 
 
 DataTable.use(DataTablesLib);
@@ -235,6 +236,7 @@ onMounted(() => {
     <template v-if="Object.values(selectedUser).length > 0">
       <updateUserModal :dialog="(showModal == 'update')"  :user="selectedUser"  @updateList="getUsers()"  @closeModal="closeModal() "  />
       <deleteUserModal :dialog="(showModal == 'delete')"  :user="selectedUser"  @updateList="getUsers()"  @closeModal="closeModal() "  />
+      <viewUserModal :dialog="(showModal == 'view')"  :user="selectedUser"    @closeModal="closeModal() " />
     </template> 
   </div>
 </template>

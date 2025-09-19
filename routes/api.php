@@ -100,6 +100,8 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'getUsersPagination']);
         Route::post('/', [UserController::class, 'storeUser']);
+        Route::get('/byId/{id}', [UserController::class, 'getUserById']);
+
         Route::post('/u/{id}', [UserController::class, 'updateUser']);
         Route::post('/d/{id}', [UserController::class, 'deleteUser']);
 
