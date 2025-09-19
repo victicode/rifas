@@ -1,7 +1,7 @@
 <script setup>
 import { useRifaStore } from '@/services/store/rifas.store';
 import { onMounted, ref } from 'vue';
-import bgVideo from '@/assets/videos/horizontalVideo.mp4'
+// import bgVideo from '@/assets/videos/horizontalVideo.mp4'
 const rifaStore = useRifaStore()
 const data = ref([])
 const ready = ref(false)
@@ -9,6 +9,8 @@ const getDataRifa = () => {
   rifaStore.getDataStadisticRifas()
   .then((response) =>{
     data.value = response.data
+
+    console.log(data.value)
     ready.value = true
   })
 }
@@ -50,8 +52,8 @@ onMounted(() => {
       <div class="video-wrapper position-relative d-none d-992-block " style="height:-webkit-fill-available">
         <div class="video-container" style="height:100%">
             <video class="video-dt-lazy" id="hp_video" muted="" autoplay="" loop="" width="100%"  preload="metadata" playsinline="" style="cursor: pointer; object-fit: cover; ">
-            <!-- <source src="https://media.tommy.com/us/static/images/scheduled_marketing/video/20250724_HP_Hero_Video_dt.mp4" type="video/mp4"></video> -->
-            <source :src="bgVideo" type="video/mp4"></video>
+            <source src="https://media.tommy.com/us/static/images/scheduled_marketing/video/20250724_HP_Hero_Video_dt.mp4" type="video/mp4"></video>
+            <!-- <source :src="bgVideo" type="video/mp4"></video> -->
             
             
         </div>
@@ -61,10 +63,10 @@ onMounted(() => {
       <div class=" py-16">
         <div class="">
           <div class="text-white text-center text-benefit-title">
-            Nuestras bendiciones
+            Nuestras rifas realizadas
           </div>
           <div class="text-white mt-2 text-center text-benefit-subtitle px-5">
-            Gracias a ti por confiar y creer en nosotros, seguiremos dando mas bendiciones 
+            Gracias a ti por confiar y creer en nosotros, seguiremos dando mas ganadores 
           </div>
         </div>
         <div v-if="ready" class="md:pl-4">
@@ -97,9 +99,10 @@ onMounted(() => {
 </template>
 <style lang="scss">
 .benefit__item{
-  border:5px solid rgb(255, 255, 255); 
+  border:5px solid $secondary; 
   border-radius:0.8rem;
-  box-shadow: 0px 2px 5px 1px #5454544a;
+  box-shadow: 0px 2px 5px 1px #5a12124a;
+  background: #5a12124a
 }
 .text-benefit-title{
   font-size: 1.9rem;

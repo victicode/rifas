@@ -180,7 +180,7 @@ class OrderController extends Controller
         $vaucher = ""; 
 
         if ($request->file("vaucher")) {
-            $vaucher = "/public/images/vaucher/".rand(1000000, 9999999)."_". trim(str_replace(" ", "_", $request->reference )) .".". $request->File("vaucher")->extension();
+            $vaucher = "/images/vaucher/".rand(1000000, 9999999)."_". trim(str_replace(" ", "_", $request->reference )) .".". $request->File("vaucher")->extension();
             $request->file("vaucher")->move(public_path() . "/images/vaucher/", $vaucher);
         }  
         
@@ -271,7 +271,7 @@ class OrderController extends Controller
 
         try{
             Mail::send($template, ["order"=>$order], function ($message) use ($order, $subject, $client)  {  
-                $message->from("notificacion@ganaconlahijalinda.com", "Gana Con La Hija Linda");
+                $message->from("notificacion@ganaconlahijalinda.com", "RifasApp");
                 $message->to($client)->subject($subject);
  
             });

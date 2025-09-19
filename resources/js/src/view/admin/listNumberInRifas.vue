@@ -36,6 +36,7 @@ const changeShowTickets = () => {
     showTickets.value = arrayTickets.value 
     return
   }
+
   showTickets.value = allTickets
 }
 const getAllTickets = (id) => {
@@ -113,7 +114,7 @@ onMounted(() => {
     </div>
     <template v-if="ready">
       <div class="mt-4" >
-        <template v-if="tickets.length > 0">
+        <template v-if="tickets.length > 0 || showTickets.length > 0">
           <div class="row items-center md:justify-start  w-100">
             <div v-for="item in showTickets" :key="item" class="  col-3 col-md-1 text-center  px-1 md:px-1 md:my-2 my-3 " >
               <div class="ticket__content py-2" :class="{'payded': checkNumber(item)}" @click="checkNumber(item) ? openModal('view', item) : ''">

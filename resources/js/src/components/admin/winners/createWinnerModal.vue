@@ -274,7 +274,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
                            
                           <q-input
                             v-model="formInputs.linkTt"
-                            label="Link de publicación de Telegram"
+                            label="Link de publicación de Tiktok"
                             class=" createWinnerForm__input"
                           />
                         </div>

@@ -1,5 +1,7 @@
 <script setup>
-import logo from '@/assets/images/logo/logo3.png'
+// import logo from '@/assets/images/logo/logo3.png'
+import logo from '@/assets/images/logo/logoCars2.webp'
+
 import supergana from '@/assets/images/logo/supergana.png'
 import { inject } from 'vue';
 import conalot from '@/assets/images/logo/conalot.png'
@@ -13,9 +15,12 @@ const showSidebar = () => {
 </script>
 <template>
   <header class="h-full header__client">
-    <div class=" h-full md:px-6 md:py-0 py-1 bg-stone-950 row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
-      <div class="flex items-center  md:justify-start col-6 col-md-1 mb-0 md:mb-0 pl-4">
-        <img :src="logo" alt=""  style="width:5.5rem" @click="router.push('/home')">
+    <div class=" h-full md:px-6 md:py-0 py-1 mkBG row items-center" style="    background-image: url('https://vergacionderifa.com/static/img/trama.svg');" >
+      <div class="flex items-center  md:justify-start col-6 col-md-2 mb-0 md:mb-0 pl-3 md:pl-0">
+        <img :src="logo" alt=""  style="width:13rem" @click="router.push('/home')">
+        <!-- <div class="text-white text-bold  rubik-glitch gradient-text gold-gradient" >
+           Gana con Frank
+        </div> -->
       </div>
       <div class="flex md:hiddenx justify-end col-6 ">
         <img :src="supergana" alt=""  style="width:3rem; height:3rem" class="mr-2">
@@ -24,7 +29,7 @@ const showSidebar = () => {
           <q-icon name="menu" size="1.7rem" />
         </q-btn>
       </div>
-      <div class="col-12 col-md-6 md:pl-0  hiddenx md:flex">
+      <div class="col-12 col-md-5 md:pl-0  hiddenx md:flex">
         <ul class="flex justify-center md:justify-start">
           <RouterLink activeClass="active_link" to="/home" >
             <li class="text-white mx-3 nav_header--items" >
@@ -61,6 +66,34 @@ const showSidebar = () => {
   </header>
 </template>
 <style lang="scss">
+
+.gradient-text {
+    background: linear-gradient(45deg, #650202, #e52e71, #e10b0b);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.rubik-glitch {
+  font-family: "Rubik Glitch", system-ui!important;
+  font-weight: 400!important;
+  font-style: normal!important;
+  font-size: 1.9rem;
+}
+
+.mkBG{
+  background-color: #300707;
+  // background-color:  #8f0002ff;
+
+ 
+}
 .header__client{
   box-shadow: 0px 2px 5px 0px darkgray;
 }
@@ -126,4 +159,11 @@ const showSidebar = () => {
     }
   }
 }
+@media (max-width: 768px){
+.rubik-glitch {
+
+  font-size: 1.51rem;
+}
+}
+
 </style>

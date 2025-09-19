@@ -1,5 +1,7 @@
 <script setup>
-import logo from '@/assets/images/logo/logo3.png'
+// import logo from '@/assets/images/logo/logo3.png'
+import logo from '@/assets/images/logo/logoCars2.webp'
+
 import supergana from '@/assets/images/logo/supergana.png'
 import { inject } from 'vue';
 import conalot from '@/assets/images/logo/conalot.png'
@@ -11,10 +13,16 @@ const router = useRouter()
 </script>
 <template>
   <footer class=" footer__client py-5  bg-stone-950" style="background-image: url('https://vergacionderifa.com/static/img/trama.svg'); border-top: 2px solid darkgrey">
-    <div class=" h-full md:px-6 md:py-0  items-center flex justify-between"  >
-      <div class=" flex items-center">
-        <img :src="logo" alt=""  style="width:5.5rem" @click="router.push('/home')">
-        <div class="text-white ml-5 text-subtitle1">
+    <div class=" h-full "  >
+      <div class=" row items-center">
+        <!-- <div class="col-12 col-md-6 text-white text-bold  rubik-glitch gradient-text gold-gradient text-center" >
+           Gana con Frank
+        </div> -->
+        <div class="col-12 col-md-6 md:pl-16 justify-center flex">
+
+          <img :src="logo" alt=""  style="width:12rem" @click="router.push('/home')">
+        </div>
+        <div class="text-white text-subtitle1 col-12 col-md-6 text-center mt-2">
           © Derechos reservados 2025
         </div>
       </div>

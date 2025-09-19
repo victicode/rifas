@@ -30,7 +30,7 @@ const setRand = () => {
 <template>
   <div>
     <div class="row bg-white pb-1 rifa_containerbuy">
-      <div class="col-12 px-0 relative" style="height:72%" >
+      <div class="col-12 px-0 relative" style="height:68%" >
         <img :src="rifa.configuration.banner_img" alt="" style="" class="img__rifa">
         <div class="badge__buy py-1 px-4" style=" " >
           Compra ahora!
@@ -41,16 +41,16 @@ const setRand = () => {
           <div class="rifa__item--title w-full ellipsis text-h5 text-black text-center">{{rifa.title}}</div>
         </div>
         <div class="q-mt-sm">
-          <!-- <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" > -->
-          <!-- <q-linear-progress class="py-4"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" > -->
+           <!-- <q-linear-progress class="py-4" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" >  -->
+           <q-linear-progress class="py-4"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" > 
 
-            <!-- <div class="absolute-full flex flex-center "> -->
-              <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" /> -->
+             <div class="absolute-full flex flex-center "> 
+               <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" /> 
 
-              <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'¿¿??'" /> -->
+               <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'¿¿??'" />  -->
 
-            <!-- </div> -->
-          <!-- </q-linear-progress> -->
+             </div> 
+          </q-linear-progress>
         </div>
         <div class="flex justify-end my-3">
           <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-full" text-color="white" style="border-radius:0.5rem"  @click="goTo('rifa', rifa.id)">
@@ -70,7 +70,7 @@ const setRand = () => {
 </template>
 <style lang="scss">
 .actionInfoSection{
-  height: 28%;
+  height: 32%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

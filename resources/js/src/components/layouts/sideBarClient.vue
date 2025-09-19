@@ -1,6 +1,6 @@
 <script setup>
 import {  inject, onMounted, ref, watch} from 'vue';
-import logo from '@/assets/images/logo/logo2.png'
+import logo from '@/assets/images/logo/logoCars2.webp'
 
 const emitter = inject('emitter')
 const showXs = ref( window.screen.width < 780 ? false : true)
@@ -24,26 +24,26 @@ onMounted(() =>{
       <div style="position: absolute;right: -2.5rem; top: 0rem;" class=" md:hidden">
         <q-btn rounded unelevated icon="arrow_back_ios" class="close_buttonSidebar q-py-md" size="lg" color="dark" text-color="white"  @click="showXs = false"/>
       </div>
-      <div >
+      <div class="my-4">
         <img :src="logo" alt=""  style="width:12rem" class="mx-auto">
       </div>
-      <ul class="text-center">
+      <ul class="text-center mt-8">
           <RouterLink activeClass="active_link"  @click="showMovil()"  to="/home" >
-            <li class="text-white my-3 mx-5 nav_header--items" >
+            <li class="text-white my-5 mx-5 nav_header--items" >
               <div class="px-2">
                 Inicio
               </div>
             </li>
           </RouterLink>
           <RouterLink activeClass="active_link"  @click="showMovil()"  to="/winners" >
-            <li class="text-white my-3 mx-5 nav_header--items" >
+            <li class="text-white my-5 mx-5 nav_header--items" >
               <div class="px-2">
                 Ganadores
               </div>
             </li>
           </RouterLink>
           <RouterLink activeClass="active_link"  @click="showMovil()"  to="/support">
-            <li class="text-white my-3 mx-5 nav_header--items" >
+            <li class="text-white my-5 mx-5 nav_header--items" >
               <div class="px-2">
                 Soporte
               </div>

@@ -89,15 +89,15 @@ onMounted(() => {
             </div>
             <div class="blockx md:hidden my-3">
               <!-- <q-linear-progress class="py-4 mb-3" stripe rounded size="1.5rem" :value="(rifa.soldTickets/100)" color="blur" track-color="grey-8" style="border-radius: 2rem;" > -->
-              <!-- <q-linear-progress class="py-4 mb-3"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" > -->
+              <q-linear-progress class="py-4 mb-3"  rounded stripe size="1.5rem" :value="rifa.ranNum" :color="rifa.color" track-color="grey-8" style="border-radius: 2rem;" >
 
-                <!-- <div class="absolute-full flex flex-center "> -->
-                  <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" /> -->
+                <div class="absolute-full flex flex-center ">
+                  <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
 
                   <!-- <q-badge color="white" text-color="black" class="text-bold" :label="'¿¿??'" /> -->
 
-                <!-- </div> -->
-              <!-- </q-linear-progress> -->
+                </div>
+              </q-linear-progress>
               <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()">
                 <div class="py-2 text-subtitle2">
                   Comprar Ahora
@@ -145,16 +145,17 @@ onMounted(() => {
                 </div>
               </div>
               <div class="pt-2 px-5 ">
-                <q-btn  color="blur" size="0.72rem" unelevated class=" button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()" >
+                
+                <q-linear-progress stripe rounded size="1.5rem" class="py-4 " :value="(rifa.soldTickets/100)" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
+                  <div class="absolute-full flex flex-center ">
+                    <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
+                  </div>
+                </q-linear-progress>
+                <q-btn  color="blur" size="0.72rem" unelevated class="mt-3  button__BuyRifa w-2/6" text-color="white" style="border-radius:0.5rem" @click="showModal()" >
                   <div class="py-1 text-subtitle2">
                     Comprar Ahora
                   </div>
                 </q-btn>
-                <!-- <q-linear-progress stripe rounded size="1.5rem" class="py-4 mt-3" :value="(rifa.soldTickets/100)" color="primary" track-color="grey-8" style="border-radius: 2rem;" >
-                  <div class="absolute-full flex flex-center ">
-                    <q-badge color="white" text-color="black" class="text-bold" :label="'Vendidos: '+rifa.soldTickets+'%'" />
-                  </div>
-                </q-linear-progress> -->
               </div>
             </div>
           </div>

@@ -49,7 +49,6 @@ const formatTicket = () => {
 <template>
   <div class="px-5 md:px-10 pb-20 md:py-24 md:mb-14"  >
     <div>
-
       <div>
         <div class="text-center text-h5 mt-8 text-black text-bold">
           VERIFICADOR DE BOLETOS

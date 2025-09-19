@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Gana con la Hija linda</title>
+        <title>RifasApp</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -46,7 +46,7 @@
         @endif
     </head>
     <body class="font-sans antialiased  " style="background:#aa13a4; padding-top: 2rem; height: 100vh; overflow:auto"> 
-        <div class=" text-center text-white " style="font-size:1.5rem; font-weight:bold; padding-bottom:1rem; height: 12%; color:white; text-align:center"> ¡Gracias por comprar con Gana Con La Hija Linda!</div> 
+        <div class=" text-center text-white " style="font-size:1.5rem; font-weight:bold; padding-bottom:1rem; height: 12%; color:white; text-align:center"> ¡Gracias por comprar con Gana con Frank Linda!</div> 
         <div class=""  style="background:white; border-top-left-radius:4rem; border-top-right-radius:4rem;height: 88%; padding-top: 1.5rem" >
             <div style="text-align:center">
               <img src="https://ganaconlahijalinda.com/public/images/logo/logo3.png" style="width:12rem; margin:auto" />

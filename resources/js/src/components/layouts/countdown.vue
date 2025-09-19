@@ -1,7 +1,7 @@
 <template>
   <div class="countdown-container">
     <div class=" text-white px-5 py-2 my-1 tex t-center actualRifa" >
-        Nuestra proxima bendición se juega en 🎉:
+        Nuestra proxima rifa se juega en 🎉:
     </div>
     <div class="countdown-display">
       <div class="time-unit">
