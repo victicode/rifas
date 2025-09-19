@@ -50,7 +50,7 @@ class WinnerController extends Controller
         $photo = $winner->winner_photo;
 
         if ($request->file('photo')) {
-            $photo = '/public/images/winner/'.rand(1000000, 9999999).'_'. trim(str_replace(' ', '_', $winner->id )) .'.'. $request->File('photo')->extension();
+            $photo = '/images/winner/'.rand(1000000, 9999999).'_'. trim(str_replace(' ', '_', $winner->id )) .'.'. $request->File('photo')->extension();
             $request->file('photo')->move(public_path() . '/images/winner/', $photo);
         }  
 

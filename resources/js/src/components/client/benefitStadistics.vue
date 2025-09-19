@@ -54,8 +54,6 @@ onMounted(() => {
             <video class="video-dt-lazy" id="hp_video" muted="" autoplay="" loop="" width="100%"  preload="metadata" playsinline="" style="cursor: pointer; object-fit: cover; ">
             <source src="https://media.tommy.com/us/static/images/scheduled_marketing/video/20250724_HP_Hero_Video_dt.mp4" type="video/mp4"></video>
             <!-- <source :src="bgVideo" type="video/mp4"></video> -->
-            
-            
         </div>
       </div>
     </div>

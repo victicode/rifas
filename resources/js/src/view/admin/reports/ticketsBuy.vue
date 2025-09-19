@@ -117,11 +117,12 @@ onMounted(() => {
               <div class=" mt-2 py-2 mx-2" >
                 <table style="width: 100%;">
                   <thead>
-                    <th class="text-black th_repot px-2 py-2 text-left">Puesto</th>
-                    <th class="text-black th_repot px-2 py-2 text-left">Nombre</th>
-                    <th class="text-black th_repot px-2 py-2 text-center thr">Compras</th>
-                    <th class="text-black th_repot px-2 py-2 text-center">Tickets</th>
-  
+                    <tr>
+                      <th class="text-black th_repot px-2 py-2 text-left">Puesto</th>
+                      <th class="text-black th_repot px-2 py-2 text-left">Nombre</th>
+                      <th class="text-black th_repot px-2 py-2 text-center thr">Compras</th>
+                      <th class="text-black th_repot px-2 py-2 text-center">Tickets</th>
+                    </tr>
                   </thead>
                   <tbody class="py-8">
                     <tr class="" style="border-top: 1px solid darkgray;" v-for="(item, key) in selectedRifa.mostBuy" :key="key">
@@ -162,12 +163,12 @@ onMounted(() => {
               <div class=" mt-2 py-2 mx-2" >
                 <table style="width: 100%;">
                   <thead>
-                    <th class="text-black th_repot px-2 py-2 text-left">Puesto</th>
-                    <th class="text-black th_repot px-2 py-2 text-left">Nombre</th>
-                    <th class="text-black th_repot px-2 py-2 text-center">Compras</th>
-
-                    <th class="text-black th_repot px-2 py-2 text-center">Tickets</th>
-  
+                    <tr>
+                      <th class="text-black th_repot px-2 py-2 text-left">Puesto</th>
+                      <th class="text-black th_repot px-2 py-2 text-left">Nombre</th>
+                      <th class="text-black th_repot px-2 py-2 text-center">Compras</th>
+                      <th class="text-black th_repot px-2 py-2 text-center">Tickets</th>
+                    </tr>
                   </thead>
                 </table>
                 <div class="text-h6 text-black my-8 text-center">
