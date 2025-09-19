@@ -195,7 +195,7 @@ import { useOrderStore } from '@/services/store/order.store';
                 Rechazar pago
               </div>
             </q-btn>
-            <q-btn  style="border-radius: 0.5rem;" size="0.8rem" color="positive"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(2)">
+            <q-btn  v-if="props.order.status != 2" style="border-radius: 0.5rem;" size="0.8rem" color="positive"  class="my-1 mx-1" :loading="loading" @click="updateStatusOrden(2)">
               <div class="py-1">
                 Validar pago
               </div>
@@ -223,7 +223,7 @@ import { useOrderStore } from '@/services/store/order.store';
   max-width: 800px !important;
   overflow: visible !important;
   position: relative;
-  height: 85vh;
+  height: 95vh;
 }
 .content__modalSectionOrder{
   overflow: auto; max-height: 80%; 

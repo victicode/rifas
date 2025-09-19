@@ -13,7 +13,7 @@ const arrayTickets = ref([])
 
 const rifa = ref([])
 const viewOnlySold = ref(true)
-const showTickets = ref(9999)
+const showTickets = ref(10000)
 const showModal = ref('')
 const selectedTicket = ref({})
 const finder = ref('')
@@ -25,12 +25,14 @@ const ticketFormat = (ticket) => {
 
 }
 
-const allTickets = new Array(9999).fill(0).map((_, i) => (ticketFormat(i+1)));
+const allTickets = new Array(10000).fill(0).map((_, i) => (ticketFormat(i)));
 
 const checkNumber = (number) => {
  return tickets.value.findIndex(item => ticketFormat(item.number) == number) != -1
 }
 const changeShowTickets = () => {
+  console.log(viewOnlySold.value)
+  console.log(allTickets)
   if(viewOnlySold.value){
 
     showTickets.value = arrayTickets.value 
@@ -88,15 +90,16 @@ onMounted(() => {
         {{  rifa.title }}
       </div>
     </div>
-    <div class="flex justify-between items-center">
-      <div class="text-end">
+    <div class="row items-center">
+
+      <div class="text-start col-md-10 col-12">
         <q-checkbox v-model="viewOnlySold" @update:model-value="changeShowTickets()">
           <div class="text-subtitle1 mt-1 text-black text-bold">
             Mostrar los vendidos
           </div>
         </q-checkbox>
       </div>
-      <div class="text-end text-subtitle1 mt-2 text-black text-bold">
+      <div class="text-end text-subtitle1 mt-2 text-black text-bold col-md-2 col-12">
         Vendidos: {{ numberFormat(rifa.tickets_count) }}/10.000
       </div>
     </div>
@@ -113,7 +116,7 @@ onMounted(() => {
     </div>
     <template v-if="ready">
       <div class="mt-4" >
-        <template v-if="tickets.length > 0">
+        <template v-if="tickets.length > 0 || showTickets.length > 0">
           <div class="row items-center md:justify-start  w-100">
             <div v-for="item in showTickets" :key="item" class="  col-3 col-md-1 text-center  px-1 md:px-1 md:my-2 my-3 " >
               <div class="ticket__content py-2" :class="{'payded': checkNumber(item)}" @click="checkNumber(item) ? openModal('view', item) : ''">

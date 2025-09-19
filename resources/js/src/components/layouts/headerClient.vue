@@ -50,8 +50,12 @@ const showSidebar = () => {
         </ul>
       </div>
       <div class="col-12 col-md-5 md:pl-0  hiddenx md:flex justify-end">
-        <img :src="supergana" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
-        <img :src="conalot" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
+        <a href="https://supergana.com.ve/historico.php" target="_blank">
+          <img :src="supergana" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
+        </a>
+        <a href="https://pagina.conalot.gob.ve/" target="_blank">
+          <img :src="conalot" alt=""  style="width:3.5rem; height:3.5rem" class="mx-4">
+        </a>
       </div>
       <!-- <div class="col-12 col-md-4 flex md:justify-end">
         <q-btn  outline style="border-radius: 0.5rem;" color="white" class="mx-2" text-color="white" icon="settings" />

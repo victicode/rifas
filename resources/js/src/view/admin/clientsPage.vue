@@ -203,7 +203,7 @@ onMounted(() => {
               <div class="col-md-2 col-6">
                 <q-radio v-model="searchType" :val="2" class="text-black" label="Nombre" />
               </div>
-              <div class="col-md-2 col-6">
+              <div class="col-md-2 col-12">
                 <q-radio v-model="searchType" :val="3" class="text-black" label="Correo electrónico" />
               </div>
             </div>

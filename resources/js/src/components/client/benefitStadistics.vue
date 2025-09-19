@@ -1,7 +1,7 @@
 <script setup>
 import { useRifaStore } from '@/services/store/rifas.store';
 import { onMounted, ref } from 'vue';
-import bgVideo from '@/assets/videos/horizontalVideo.mp4'
+// import bgVideo from '@/assets/videos/horizontalVideo.mp4'
 const rifaStore = useRifaStore()
 const data = ref([])
 const ready = ref(false)
@@ -50,8 +50,8 @@ onMounted(() => {
       <div class="video-wrapper position-relative d-none d-992-block " style="height:-webkit-fill-available">
         <div class="video-container" style="height:100%">
             <video class="video-dt-lazy" id="hp_video" muted="" autoplay="" loop="" width="100%"  preload="metadata" playsinline="" style="cursor: pointer; object-fit: cover; ">
-            <!-- <source src="https://media.tommy.com/us/static/images/scheduled_marketing/video/20250724_HP_Hero_Video_dt.mp4" type="video/mp4"></video> -->
-            <source :src="bgVideo" type="video/mp4"></video>
+            <source src="https://ganaconlahijalinda.com/public/video/horizontalVideo.mp4" type="video/mp4"></video>
+            <!-- <source :src="bgVideo" type="video/mp4"></video> -->
             
             
         </div>

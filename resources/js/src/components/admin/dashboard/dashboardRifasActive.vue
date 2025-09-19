@@ -27,10 +27,12 @@ onMounted(() => {
     <div class=" mt-2 pb-5 " v-if="rifas.length > 0" >
       <table style="width: 100%;">
         <thead>
-          <th class="text-black th_dash py-2 " style="width: 32%;">Nombre</th>
-          <th class="text-black th_dash py-2 ">Se juega</th>
-          <th class="text-black th_dash py-2 " style="width:18%">% vendido</th>
-          <th class="text-black th_dash py-2 ">Compras por aprobar</th>
+          <tr>
+            <th class="text-black th_dash py-2 " style="width: 32%;">Nombre</th>
+            <th class="text-black th_dash py-2 ">Se juega</th>
+            <th class="text-black th_dash py-2 " style="width:18%">% vendido</th>
+            <th class="text-black th_dash py-2 ">Compras por aprobar</th>
+          </tr>
         </thead>
         <tbody class="py-8">
           <tr v-for="rifa in rifas" :key="rifa.id" class="" style="border-bottom: 1px solid darkgray;">
