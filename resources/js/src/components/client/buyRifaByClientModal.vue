@@ -55,6 +55,7 @@ import bankLabels from '@/utils/bankLabelUtils';
 
   })
   const dataPays = ref([]);
+  const minBuy = ref(rifa.configuration.minimus_buy)
   const onFileChange = () => {
     const file = document.getElementById('vaucher').files[0]
     formInputs.value.payPhoto = file
@@ -196,7 +197,7 @@ import bankLabels from '@/utils/bankLabelUtils';
 
   const changeMethodData = () => {
     let id =  formInputs.value.method_pay.id 
-    
+    minBuy.value = formInputs.value.method_pay.coin_id  == 1 ? rifa.configuration.minimus_buy : rifa.configuration.minimus_buy_usd
 
     try {
       setTimeout(() => {
@@ -321,7 +322,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             label="Cantidad de tickets"
                             class=" createOrderForm__input quantity"
                            @update:model-value="formatTicket"
-                          :rules="[ val => !!val  || 'El campo es obligatorio', val => val >= 2 || 'El minimo son 2 tickets', val => val <= 10000 || 'El maximo son 9999 tickets',]"
+                          :rules="[ val => !!val  || 'El campo es obligatorio', val => val >= minBuy || 'El minimo son '+minBuy+' tickets', val => val <= 10000 || 'El maximo son 9999 tickets',]"
                           />
                         </div>
                         <div class="col-md-12 col-12 mt-5 flex justify-between  px-12">
@@ -399,7 +400,7 @@ import bankLabels from '@/utils/bankLabelUtils';
                             color="primary"
                             :options="optionsMethodPay"
                             class="createOrderForm__input methodSelectInput"
-                            :hint="formInputs.method_pay.coin_id == 1 ? 'La compra minima es de 2 tickets': 'La compra minima es de '+rifa.configuration.minimus_buy_usd+' tickets'"
+                            :hint="'La compra minima es de '+minBuy+' tickets'"
                             @update:model-value="changeMethodData()"
                           />
                         </div>
