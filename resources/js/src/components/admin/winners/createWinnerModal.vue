@@ -150,8 +150,8 @@ import { useWinnerStore } from '@/services/store/winner.store';
     .then((response) => {
       rifasOption.value = [
         {
-        title:'Selecciona la rifa',
-        id:0
+          title:'Selecciona la rifa',
+          id:0
         },
         ...response.data
       ]
@@ -274,7 +274,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
                            
                           <q-input
                             v-model="formInputs.linkTt"
-                            label="Link de publicación de Telegram"
+                            label="Link de publicación de Tik Tok"
                             class=" createWinnerForm__input"
                           />
                         </div>

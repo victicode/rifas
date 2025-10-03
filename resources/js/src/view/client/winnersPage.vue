@@ -25,7 +25,7 @@ const getWinner = () => {
   winnerStore.getWinnersPublic(query)
   .then((response) =>{
     lastPage.value = response.data.last_page
-    // winners.value = response.data.data;
+    winners.value = response.data.data;
 
     setTimeout(() => {
       ready.value = true
@@ -58,22 +58,37 @@ onMounted(() =>{
       <template v-if="winners.length > 0">
         <div class="row">
           <!-- Primer premio -->
-          <div class="col-md-3 col-12 flex flex-center my-2" v-for="winner in winners" :key="winner.id"> 
-    
+          <div class="col-md-3 col-12 flex flex-center my-2 px-5 " v-for="winner in winners" :key="winner.id"> 
+            
             <div class="winner-card premio-1 pt-10 ">
-              <div class="medal ">{{winner.reward.pole}}°</div>
-              <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
-              <div class="numero-ganador">{{ticketFormat(winner.ticket.number) }}</div>
-              <div class="descripcion " style="height: 60px;">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
-              <div class="ganador-info">
-                <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
-                <div class="fecha">Sorteado el {{moment(winner.rifa.due_date +' '+ winner.reward.reward_time).format('DD/MM/YYYY h A')}}</div>
+              <div class="imgBackground" style="height: 100%;"  v-if="winner.winner_photo.slice(-3) == 'mp4' || winner.winner_photo.slice(-3) == 'AVI'">
+                <video 
+                  class="video-dt-lazy" 
+                  id="hp_video" muted="" autoplay="" loop="" width="100%"  preload="metadata" playsinline="" 
+                  style="cursor: pointer; ">
+                  <source :src="winner.winner_photo" type="video/mp4"></video>
               </div>
-              <div class="flex flex-center mt-4  md:mt-3">
-                <a href="https://www.instagram.com/rifaderave?igsh=MTg2bGpwcTRzOHdjbA==" target="_blank" rel="noopener noreferrer">
-                  <img :src="instagram" alt="" class="iconSocialWinner  mx-4">
-                </a>
-                <img :src="tiktok" alt="" class="iconSocialWinner  mx-4">
+              <img :src="winner.winner_photo" alt="" class="imgBackground" v-else>
+
+              <div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: #000000d4;  z-index: 2;" />
+
+              <div style="position: relative; z-index: 3;">
+                <div class="medal ">{{winner.reward.pole}}°</div>
+                <div class="premio mt-2">Ganador del {{winner.rifa.title}}</div>
+                <div class="numero-ganador">{{ticketFormat(winner.ticket.number) }}</div>
+                <div class="descripcion " style="height: 60px;">¡Felicidades! Ganador de: <br>{{ winner.reward.title }}.</div>
+                <div class="ganador-info">
+                  <div class="nombre-ganador">{{winner.ticket.order.client.name}}</div>
+                  <div class="fecha">Sorteado el {{moment(winner.rifa.due_date +' '+ winner.reward.reward_time).format('DD/MM/YYYY h A')}}</div>
+                </div>
+                <div class="flex flex-center mt-4  md:mt-3">
+                  <a :href="winner.link_ig ? winner.link_ig : '#'" :target="winner.link_ig ? '_blank' : '_self'" rel="noopener noreferrer">
+                    <img :src="instagram" alt="" class="iconSocialWinner  mx-4">
+                  </a>
+                  <a :href="winner.link_tt ? winner.link_tt : '#'" :target="winner.link_tt ? '_blank' : '_self'" rel="noopener noreferrer">
+                    <img :src="tiktok" alt="" class="iconSocialWinner  mx-4">
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -101,7 +116,16 @@ onMounted(() =>{
   </div>
 </template>
 <style lang="scss" >
-
+.imgBackground{
+  position: absolute;
+    right: 0px;
+    left: 0px;
+    object-fit: fill;
+    top: 0px;
+    bottom: 0;
+    height: 100%;
+    z-index: 1;
+}
 .iconSocialWinner{
   height: 2rem;
   filter: contrast(0) brightness(2);
@@ -122,188 +146,185 @@ onMounted(() =>{
 }
 </style>
 <style>
-
-
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
-    
-    :root {
-        --premio-1: #ffb84d;
-        --premio-2: #ffb84d;;
-        --premio-3: #ffb84d;
-        --dark-bg: #1a1a2e;
-        --card-bg: #000000;
-    }
-    .winner-card {
-        background: var(--card-bg);
-        border-radius: 20px;
-        width: 300px;
-        padding: 30px;
-        height: 31rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.4s ease;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .winner-card:hover {
-        transform: translateY(-10px) scale(1.03);
-    }
-    
-    .winner-card::after {
-        content: '';
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        background: linear-gradient(45deg, 
-                        var(--card-color) 0%, 
-                        rgba(255, 255, 255, 0.403) 50%, 
-                        var(--card-color) 100%);
-        z-index: -1;
-        border-radius: 22px;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-    
-    .winner-card:hover::after {
-        opacity: 1;
-        animation: neonGlow 2s linear infinite;
-    }
-    
-    @keyframes neonGlow {
-        0% { filter: blur(5px); opacity: 0.7; }
-        50% { filter: blur(7px); opacity: 1; }
-        100% { filter: blur(5px); opacity: 0.7; }
-    }
-    
-    .winner-card.premio-1 {
-        --card-color: var(--premio-1);
-    }
-    
-    .winner-card.premio-2 {
-        --card-color: var(--premio-2);
-    }
-    
-    .winner-card.premio-3 {
-        --card-color: var(--premio-3);
-    }
-    
-    .medal {
-        width: 80px;
-        height: 80px;
-        margin: 0px auto;
-        background: radial-gradient(circle at center, 
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+  :root {
+      --premio-1: #ffb84d;
+      --premio-2: #ffb84d;;
+      --premio-3: #ffb84d;
+      --dark-bg: #1a1a2e;
+      --card-bg: #000000;
+  }
+  .winner-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      width: 300px;
+      padding: 30px;
+      height: 31rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .winner-card:hover {
+      transform: translateY(-10px) scale(1.03);
+  }
+  
+  .winner-card::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
                       var(--card-color) 0%, 
-                      rgba(0,0,0,0) 70%);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 30px;
-        font-weight: 800;
-        color: white;
-        box-shadow: 0 0 20px var(--card-color);
-        position: relative;
-        z-index: 1;
-    }
-    
-    .medal::before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border: 2px dashed var(--card-color);
-        border-radius: 50%;
-        animation: rotate 10s linear infinite;
-        opacity: 0.5;
-    }
-    
-    @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    .premio {
-        font-size: 18px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .numero-ganador {
-        font-size: 52px;
-        font-weight: 800;
-        color: white;
-        margin: 0px 0 15px;
-        text-shadow: 0 0 10px var(--card-color);
-        position: relative;
-        display: inline-block;
-    }
-    
-    .numero-ganador::after {
-        content: '';
-        position: absolute;
-        bottom: -0px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50%;
-        height: 3px;
-        background: var(--card-color);
-        border-radius: 3px;
-    }
-    
-    .descripcion {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.768);
-        margin-bottom: 20px;
-        line-height: 1.6;
-    }
-    
-    .ganador-info {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 15px;
-        border-radius: 12px;
-        margin-top: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-    }
-    
-    .nombre-ganador {
-        font-weight: 600;
-        color: white;
-        margin-bottom: 5px;
-        font-size: 18px;
-    }
-    
-    .fecha {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.5);
-        letter-spacing: 1px;
-    }
-    
-    .particles {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background-color: var(--card-color);
-        border-radius: 50%;
-        opacity: 0;
-    }
-    
-    @media (max-width: 768px) {
-        .container {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .winner-card {
-            width: 100%;
-            max-width: 350px;
-        }
-    }
+                      rgba(255, 255, 255, 0.403) 50%, 
+                      var(--card-color) 100%);
+      z-index: -1;
+      border-radius: 22px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+  }
+  
+  .winner-card:hover::after {
+      opacity: 1;
+      animation: neonGlow 2s linear infinite;
+  }
+  
+  @keyframes neonGlow {
+      0% { filter: blur(5px); opacity: 0.7; }
+      50% { filter: blur(7px); opacity: 1; }
+      100% { filter: blur(5px); opacity: 0.7; }
+  }
+  
+  .winner-card.premio-1 {
+      --card-color: var(--premio-1);
+  }
+  
+  .winner-card.premio-2 {
+      --card-color: var(--premio-2);
+  }
+  
+  .winner-card.premio-3 {
+      --card-color: var(--premio-3);
+  }
+  
+  .medal {
+      width: 80px;
+      height: 80px;
+      margin: 0px auto;
+      background: radial-gradient(circle at center, 
+                    var(--card-color) 0%, 
+                    rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 0 20px var(--card-color);
+      position: relative;
+      z-index: 1;
+  }
+  
+  .medal::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px dashed var(--card-color);
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+      opacity: 0.5;
+  }
+  
+  @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+  
+  .premio {
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  
+  .numero-ganador {
+      font-size: 52px;
+      font-weight: 800;
+      color: white;
+      margin: 0px 0 15px;
+      text-shadow: 0 0 10px var(--card-color);
+      position: relative;
+      display: inline-block;
+  }
+  
+  .numero-ganador::after {
+      content: '';
+      position: absolute;
+      bottom: -0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 3px;
+      background: var(--card-color);
+      border-radius: 3px;
+  }
+  
+  .descripcion {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.768);
+      margin-bottom: 20px;
+      line-height: 1.6;
+  }
+  
+  .ganador-info {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+  }
+  
+  .nombre-ganador {
+      font-weight: 600;
+      color: white;
+      margin-bottom: 5px;
+      font-size: 18px;
+  }
+  
+  .fecha {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1px;
+  }
+  
+  .particles {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background-color: var(--card-color);
+      border-radius: 50%;
+      opacity: 0;
+  }
+  
+  @media (max-width: 768px) {
+      .container {
+          flex-direction: column;
+          align-items: center;
+      }
+      
+      .winner-card {
+          width: 100%;
+          max-width: 350px;
+      }
+  }
   </style>

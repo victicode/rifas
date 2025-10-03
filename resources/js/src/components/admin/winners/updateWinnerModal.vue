@@ -279,7 +279,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
                             <div class="py-2" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': winner.winner_photo}">
                               <img :src="previewImg" alt="" style="height: 15rem;  margin: auto; border-radius: 1rem; object-fit: cover;" v-if="previewImg">
                             </div>
-                            <div class="pb-5 pt-2 text-subtitle1 text-center" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': previewImg}">
+                            <div class="pb-5 pt-2 text-subtitle1 text-center" style="text-decoration: underline; cursor:pointer;" :class="{'text-positive': previewImg, 'text-black': !previewImg}">
                               {{ !previewImg ? 'Agregar foto de la entrega' :'Foto de la entrega ✅' }} 
                             </div>
                           </label>
@@ -295,7 +295,7 @@ import { useWinnerStore } from '@/services/store/winner.store';
                            
                           <q-input
                             v-model="winner.link_tt"
-                            label="Link de publicación de Telegram"
+                            label="Link de publicación de Tik Tok"
                             class=" updateWinnerForm__input"
                           />
                         </div>
