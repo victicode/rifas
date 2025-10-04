@@ -21,6 +21,13 @@ import { useRifaStore } from '@/services/store/rifas.store';
       reward_time:'',
     }
   ])
+  const topBuy = ref([
+    {
+      title:'',
+      position:4,
+      reward_time:'',
+    }
+  ])
   const formInputs = ref({
     title:'',
     description:'',
@@ -31,6 +38,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
     minimus_buy:2,
     minimus_buy_usd:5,
     auto_select:true,
+    availableTopSell:false,
     all_image:'',
   })
   const optionsFn = (date) => {
@@ -73,6 +81,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
       minimus_buy:2,
       minimus_buy_usd:5,
       auto_select:true,
+      availableTopSell:false,
       all_image:'',
     }
     rewards.value = [
@@ -101,6 +110,9 @@ import { useRifaStore } from '@/services/store/rifas.store';
     formData.append('auto_select', formInputs.value.auto_select)
     formData.append('banner_img', file.files[0])
     formData.append('rewards', JSON.stringify(rewards.value))
+    formData.append('topBuy', JSON.stringify(topBuy.value))
+    formData.append('IsTopBuy', formInputs.value.availableTopSell)
+
 
     rifaStore.createRifa(formData)
     .then((response) => {
@@ -304,7 +316,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
                           class=" createRifaForm__input"
                           :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
                         >
-                        <template v-slot:append>
+                          <template v-slot:append>
                             <q-icon name="access_time" class="cursor-pointer">
                               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                                 <q-time v-model="item.reward_time">
@@ -321,14 +333,30 @@ import { useRifaStore } from '@/services/store/rifas.store';
                         <q-btn  color="negative" icon="delete" round v-if="step==3" @click="deleteReward(index)" />
                       </div>
                     </div>
+                    <div class="row my-3">
+                      <div class="col-12 q-mt-xs q-mt-md-none">
+                        <q-checkbox  v-model="formInputs.availableTopSell" label="Top de compras" color="teal" />
+                      </div>
+                    </div>
+                    <div class="row my-3" v-if="formInputs.availableTopSell">
+                      <div class="col-md-12 col-12 md:pr-2  pr-1 md:mb-0" >
+                        <q-input
+                          outlined
+                          v-model="topBuy[0].title"
+                          :label="'Premio top de compra'"
+                          class=" createRifaForm__input"
+                          :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
+                        />
+                      </div>
+                    </div>
+
                   </div>
                 </template>
               </transition>
               <input type="file"  id="rifa_img" ref="rifa_img" style="display: none;" @change="onFileChange" >
-              
+
               <div class="flex justify-end mt-5">
                 <q-btn label=" Premio" color="black" class="" icon="add" v-if="step==3" @click="addReward()" />
-                
                 <q-btn :label="step == 1 ? 'Cerrar' : 'Volver' " color="negative"  class="q-mx-sm" @click="step == 1 ? hideModal() : step--" />
                 <q-btn :label="step !== 3 ? 'Siguiente' : 'Enviar' "  color="black" type="submit" :loading="loading"/>
               </div>

@@ -11,7 +11,12 @@ import { useRifaStore } from '@/services/store/rifas.store';
   })
 
   const dialog    = ref(props.dialog); 
-  const rewards   = ref([])
+  const rifa      = ref(props.rifa); 
+  const rewards   = ref({
+    reward:[],
+    topBuy:[]
+  })
+
   const editView  = ref(false)
   const loading   = ref(false)
   const hideModal = () => {
@@ -29,7 +34,9 @@ import { useRifaStore } from '@/services/store/rifas.store';
   const updateReward = () => {
     loading.value  = true
     const formData = new FormData()
-    formData.append('rewards', JSON.stringify(rewards.value))
+    formData.append('rewards', JSON.stringify(rewards.value.reward))
+    formData.append('topBuy', JSON.stringify(rewards.value.topBuy))
+
     rifaStore.updateRewards({id: props.rifa.id, form: formData})
     .then((response) => {
       loading.value  = false
@@ -50,18 +57,38 @@ import { useRifaStore } from '@/services/store/rifas.store';
     rewards.value.splice(index, 1)
   }
   const formatReward = (rewards) => {
-    let value = []
-    rewards.forEach((reward) => {
-      value.push({
-        title: reward.title,
-        reward_time: reward.reward_time,
-      })
-    });         
+    let value = {
+      reward:[],
+      topBuy:[]
+    }
+    try{
+      let rewardx = rewards.filter((r) => r.type == 1) 
+      let topBuy = rewards.filter((r) => r.type == 2) 
+      rewardx.forEach((reward) => {
+        value.reward.push({
+          title: reward.title,
+          reward_time: reward.reward_time,
+        })
+      }); 
+      topBuy.forEach((reward) => {
+        value.topBuy.push({
+          title: reward.title,
+          reward_time: reward.reward_time,
+        })
+      });         
+    }catch(e){
+      value = {
+        reward: rewards.reward,
+        topBuy: rewards.topBuy,
+      }
+    }
+
+    
     return value
   }
   watch(() => props.dialog, (newValue) => {
     dialog.value = newValue
-
+    rifa.value  = props.rifa
     rewards.value = formatReward(props.rifa.rewards)
   });
 
@@ -85,7 +112,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
           <transition name="fade">
             <template v-if="editView">
               <div class="q-px-md">
-                <div class="row my-3" v-for="(reward, index) in rewards" :key="index">
+                <div class="row my-3" v-for="(reward, index) in rewards.reward" :key="index">
                   <div class="col-md-6 col-12 md:pr-2  pr-1 md:mb-0" >
                     <q-input
                       outlined
@@ -120,6 +147,19 @@ import { useRifaStore } from '@/services/store/rifas.store';
                     <q-btn  color="negative" icon="delete" round  @click="deleteReward(index)" />
                   </div>
                 </div>
+    
+                <div class="row my-5"  v-for="(reward, index) in rewards.topBuy" :key="index">
+                  <div class="col-md-12 col-12 md:pr-2  pr-1 md:mb-0" >
+                    <q-input
+                      outlined
+                      v-model="reward.title"
+                      :label="'Premio top de compra'"
+                      class=" createRifaForm__input"
+                      :rules="[ val => val && val.length > 0 || 'El campo es obligatorio']"
+                    />
+                  </div>
+                </div>
+                
               </div>
             </template>
           </transition>
@@ -127,7 +167,7 @@ import { useRifaStore } from '@/services/store/rifas.store';
             <template v-if="!editView">
               <q-card-section class="q-pt-none q-px-sm">
                 
-                <div v-for="(reward, index) in rifa.rewards" :key="reward.id" class="q-mb-sm q-pt-sm q-pb-sm  mx-2" style="border-bottom: 1px solid darkgray;">
+                <div v-for="(reward, index) in rewards.reward" :key="reward.id" class="q-mb-sm q-pt-sm q-pb-sm  mx-2" style="border-bottom: 1px solid darkgray;">
                   <div class="flex justify-between items-center">
                     <div class="text-h6 text-bold text-black">
                       Premio n° {{ index+1 }}
@@ -142,6 +182,23 @@ import { useRifaStore } from '@/services/store/rifas.store';
                     {{ reward.title }}
                   </div>
                 </div>
+
+                <div v-for="(reward) in rewards.topBuy" :key="reward.id" class="q-mb-sm q-pt-md q-pb-sm  mx-2" style="border-bottom: 1px solid darkgray;">
+                  <div class="flex justify-between items-center">
+                    <div class="text-h6 text-bold text-black">
+                      Premio TOP de compras 🔥
+                    </div>
+                    <q-chip color="black" text-color="white"  class="">
+                      <div class="text-caption">
+                        Se entrega al finalizar
+                      </div>
+                    </q-chip>
+                  </div>
+                  <div class="py-2 text-subtitle1 text-bold text-black">
+                    {{ reward.title }}
+                  </div>
+                </div>
+
               </q-card-section>
             </template>
           </transition>

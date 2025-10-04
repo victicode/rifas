@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Reward extends Model
 {
     //
-    protected $fillable = ["title", "reward_time", "rifa_id", 'pole'];
+    protected $fillable = ["title", "reward_time", "rifa_id", "type", "pole"];
     
     public function rifa(): BelongsTo
     {

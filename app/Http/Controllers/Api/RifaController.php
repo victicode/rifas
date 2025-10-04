@@ -67,6 +67,11 @@ class RifaController extends Controller
         $this->loadImageToStorage($request, $newRifa->id);
         $this->addRewards(json_decode($request->rewards, true), $newRifa->id);
 
+        if($request->IsTopBuy == 'true'){
+            $this->addTopBuy(json_decode($request->topBuy, true), $newRifa->id);
+
+        }
+
         return $this->returnSuccess(200, ['rifa' => $newRifa, 'config' => $configuration ]);
         
     }
@@ -122,8 +127,15 @@ class RifaController extends Controller
         return $this->returnSuccess(200, ['rifa' => $rifa ]);
     }
     public function updateRewards(Request $request, $id) {
+        
+        $isTopBuy = Reward::where('rifa_id', $id)->where('type', 2)->first();
         Reward::where('rifa_id', $id)->delete();
         $this->addRewards(json_decode($request->rewards, true), $id);
+        
+        if($isTopBuy){
+            $this->addTopBuy(json_decode($request->topBuy, true), $id);
+        }
+        
         return $this->returnSuccess(200, Reward::where('rifa_id', $id)->get());
     }
     public function getTicketsInRifa($id){
@@ -217,7 +229,20 @@ class RifaController extends Controller
                 'pole' => $i+1,
             ]);
         }
+    }
+    private function addTopBuy($topBuy, $id){
 
+        $re = Reward::where('rifa_id', $id)->count();
+
+        for ($i=0; $i < count($topBuy); $i++) { 
+            Reward::create([
+                'title'     => $topBuy[$i]['title'],
+                'reward_time'      => '22:00',
+                'rifa_id'   => $id,
+                'pole' => $re+1,
+                'type' => 2,
+            ]);
+        }
     }
     private function addReports($rifa){
        
